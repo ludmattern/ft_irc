@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Client.hpp                                         :+:      :+:    :+:   */
+/*   ServerPoll.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/20 18:20:05 by lmattern          #+#    #+#             */
-/*   Updated: 2024/08/21 17:06:33 by lmattern         ###   ########.fr       */
+/*   Created: 2024/08/21 17:31:01 by lmattern          #+#    #+#             */
+/*   Updated: 2024/08/21 17:43:39 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_HPP
-#define CLIENT_HPP
+#include "Server.hpp"
+#include <stdexcept>
+#include <poll.h>
 
-#include <string>
-
-class Client
+void Server::checkPoll()
 {
-private:
-	int _fd;
-	std::string _ip_address;
-	bool _authenticated;
+	int poll_count = poll(_SocketPollList.data(), _SocketPollList.size(), -1);
+	if (poll_count == -1)
+		throw std::runtime_error("poll() failed");
+}
 
-public:
-	Client(int fd, const std::string &ip_address);
+void Server::processPollEvent(pollfd &pfd)
+{
+	if (!(pfd.revents & POLLIN))
+		return ;
 
-	int getFd() const;
-	const std::string &getIpAddress() const;
-	bool isAuthenticated() const;
-	void authenticate();
-};
-
-#endif
+	if (pfd.fd == _Socket.getFd())
+		handleNewClient();
+	else
+		handleClientData(pfd.fd);
+}

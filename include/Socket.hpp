@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Client.hpp                                         :+:      :+:    :+:   */
+/*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/20 18:20:05 by lmattern          #+#    #+#             */
-/*   Updated: 2024/08/21 17:06:33 by lmattern         ###   ########.fr       */
+/*   Created: 2024/08/20 18:16:08 by lmattern          #+#    #+#             */
+/*   Updated: 2024/08/21 14:41:38 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENT_HPP
-#define CLIENT_HPP
+#ifndef SOCKET_HPP
+#define SOCKET_HPP
 
+#include <stdexcept>
 #include <string>
+#include <netinet/in.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <cstring>
 
-class Client
+class Socket
 {
-private:
-	int _fd;
-	std::string _ip_address;
-	bool _authenticated;
-
 public:
-	Client(int fd, const std::string &ip_address);
+	Socket();
+	~Socket();
+
+	void bindSocket(int port);
+	void listenSocket(int backlog = SOMAXCONN);
+	int acceptClient(sockaddr_in *client_addr, socklen_t *addrlen);
+	void setNonBlocking();
 
 	int getFd() const;
-	const std::string &getIpAddress() const;
-	bool isAuthenticated() const;
-	void authenticate();
+
+private:
+	int socket_fd;
 };
 
-#endif
+#endif // SOCKET_HPP
