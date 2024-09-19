@@ -16,7 +16,9 @@ void Server::init_server_socket()
 	}
 	struct sockaddr_in server_addr;
 	memset(&server_addr, 0, sizeof(server_addr));
-	server_addr.sin_port = htons(_port);
+	server_addr.sin_family = AF_INET;          // IPv4
+    server_addr.sin_addr.s_addr = INADDR_ANY;  // Toutes les interfaces locales
+    server_addr.sin_port = htons(_port);       // Conversion du port en réseau
 	int opt = 1;
 	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
 	{
