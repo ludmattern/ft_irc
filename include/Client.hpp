@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/19 14:37:32 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/19 16:35:11 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ public:
 	~Client();
 
 	int get_fd() const;
-
 	void append_to_buffer(const char *data, size_t length);
 	bool extract_command(std::string &command);
 
