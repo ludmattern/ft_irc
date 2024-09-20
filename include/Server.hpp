@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/18 13:47:38 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/19 14:39:40 by fprevot          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
@@ -26,31 +14,60 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-
 #include "Client.hpp"
+
+#define RPL_WELCOME "001"
+#define RPL_YOURHOST "002"
+#define RPL_CREATED "003"
+#define RPL_MYINFO "004"
+#define ERR_NEEDMOREPARAMS "461"
+#define ERR_ALREADYREGISTRED "462"
+#define ERR_PASSWDMISMATCH "464"
+#define ERR_UNKNOWNCOMMAND "421"
+#define ERR_NICKNAMEINUSE "433"
+#define ERR_NONICKNAMEGIVEN "431"
 
 class Server {
 public:
-	Server(int port, const std::string &password);
-	~Server();
+    Server(int port, const std::string& password);
+    ~Server();
 
-	void run();
+    void run();
 
 private:
-	int _server_fd;
-	int _port;
-	std::string _password;
-	std::vector<struct pollfd> _poll_fds;
-	std::map<int, Client*> _clients; 
-	
-	void mod_event_to_pollout(int client_fd);
-	void send_message_to_client(int client_fd, const std::string &message);
-	void init_server_socket();
-	void set_non_blocking(int fd);
-	void accept_new_connection();
-	void client_read(int client_fd);
-	void client_write(int client_fd);
-	void disconnect_client(int client_fd);
+    int _server_fd;
+    int _port;
+    std::string _password;
+    std::vector<struct pollfd> _poll_fds;
+    std::map<int, Client*> _clients;
+    std::string _server_name;
+    bool _is_running;
+
+    void mod_event_to_pollout(int client_fd);
+    void init_server_socket();
+    void set_non_blocking(int fd);
+    void accept_new_connection();
+    void client_read(int client_fd);
+    void client_write(int client_fd);
+    void disconnect_client(int client_fd);
+
+    typedef void (Server::*CommandHandler)(Client*, const std::string&);
+    void initializeCommandHandlers();
+    void processCommand(Client* client, const std::string& commandLine);
+    std::map<std::string, CommandHandler> _commandHandlers;
+
+    void handlePassCommand(Client* client, const std::string& params);
+    void handleNickCommand(Client* client, const std::string& params);
+    void handleUserCommand(Client* client, const std::string& params);
+    void attemptClientRegistration(Client* client);
+
+    void sendWelcomeMessages(Client* client);
+    void sendReply(Client* client, const std::string& code,
+                   const std::string& params, const std::string& message);
+    void sendError(Client* client, const std::string& code,
+                   const std::string& command, const std::string& message);
+    void sendToClient(Client* client, const std::string& message);
+    bool isNicknameInUse(const std::string& nickname) const;
 };
 
-#endif 
+#endif
