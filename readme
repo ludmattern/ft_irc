@@ -1,0 +1,11 @@
+IRCSERV
+
+
+Sur un terminal
+/ircserv <port>  <pass>
+Sur un autre
+nc localhost <port>
+
+hexchat localhost/4444 (un truc comme ca)
+
+J arrivais pas a retrouver la cmd hexchat dcp je faisait mes test avec netcat mais je pense cest la meme
