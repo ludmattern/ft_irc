@@ -6,7 +6,7 @@
 #    By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 18:12:42 by lmattern          #+#    #+#              #
-#    Updated: 2024/09/19 14:26:41 by fprevot          ###   ########.fr        #
+#    Updated: 2024/09/20 10:31:26 by fprevot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRCS_DIR = src
 INCLUDE_DIR = include
 OBJS_DIR = build
 
-SRC_FILES = main Server Client SendDataToclient GetDataFromCLient Constructor
+SRC_FILES = main Server Client
 SRCS = $(addprefix $(SRCS_DIR)/,$(addsuffix .cpp,$(SRC_FILES)))
 OBJS = $(patsubst $(SRCS_DIR)/%.cpp,$(OBJS_DIR)/%.o,$(SRCS))
 DEPS = $(OBJS:.o=.d)

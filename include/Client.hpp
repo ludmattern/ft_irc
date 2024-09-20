@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/19 16:35:11 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/20 10:29:59 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,63 @@
 #define CLIENT_HPP
 
 #include <string>
+#include <set>
+#include <sstream>
 
 class Client {
 public:
-	Client(int fd);
-	~Client();
+    Client(int fd);
+    ~Client();
 
-	int get_fd() const;
-	void append_to_buffer(const char *data, size_t length);
-	bool extract_command(std::string &command);
+    // Getters
+    int getFd() const;
+    const std::string& getIp() const;
+    const std::string& getNickname() const;
+    const std::string& getUsername() const;
+    const std::string& getRealname() const;
+    const std::string& getPrefix() const;
+    const std::string& getPassword() const;
+    bool isAuthenticated() const;
+    bool isRegistered() const;
 
-	void add_to_output_buffer(const std::string &data);
-	const std::string &get_output_buffer() const;
-	void erase_from_output_buffer(size_t length);
+    // Setters
+    void setIp(const std::string& ip);
+    void setNickname(const std::string& nickname);
+    void setUsername(const std::string& username);
+    void setRealname(const std::string& realname);
+    void setPassword(const std::string& password);
+    void setAuthenticated(bool authenticated);
+    void setRegistered(bool registered);
+
+    // Buffer handling
+    void appendToInputBuffer(const char* data, size_t length);
+    bool extractCommand(std::string& command);
+    void addToOutputBuffer(const std::string& data);
+    const std::string& getOutputBuffer() const;
+    void eraseFromOutputBuffer(size_t length);
+    std::string& getInputBuffer();
+
+    // Channel management
+    void joinChannel(const std::string& channel);
+    void leaveChannel(const std::string& channel);
+    const std::set<std::string>& getChannels() const;
+
+    // Prefix generation
+    void updatePrefix();
 
 private:
-	int _fd;
-	std::string _input_buffer;
-	std::string _output_buffer;
+    int _fd;
+    std::string _ip;
+    std::string _nickname;
+    std::string _username;
+    std::string _realname;
+    std::string _password;
+    bool _is_authenticated;
+    bool _is_registered;
+    std::set<std::string> _channels;
+    std::string _prefix;
+    std::string _input_buffer;
+    std::string _output_buffer;
 };
 
 #endif
