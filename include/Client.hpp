@@ -1,17 +1,28 @@
-// Client.hpp
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
+/*   Updated: 2024/09/20 10:29:59 by fprevot          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
 #include <string>
 #include <set>
+#include <sstream>
 
 class Client {
 public:
-    Client(int fd, const std::string& ip);
+    Client(int fd);
     ~Client();
 
-    // Accesseurs
+    // Getters
     int getFd() const;
     const std::string& getIp() const;
     const std::string& getNickname() const;
@@ -22,7 +33,8 @@ public:
     bool isAuthenticated() const;
     bool isRegistered() const;
 
-    // Modificateurs
+    // Setters
+    void setIp(const std::string& ip);
     void setNickname(const std::string& nickname);
     void setUsername(const std::string& username);
     void setRealname(const std::string& realname);
@@ -30,16 +42,20 @@ public:
     void setAuthenticated(bool authenticated);
     void setRegistered(bool registered);
 
-    // Tampon d'entrée
-    void appendToInputBuffer(const std::string& data);
+    // Buffer handling
+    void appendToInputBuffer(const char* data, size_t length);
+    bool extractCommand(std::string& command);
+    void addToOutputBuffer(const std::string& data);
+    const std::string& getOutputBuffer() const;
+    void eraseFromOutputBuffer(size_t length);
     std::string& getInputBuffer();
 
-    // Gestion des canaux
+    // Channel management
     void joinChannel(const std::string& channel);
     void leaveChannel(const std::string& channel);
     const std::set<std::string>& getChannels() const;
 
-    // Génération du préfixe
+    // Prefix generation
     void updatePrefix();
 
 private:
@@ -51,9 +67,10 @@ private:
     std::string _password;
     bool _is_authenticated;
     bool _is_registered;
-    std::string _input_buffer;
     std::set<std::string> _channels;
     std::string _prefix;
+    std::string _input_buffer;
+    std::string _output_buffer;
 };
 
-#endif // CLIENT_HPP
+#endif
