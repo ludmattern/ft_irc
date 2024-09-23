@@ -75,6 +75,9 @@ private:
     void sendToClient(Client* client, const std::string& message);
     bool isNicknameInUse(const std::string& nickname) const;
     bool hasClientToBeDisconnected(int client_fd);
+
+    void cleanup();
+
 };
 
 #endif
