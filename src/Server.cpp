@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/23 17:16:06 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/23 17:31:40 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,7 @@ void Server::init_server_socket()
 {
 	_server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_server_fd < 0)
-	{
 		throw std::runtime_error("Runtime error: Failed on socket creating");
-	}
 
 	int opt = 1;
 	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
@@ -116,7 +114,6 @@ void Server::run()
 	while (_is_running)
 	{
 		int poll_count = poll(&_poll_fds[0], _poll_fds.size(), -1);
-
 		if (poll_count < 0)
 		{
 			if (_is_running)
@@ -126,20 +123,14 @@ void Server::run()
 
 		for (size_t i = 0; i < _poll_fds.size(); ++i)
 		{
-			if (!_is_running) break;
+			if (!_is_running) break ;
 
 			if (_poll_fds[i].fd == _server_fd && (_poll_fds[i].revents & POLLIN))
-			{
 				accept_new_connection();
-			}
 			else if (_poll_fds[i].revents & POLLIN)
-			{
 				client_read(_poll_fds[i].fd);
-			}
 			else if (_poll_fds[i].revents & POLLOUT)
-			{
 				client_write(_poll_fds[i].fd);
-			}
 			if (_poll_fds[i].fd != _server_fd && hasClientToBeDisconnected(_poll_fds[i].fd))
 			{
 				if (_poll_fds[i].revents & POLLOUT)
@@ -171,10 +162,8 @@ void Server::accept_new_connection()
 	if (client_fd < 0)
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
-		{
 			throw std::runtime_error("Runtime error: Failed on accept");
-		}
-		return;
+		return ;
 	}
 
 	set_non_blocking(client_fd);
@@ -186,7 +175,6 @@ void Server::accept_new_connection()
 	_poll_fds.push_back(client_pollfd);
 
 	Client* new_client = new Client(client_fd);
-	// Set client IP
 	char client_ip[INET_ADDRSTRLEN];
 	inet_ntop(AF_INET, &(client_addr.sin_addr), client_ip, INET_ADDRSTRLEN);
 	new_client->setIp(client_ip);
@@ -236,15 +224,14 @@ void Server::client_write(int client_fd)
 	else
 	{
 		client->eraseFromOutputBuffer(bytes_sent);
-		if (client->getOutputBuffer().empty())
+		if (!(client->getOutputBuffer().empty()))
+			return ;
+		for (size_t i = 0; i < _poll_fds.size(); ++i)
 		{
-			for (size_t i = 0; i < _poll_fds.size(); ++i)
+			if (_poll_fds[i].fd == client_fd)
 			{
-				if (_poll_fds[i].fd == client_fd)
-				{
-					_poll_fds[i].events = POLLIN;
-					break;
-				}
+				_poll_fds[i].events = POLLIN;
+				break;
 			}
 		}
 	}
@@ -297,61 +284,41 @@ void Server::processCommand(Client* client, const std::string& commandLine)
 		(this->*handler)(client, params);
 	}
 	else
-	{
 		sendError(client, ERR_UNKNOWNCOMMAND, command, "Unknown command");
-	}
 }
 
 // Handle PASS command
 void Server::handlePassCommand(Client* client, const std::string& params)
 {
 	if (client->isRegistered())
-	{
 		sendError(client, ERR_ALREADYREGISTRED, "", "You may not reregister");
-		return;
-	}
-
-	if (params.empty())
-	{
+	else if (params.empty())
 		sendError(client, ERR_NEEDMOREPARAMS, "PASS", "Not enough parameters");
-		return;
-	}
-	client->setPassword(params);
+	else
+		client->setPassword(params);
 }
 
 // Handle NICK command
-void Server::handleNickCommand(Client* client, const std::string& params)
+void Server::handleNickCommand(Client* client, const std::string& nickname)
 {
-	if (params.empty())
-	{
+	if (nickname.empty())
 		sendError(client, ERR_NONICKNAMEGIVEN, "", "No nickname given");
-		return;
-	}
-
-	std::string nickname = params;
-
-	if (isNicknameInUse(nickname))
-	{
+	else if (isNicknameInUse(nickname))
 		sendError(client, ERR_NICKNAMEINUSE, nickname, "Nickname is already in use");
-		return;
+	else
+	{
+		client->setNickname(nickname);
+		attemptClientRegistration(client);
 	}
-
-	client->setNickname(nickname);
-
-	// Check if client can be registered
-	attemptClientRegistration(client);
 }
 
 // Check if nickname is in use
 bool Server::isNicknameInUse(const std::string& nickname) const
 {
-	for (std::map<int, Client*>::const_iterator it = _clients.begin();
-		it != _clients.end(); ++it)
+	for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
 		if (it->second->getNickname() == nickname)
-		{
 			return true;
-		}
 	}
 	return false;
 }
@@ -425,18 +392,12 @@ void Server::sendReply(Client* client, const std::string& code,
 {
 	std::string nickname = client->getNickname();
 	if (nickname.empty())
-	{
 		nickname = "*";
-	}
 	std::string reply = ":" + _server_name + " " + code + " " + nickname;
 	if (!params.empty())
-	{
 		reply += " " + params;
-	}
 	if (!message.empty())
-	{
 		reply += " :" + message;
-	}
 	reply += "\r\n";
 	sendToClient(client, reply);
 }
@@ -447,14 +408,10 @@ void Server::sendError(Client* client, const std::string& code,
 {
 	std::string nickname = client->getNickname();
 	if (nickname.empty())
-	{
 		nickname = "*";
-	}
 	std::string error = ":" + _server_name + " " + code + " " + nickname;
 	if (!command.empty())
-	{
 		error += " " + command;
-	}
 	error += " :" + message + "\r\n";
 	sendToClient(client, error);
 }
