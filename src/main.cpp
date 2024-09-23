@@ -11,7 +11,8 @@ int main(int argc, char* argv[])
     int port = atoi(argv[1]);
     std::string password = argv[2];
     Server server(port, password);
+    
     server.run();
 
-    return EXIT_SUCCESS;
+    return (EXIT_SUCCESS);
 }
