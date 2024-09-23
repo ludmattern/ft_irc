@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/23 17:31:40 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:47:53 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@
 Server* global_server_instance = NULL;
 
 // Constructor & Destructor
-Server::Server(int port, const std::string& password)
-	: _port(port), _password(password), _server_name("MyIRCServer"), _is_running(true)
+Server::Server(int argc, char **argv)
+	: _server_name("MyIRCServer"), _is_running(true)
 {
 	global_server_instance = this;
-	
+
+	parseArguments(argc, argv);
 	init_server_socket();
 	initializeCommandHandlers();
 	signal(SIGINT, &Server::signal_handler);
@@ -38,6 +39,28 @@ Server::~Server()
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 		delete it->second;
 	_clients.clear();
+}
+
+#define MIN_PORT 1
+#define MAX_PORT 65535
+#define RESERVED_PORT 1024
+
+void Server::parseArguments(int argc, char **argv)
+{
+    if (argc != 3)
+        throw std::invalid_argument("Usage: " + std::string(argv[0]) + " <listening port> <connection password>");
+    char *endptr;
+    long port = std::strtol(argv[1], &endptr, 10);
+    if (*endptr != '\0' || endptr == argv[1])
+        throw std::invalid_argument("Error: Port must be a valid integer.");
+    if (port < MIN_PORT || port > MAX_PORT)
+        throw std::invalid_argument("Error: Port must be a positive integer between 1 and 65535.");
+    if (port < RESERVED_PORT)
+        std::cerr << "Warning: Ports below 1024 are typically reserved for system services." << std::endl;
+    std::string password = argv[2];
+
+	_port = static_cast<int>(port);
+	_password = password;
 }
 
 // Initialize server socket
