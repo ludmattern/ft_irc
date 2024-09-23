@@ -1,15 +1,20 @@
 # Prerequisites
 *.d
+
 # Compiled Object files
 *.o
 *.obj
+
 # Compiled Static libraries
 *.a
 *.lib
+
 # Executables
 *.out
 ircserv
+
 # Build directories
 build/
+
 # Vscode directories
 .vscode/
