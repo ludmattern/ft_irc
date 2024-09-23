@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/23 17:07:57 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:10:06 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ Server::~Server()
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 		delete it->second;
 	_clients.clear();
+	std::cout << "Server object destroyed." << std::endl;
 }
 
 void Server::stop()
