@@ -6,20 +6,27 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/23 15:32:33 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:05:15 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include <sstream>
 #include <arpa/inet.h>
+#include <csignal>
+
+Server* global_server_instance = NULL;
 
 // Constructor & Destructor
 Server::Server(int port, const std::string& password)
 	: _port(port), _password(password), _server_name("MyIRCServer"), _is_running(true)
 {
+	global_server_instance = this;
+	
 	init_server_socket();
 	initializeCommandHandlers();
+	signal(SIGINT, &Server::signal_handler);
+	signal(SIGQUIT, &Server::signal_handler);
 }
 
 Server::~Server()
@@ -32,6 +39,31 @@ Server::~Server()
 		delete it->second;
 	_clients.clear();
 }
+
+void Server::stop()
+{
+	this->_is_running = false;
+    std::cout << "Server is shutting down..." << std::endl;
+    
+    // Fermer toutes les connexions
+    for (size_t i = 0; i < _poll_fds.size(); ++i)
+    {
+        close(_poll_fds[i].fd);
+    }
+
+    // Libérer les clients
+    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+        delete it->second;
+    
+    _clients.clear();
+    _poll_fds.clear();
+    
+    // Fermer le socket du serveur
+    close(_server_fd);
+
+    std::cout << "Server shutdowned" << std::endl;
+}
+
 
 // Initialize server socket
 void Server::init_server_socket()
@@ -93,6 +125,20 @@ void Server::set_non_blocking(int fd)
 	}
 }
 
+void Server::signal_handler(int signal)
+{
+    if (signal == SIGINT || signal == SIGQUIT)
+    {
+        std::cout << "Signal reçu (" << signal << "). Fermeture du serveur..." << std::endl;
+		global_server_instance->setIsRunning(false);
+    }
+}
+
+void Server::setIsRunning(bool is_running)
+{
+	this->_is_running = is_running;
+}
+
 // Run server
 void Server::run()
 {
@@ -102,12 +148,15 @@ void Server::run()
 
 		if (poll_count < 0)
 		{
-			perror("Error on poll");
+			if (_is_running)
+				perror("Error on poll");
 			break;
 		}
 
 		for (size_t i = 0; i < _poll_fds.size(); ++i)
 		{
+			if (!_is_running) break;
+
 			if (_poll_fds[i].fd == _server_fd && (_poll_fds[i].revents & POLLIN))
 			{
 				accept_new_connection();

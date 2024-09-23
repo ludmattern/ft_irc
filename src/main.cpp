@@ -6,11 +6,12 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 15:32:29 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/23 15:32:31 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/23 16:51:19 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <csignal>
 
 int main(int argc, char* argv[])
 {
