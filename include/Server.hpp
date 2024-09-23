@@ -50,6 +50,11 @@ private:
     void client_read(int client_fd);
     void client_write(int client_fd);
     void disconnect_client(int client_fd);
+    void stop();
+    static void signal_handler(int signal);
+
+    void setIsRunning(bool is_running);
+
 
     typedef void (Server::*CommandHandler)(Client*, const std::string&);
     void initializeCommandHandlers();
