@@ -15,7 +15,7 @@ const std::string& Client::getPassword() const { return _password; }
 const std::string& Client::getPrefix() const { return _prefix; }
 bool Client::isAuthenticated() const { return _is_authenticated; }
 bool Client::isRegistered() const { return _is_registered; }
-bool Client::hasToDisconnect() const { return _to_disconnect; }
+bool Client::shouldDisconnect() const { return _to_disconnect; }
 
 
 // Setters
@@ -50,7 +50,7 @@ void Client::setRegistered(bool registered) {
     _is_registered = registered;
 }
 
-void Client::setToDisconnect(bool to_disconnect) {
+void Client::markForDisconnection(bool to_disconnect) {
     _to_disconnect = to_disconnect;
 }
 
