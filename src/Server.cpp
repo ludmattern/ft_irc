@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/20 11:39:11 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/23 14:52:30 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,24 @@ void Server::run()
 			{
 				client_write(_poll_fds[i].fd);
 			}
+			if (_poll_fds[i].fd != _server_fd && hasClientToBeDisconnected(_poll_fds[i].fd))
+			{
+				if (_poll_fds[i].revents & POLLOUT)
+					client_write(_poll_fds[i].fd);
+				disconnect_client(_poll_fds[i].fd);
+			}
 		}
 	}
+}
+
+bool Server::hasClientToBeDisconnected(int client_fd)
+{
+	Client* client = _clients[client_fd];
+
+	if (client->hasToDisconnect())
+		return true;
+	else
+		return false;
 }
 
 // Accept new connections
@@ -180,17 +196,11 @@ void Server::client_read(int client_fd)
 		}
 	}
 	else if (bytes_read == 0)
-	{
-		std::cout << "Client FD " << client_fd << " closed connection." << std::endl;
-		disconnect_client(client_fd);
-	}
+		client->setToDisconnect(true);
 	else
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
-		{
 			perror("Error on recv");
-			disconnect_client(client_fd);
-		}
 	}
 }
 
@@ -202,10 +212,7 @@ void Server::client_write(int client_fd)
 
 	int bytes_sent = send(client_fd, message.c_str(), message.size(), 0);
 	if (bytes_sent < 0)
-	{
 		perror("Error on send");
-		disconnect_client(client_fd);
-	}
 	else
 	{
 		client->eraseFromOutputBuffer(bytes_sent);
@@ -289,7 +296,6 @@ void Server::handlePassCommand(Client* client, const std::string& params)
 		sendError(client, ERR_NEEDMOREPARAMS, "PASS", "Not enough parameters");
 		return;
 	}
-
 	client->setPassword(params);
 }
 
@@ -366,17 +372,15 @@ void Server::handleUserCommand(Client* client, const std::string& params)
 void Server::attemptClientRegistration(Client* client)
 {
 	if (client->getNickname().empty() || client->getUsername().empty())
-	{
 		return;
-	}
 
 	if (!_password.empty())
 	{
 		if (client->getPassword() != _password)
 		{
 			sendError(client, ERR_PASSWDMISMATCH, "", "Password incorrect");
-			disconnect_client(client->getFd());
-			return;
+			client->setToDisconnect(true);
+			return ;
 		}
 	}
 
@@ -433,6 +437,13 @@ void Server::sendError(Client* client, const std::string& code,
 	}
 	error += " :" + message + "\r\n";
 	sendToClient(client, error);
+}
+
+void Server::displaytoServer(const std::string& message)
+{
+	if (message.empty())
+		return ;
+	std::cout << message << std::endl;
 }
 
 // Send raw message to client

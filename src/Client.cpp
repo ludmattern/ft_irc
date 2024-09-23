@@ -1,7 +1,7 @@
 #include "Client.hpp"
 
 Client::Client(int fd)
-    : _fd(fd), _is_authenticated(false), _is_registered(false) {}
+    : _fd(fd), _is_authenticated(false), _is_registered(false), _to_disconnect(false) {}
 
 Client::~Client() {}
 
@@ -15,6 +15,8 @@ const std::string& Client::getPassword() const { return _password; }
 const std::string& Client::getPrefix() const { return _prefix; }
 bool Client::isAuthenticated() const { return _is_authenticated; }
 bool Client::isRegistered() const { return _is_registered; }
+bool Client::hasToDisconnect() const { return _to_disconnect; }
+
 
 // Setters
 void Client::setIp(const std::string& ip) {
@@ -46,6 +48,10 @@ void Client::setAuthenticated(bool authenticated) {
 
 void Client::setRegistered(bool registered) {
     _is_registered = registered;
+}
+
+void Client::setToDisconnect(bool to_disconnect) {
+    _to_disconnect = to_disconnect;
 }
 
 // Buffer handling

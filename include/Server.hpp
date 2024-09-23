@@ -62,12 +62,14 @@ private:
     void attemptClientRegistration(Client* client);
 
     void sendWelcomeMessages(Client* client);
+    void displaytoServer(const std::string& message);
     void sendReply(Client* client, const std::string& code,
                    const std::string& params, const std::string& message);
     void sendError(Client* client, const std::string& code,
                    const std::string& command, const std::string& message);
     void sendToClient(Client* client, const std::string& message);
     bool isNicknameInUse(const std::string& nickname) const;
+    bool hasClientToBeDisconnected(int client_fd);
 };
 
 #endif
