@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/23 17:12:30 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:16:06 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void Server::signal_handler(int signal)
 {
     if (signal == SIGINT || signal == SIGQUIT)
     {
-        std::cout << "Signal reçu (" << signal << "). Fermeture du serveur..." << std::endl;
+        std::cout << " Signal received (" << signal << "). Closing server..." << std::endl;
 		global_server_instance->setIsRunning(false);
     }
 }
