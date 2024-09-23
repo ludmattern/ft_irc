@@ -29,7 +29,7 @@
 
 class Server {
 public:
-    Server(int port, const std::string& password);
+    Server(int argc, char **argv);
     ~Server();
 
     void run();
@@ -50,10 +50,10 @@ private:
     void client_read(int client_fd);
     void client_write(int client_fd);
     void disconnect_client(int client_fd);
-    void stop();
     static void signal_handler(int signal);
 
     void setIsRunning(bool is_running);
+    void parseArguments(int argc, char **argv);
 
 
     typedef void (Server::*CommandHandler)(Client*, const std::string&);
