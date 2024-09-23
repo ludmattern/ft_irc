@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/23 17:10:06 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:12:30 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,33 +38,7 @@ Server::~Server()
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 		delete it->second;
 	_clients.clear();
-	std::cout << "Server object destroyed." << std::endl;
 }
-
-void Server::stop()
-{
-	this->_is_running = false;
-    std::cout << "Server is shutting down..." << std::endl;
-    
-    // Fermer toutes les connexions
-    for (size_t i = 0; i < _poll_fds.size(); ++i)
-    {
-        close(_poll_fds[i].fd);
-    }
-
-    // Libérer les clients
-    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
-        delete it->second;
-    
-    _clients.clear();
-    _poll_fds.clear();
-    
-    // Fermer le socket du serveur
-    close(_server_fd);
-
-    std::cout << "Server shutdowned" << std::endl;
-}
-
 
 // Initialize server socket
 void Server::init_server_socket()
@@ -145,7 +119,9 @@ void Server::run()
 
 		if (poll_count < 0)
 		{
-			throw std::runtime_error("Runtime error: Failed on poll");
+			if (_is_running)
+				throw std::runtime_error("Runtime error: Failed on poll");
+			break ;
 		}
 
 		for (size_t i = 0; i < _poll_fds.size(); ++i)
