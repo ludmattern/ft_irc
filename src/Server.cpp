@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/23 14:52:30 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/23 15:52:24 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,14 @@ void Server::init_server_socket()
 	_server_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_server_fd < 0)
 	{
-		perror("Error creating socket");
-		exit(EXIT_FAILURE);
+		throw std::runtime_error("Runtime error: Failed on socket creating");
 	}
 
 	int opt = 1;
 	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
 	{
-		perror("Error on setsockopt");
 		close(_server_fd);
-		exit(EXIT_FAILURE);
+		throw std::runtime_error("Runtime error: Failed on setsocket");
 	}
 
 	struct sockaddr_in server_addr;
@@ -59,16 +57,14 @@ void Server::init_server_socket()
 
 	if (bind(_server_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
 	{
-		perror("Error on bind");
 		close(_server_fd);
-		exit(EXIT_FAILURE);
+		throw std::runtime_error("Runtime error: Failed on bind");
 	}
 
 	if (listen(_server_fd, SOMAXCONN) < 0)
 	{
-		perror("Error on listen");
 		close(_server_fd);
-		exit(EXIT_FAILURE);
+		throw std::runtime_error("Runtime error: Failed on listen");
 	}
 
 	set_non_blocking(_server_fd);
@@ -102,8 +98,7 @@ void Server::run()
 
 		if (poll_count < 0)
 		{
-			perror("Error on poll");
-			break;
+			throw std::runtime_error("Runtime error: Failed on poll");
 		}
 
 		for (size_t i = 0; i < _poll_fds.size(); ++i)
@@ -152,7 +147,7 @@ void Server::accept_new_connection()
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
 		{
-			perror("Error on accept");
+			throw std::runtime_error("Runtime error: Failed on accept");
 		}
 		return;
 	}
@@ -200,7 +195,7 @@ void Server::client_read(int client_fd)
 	else
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
-			perror("Error on recv");
+			throw std::runtime_error("Runtime error: Failed on recv");
 	}
 }
 
@@ -212,7 +207,7 @@ void Server::client_write(int client_fd)
 
 	int bytes_sent = send(client_fd, message.c_str(), message.size(), 0);
 	if (bytes_sent < 0)
-		perror("Error on send");
+		throw std::runtime_error("Runtime error: Failed on send");
 	else
 	{
 		client->eraseFromOutputBuffer(bytes_sent);
