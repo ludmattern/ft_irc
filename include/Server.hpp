@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 15:20:51 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:23:34 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,14 +136,14 @@ private:
 	void handleJoinCommand(Client* client, const std::string& params);
 	bool validateJoinCommand(Client* client, const std::string& params);
     void handlePrivmsgCommand(Client* client, const std::string& params);
-	/*void handlePartCommand(Client* client, const std::string& params);
+	void handlePartCommand(Client* client, const std::string& params);
     void handleNoticeCommand(Client* client, const std::string& params);
     void handleQuitCommand(Client* client, const std::string& params);
     void handleTopicCommand(Client* client, const std::string& params);
     void handlePingCommand(Client* client, const std::string& params);
     void handlePongCommand(Client* client, const std::string& params);
     void handleKickCommand(Client* client, const std::string& params);
-    void handleInviteCommand(Client* client, const std::string& params);*/
+    void handleInviteCommand(Client* client, const std::string& params);
 
 	// Attempt to register a client (after PASS, NICK, USER)
 	void registerClientIfReady(Client* client);
