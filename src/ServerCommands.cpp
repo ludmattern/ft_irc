@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 15:19:06 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:21:08 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,15 @@ void Server::setupCommandHandlers()
 	_commandHandlers["USER"] = &Server::handleUserCommand;
 	_commandHandlers["JOIN"] = &Server::handleJoinCommand;
 	_commandHandlers["PRIVMSG"] = &Server::handlePrivmsgCommand;
-	_commandHandlers["PART"] = &Server::handlePartCommand;
-	_commandHandlers["PRIVMSG"] = &Server::handlePrivmsgCommand;
-	_commandHandlers["NOTICE"] = &Server::handleNoticeCommand;
-	_commandHandlers["QUIT"] = &Server::handleQuitCommand;
-	_commandHandlers["TOPIC"] = &Server::handleTopicCommand;
-	_commandHandlers["PING"] = &Server::handlePingCommand;
-	_commandHandlers["PONG"] = &Server::handlePongCommand;
-	_commandHandlers["KICK"] = &Server::handleKickCommand;
-	_commandHandlers["INVITE"] = &Server::handleInviteCommand;
-	_commandHandlers["TOPIC"] = &Server::handleTopicCommand;
+	// _commandHandlers["PART"] = &Server::handlePartCommand;
+	// _commandHandlers["NOTICE"] = &Server::handleNoticeCommand;
+	// _commandHandlers["QUIT"] = &Server::handleQuitCommand;
+	// _commandHandlers["TOPIC"] = &Server::handleTopicCommand;
+	// _commandHandlers["PING"] = &Server::handlePingCommand;
+	// _commandHandlers["PONG"] = &Server::handlePongCommand;
+	// _commandHandlers["KICK"] = &Server::handleKickCommand;
+	// _commandHandlers["INVITE"] = &Server::handleInviteCommand;
+	// _commandHandlers["TOPIC"] = &Server::handleTopicCommand;
 }
 
 void Server::processClientCommand(Client* client, const std::string& commandLine)
