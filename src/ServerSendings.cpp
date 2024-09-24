@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerSendings.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/23 18:36:46 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 13:58:25 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,6 @@ Server::~Server()
 		delete it->second;
 	_clients.clear();
 }
-
-#define MIN_PORT 1
-#define MAX_PORT 65535
-#define RESERVED_PORT 1024
 
 void Server::parseArguments(int argc, char **argv)
 {

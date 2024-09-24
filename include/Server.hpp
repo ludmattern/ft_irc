@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 15:10:48 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:18:46 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@
 #define ERR_NICKNAMEINUSE  "433"
 #define ERR_NONICKNAMEGIVEN "431"
 
+// Server Params
+#define MIN_PORT 1
+#define MAX_PORT 65535
+#define RESERVED_PORT 1024
 /**
  * Server class
  * This class handles the operation of the IRC server, including client connections,
@@ -129,8 +133,16 @@ private:
 	void handlePassCommand(Client* client, const std::string& params);
 	void handleNickCommand(Client* client, const std::string& params);
 	void handleUserCommand(Client* client, const std::string& params);
-	void handlePingCommand(Client* client, const std::string& params);
 	void handleJoinCommand(Client* client, const std::string& params);
+	void handlePartCommand(Client* client, const std::string& params);
+    void handlePrivmsgCommand(Client* client, const std::string& params);
+    void handleNoticeCommand(Client* client, const std::string& params);
+    void handleQuitCommand(Client* client, const std::string& params);
+    void handleTopicCommand(Client* client, const std::string& params);
+    void handlePingCommand(Client* client, const std::string& params);
+    void handlePongCommand(Client* client, const std::string& params);
+    void handleKickCommand(Client* client, const std::string& params);
+    void handleInviteCommand(Client* client, const std::string& params);
 	bool validateJoinCommand(Client* client, const std::string& params);
 	void handlePrivmsgCommand(Client* client, const std::string& params);
 
