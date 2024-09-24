@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/24 13:55:27 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/24 16:46:47 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <sstream>
 
 #define MAX_BUFFER_SIZE 512
-
+#define MAX_MESSAGE_LENGTH 510
 /**
  * Client class
  * This class manages a single client connection, including its state, data buffers,

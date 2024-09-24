@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 15:23:34 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/24 16:57:56 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ private:
 	void parseArguments(int argc, char **argv);
 
 	// === IRC Command Handling ===
-	typedef void (Server::*CommandHandler)(Client*, const std::string&);
+typedef void (Server::*CommandHandler)(Client*, const std::vector<std::string>&);
 
 	std::map<std::string, CommandHandler> _commandHandlers; // Map of IRC commands to their handlers
 
@@ -130,20 +130,20 @@ private:
 	void processClientCommand(Client* client, const std::string& commandLine);
 
 	// Handlers for various IRC commands
-	void handlePassCommand(Client* client, const std::string& params);
-	void handleNickCommand(Client* client, const std::string& params);
-	void handleUserCommand(Client* client, const std::string& params);
-	void handleJoinCommand(Client* client, const std::string& params);
-	bool validateJoinCommand(Client* client, const std::string& params);
-    void handlePrivmsgCommand(Client* client, const std::string& params);
-	void handlePartCommand(Client* client, const std::string& params);
-    void handleNoticeCommand(Client* client, const std::string& params);
-    void handleQuitCommand(Client* client, const std::string& params);
-    void handleTopicCommand(Client* client, const std::string& params);
-    void handlePingCommand(Client* client, const std::string& params);
-    void handlePongCommand(Client* client, const std::string& params);
-    void handleKickCommand(Client* client, const std::string& params);
-    void handleInviteCommand(Client* client, const std::string& params);
+	void handlePassCommand(Client* client, const  std::vector<std::string>& params);
+	void handleNickCommand(Client* client, const  std::vector<std::string>& params);
+	void handleUserCommand(Client* client, const  std::vector<std::string>& params);
+	void handleJoinCommand(Client* client, const  std::vector<std::string>& params);
+	bool validateJoinCommand(Client* client, const  std::vector<std::string>& params);
+	void handlePrivmsgCommand(Client* client, const  std::vector<std::string>& params);
+	void handlePartCommand(Client* client, const  std::vector<std::string>& params);
+	void handleNoticeCommand(Client* client, const  std::vector<std::string>& params);
+	void handleQuitCommand(Client* client, const  std::vector<std::string>& params);
+	void handleTopicCommand(Client* client, const  std::vector<std::string>& params);
+	void handlePingCommand(Client* client, const  std::vector<std::string>& params);
+	void handlePongCommand(Client* client, const  std::vector<std::string>& params);
+	void handleKickCommand(Client* client, const  std::vector<std::string>& params);
+	void handleInviteCommand(Client* client, const  std::vector<std::string>& params);
 
 	// Attempt to register a client (after PASS, NICK, USER)
 	void registerClientIfReady(Client* client);
@@ -162,9 +162,9 @@ private:
 	void cleanupResources();
 
 	// === Channel Handling ===
-    Channel* getOrCreateChannel(const std::string& channelName);
-    void addClientToChannel(Channel* channel, Client* client);
-    void sendChannelInfoToClient(Channel* channel, Client* client);
+	Channel* getOrCreateChannel(const std::string& channelName);
+	void addClientToChannel(Channel* channel, Client* client);
+	void sendChannelInfoToClient(Channel* channel, Client* client);
 	void broadcastToChannel(Channel* channel, const std::string& message, Client* sender);
 };
 

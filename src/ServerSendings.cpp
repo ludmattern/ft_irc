@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/24 13:58:25 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/24 16:57:52 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,17 @@ Server::~Server()
 
 void Server::parseArguments(int argc, char **argv)
 {
-    if (argc != 3)
-        throw std::invalid_argument("Usage: " + std::string(argv[0]) + " <listening port> <connection password>");
-    char *endptr;
-    long port = std::strtol(argv[1], &endptr, 10);
-    if (*endptr != '\0' || endptr == argv[1])
-        throw std::invalid_argument("Error: Port must be a valid integer.");
-    if (port < MIN_PORT || port > MAX_PORT)
-        throw std::invalid_argument("Error: Port must be a positive integer between 1 and 65535.");
-    if (port < RESERVED_PORT)
-        std::cerr << "Warning: Ports below 1024 are typically reserved for system services." << std::endl;
-    std::string password = argv[2];
+	if (argc != 3)
+		throw std::invalid_argument("Usage: " + std::string(argv[0]) + " <listening port> <connection password>");
+	char *endptr;
+	long port = std::strtol(argv[1], &endptr, 10);
+	if (*endptr != '\0' || endptr == argv[1])
+		throw std::invalid_argument("Error: Port must be a valid integer.");
+	if (port < MIN_PORT || port > MAX_PORT)
+		throw std::invalid_argument("Error: Port must be a positive integer between 1 and 65535.");
+	if (port < RESERVED_PORT)
+		std::cerr << "Warning: Ports below 1024 are typically reserved for system services." << std::endl;
+	std::string password = argv[2];
 
 	_port = static_cast<int>(port);
 	_password = password;
@@ -155,7 +155,6 @@ void Server::setSocketNonBlocking(int fd)
 		exit(EXIT_FAILURE);
 	}
 }
-
 
 bool Server::shouldClientDisconnect(int client_fd)
 {
