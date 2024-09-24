@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/23 18:32:03 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:15:15 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "Client.hpp"
+#include "Channel.hpp"
 
 // IRC Standard Replies (RPL)
 #define RPL_WELCOME        "001"
@@ -64,9 +65,10 @@ private:
 	int _port;
 	std::string _password;
 
-	// Polling file descriptors and client list
+	// Polling file descriptors, channels and client list
 	std::vector<struct pollfd> _poll_fds;
 	std::map<int, Client*> _clients;
+	std::map<std::string, Channel*> _channels;
 
 	// Server information
 	std::string _server_name;
@@ -104,6 +106,9 @@ private:
 	void handlePassCommand(Client* client, const std::string& params);
 	void handleNickCommand(Client* client, const std::string& params);
 	void handleUserCommand(Client* client, const std::string& params);
+	void handlePingCommand(Client* client, const std::string& params);
+	void handleJoinCommand(Client* client, const std::string& params);
+	bool validateJoinCommand(Client* client, const std::string& params);
 
 	// Attempt to register a client (after PASS, NICK, USER)
 	void registerClientIfReady(Client* client);
@@ -120,6 +125,11 @@ private:
 
 	// Clean up resources
 	void cleanupResources();
+
+	// === Channel Handling ===
+    Channel* getOrCreateChannel(const std::string& channelName);
+    void addClientToChannel(Channel* channel, Client* client);
+    void sendChannelInfoToClient(Channel* channel, Client* client);
 };
 
 #endif

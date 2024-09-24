@@ -6,7 +6,7 @@
 #    By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 18:12:42 by lmattern          #+#    #+#              #
-#    Updated: 2024/09/23 18:58:04 by lmattern         ###   ########.fr        #
+#    Updated: 2024/09/24 10:45:25 by lmattern         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRCS_DIR = src
 INCLUDE_DIR = include
 OBJS_DIR = build
 
-SRC_FILES = main ServerUtils ServerSendings ServerCommands ServerClientHandling Client
+SRC_FILES = main ServerUtils ServerSendings ServerCommands ServerClientHandling Client Channel
 SRCS = $(addprefix $(SRCS_DIR)/,$(addsuffix .cpp,$(SRC_FILES)))
 OBJS = $(patsubst $(SRCS_DIR)/%.cpp,$(OBJS_DIR)/%.o,$(SRCS))
 DEPS = $(OBJS:.o=.d)

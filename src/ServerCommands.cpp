@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/23 18:37:01 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:21:28 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void Server::setupCommandHandlers()
 	_commandHandlers["PASS"] = &Server::handlePassCommand;
 	_commandHandlers["NICK"] = &Server::handleNickCommand;
 	_commandHandlers["USER"] = &Server::handleUserCommand;
+	_commandHandlers["JOIN"] = &Server::handleJoinCommand;
 }
 
 void Server::processClientCommand(Client* client, const std::string& commandLine)
@@ -50,7 +51,6 @@ void Server::handlePassCommand(Client* client, const std::string& params)
 		client->setPassword(params);
 }
 
-// Handle NICK command
 void Server::handleNickCommand(Client* client, const std::string& nickname)
 {
 	if (nickname.empty())
@@ -122,6 +122,72 @@ void Server::registerClientIfReady(Client* client)
 	}
 
 	client->setRegistered(true);
-	// Send welcome messages
 	sendWelcomeMessages(client);
+}
+
+void Server::handleJoinCommand(Client* client, const std::string& params)
+{
+	if (!validateJoinCommand(client, params)) {
+		return;
+	}
+
+	std::string channelName;
+	std::istringstream iss(params);
+	iss >> channelName;
+
+	Channel* channel = getOrCreateChannel(channelName);
+
+	addClientToChannel(channel, client);
+	sendChannelInfoToClient(channel, client);
+}
+
+bool Server::validateJoinCommand(Client* client, const std::string& params)
+{
+    if (!client->isRegistered()) {
+        sendError(client, "451", "JOIN", "You are not registered");
+        return false;
+    }
+
+    if (params.empty()) {
+        sendError(client, ERR_NEEDMOREPARAMS, "JOIN", "Not enough parameters");
+        return false;
+    }
+
+    return true;
+}
+
+Channel* Server::getOrCreateChannel(const std::string& channelName)
+{
+    std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
+    if (it == _channels.end()) {
+        Channel* newChannel = new Channel(channelName);
+        _channels[channelName] = newChannel;
+        return newChannel;
+    }
+    return it->second;
+}
+
+void Server::addClientToChannel(Channel* channel, Client* client)
+{
+    channel->addClient(client);
+    client->joinChannel(channel->getName());
+
+    std::string joinMessage = ":" + client->getPrefix() + " JOIN :" + channel->getName() + "\r\n";
+    channel->broadcastMessage(joinMessage, client);
+}
+
+void Server::sendChannelInfoToClient(Channel* channel, Client* client)
+{
+    if (!channel->getTopic().empty()) {
+        sendReply(client, "332", channel->getName(), channel->getTopic());
+    }
+
+    std::string namesList = "=" + channel->getName() + " :";
+    for (std::set<Client*>::const_iterator it = channel->getClients().begin(); it != channel->getClients().end(); ++it) {
+        namesList += (*it)->getNickname() + " ";
+    }
+
+    sendReply(client, "353", namesList, "");
+    sendReply(client, "366", channel->getName(), "End of /NAMES list");
+	logToServer("Client " + client->getNickname() + " joined channel " + channel->getName());
 }

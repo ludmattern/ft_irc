@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:15:29 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/23 18:31:16 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 13:13:30 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void Server::logToServer(const std::string& message)
 // Send raw message to client
 void Server::sendRawMessageToClient(Client* client, const std::string& message)
 {
+	logToServer("Sending to " + client->getNickname() + ": " + message);
 	client->addToOutputBuffer(message);
 	for (size_t i = 0; i < _poll_fds.size(); ++i)
 	{
