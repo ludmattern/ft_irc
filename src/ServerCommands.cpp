@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerCommands.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 15:21:08 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:35:43 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ void Server::setupCommandHandlers()
 	_commandHandlers["USER"] = &Server::handleUserCommand;
 	_commandHandlers["JOIN"] = &Server::handleJoinCommand;
 	_commandHandlers["PRIVMSG"] = &Server::handlePrivmsgCommand;
-	// _commandHandlers["PART"] = &Server::handlePartCommand;
-	// _commandHandlers["NOTICE"] = &Server::handleNoticeCommand;
-	// _commandHandlers["QUIT"] = &Server::handleQuitCommand;
-	// _commandHandlers["TOPIC"] = &Server::handleTopicCommand;
-	// _commandHandlers["PING"] = &Server::handlePingCommand;
-	// _commandHandlers["PONG"] = &Server::handlePongCommand;
-	// _commandHandlers["KICK"] = &Server::handleKickCommand;
-	// _commandHandlers["INVITE"] = &Server::handleInviteCommand;
-	// _commandHandlers["TOPIC"] = &Server::handleTopicCommand;
+	_commandHandlers["PART"] = &Server::handlePartCommand;
+	_commandHandlers["NOTICE"] = &Server::handleNoticeCommand;
+	_commandHandlers["QUIT"] = &Server::handleQuitCommand;
+	_commandHandlers["TOPIC"] = &Server::handleTopicCommand;
+	_commandHandlers["PING"] = &Server::handlePingCommand;
+	_commandHandlers["PONG"] = &Server::handlePongCommand;
+	_commandHandlers["KICK"] = &Server::handleKickCommand;
+	_commandHandlers["INVITE"] = &Server::handleInviteCommand;
+	_commandHandlers["TOPIC"] = &Server::handleTopicCommand;
 }
 
 void Server::processClientCommand(Client* client, const std::string& commandLine)
@@ -281,4 +281,46 @@ void Server::handlePrivmsgCommand(Client* client, const std::string& params) {
         std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
         sendRawMessageToClient(recipient, fullMessage);
     }
+}
+
+
+void Server::handlePartCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "PART command received: " << params << std::endl;
+}
+
+
+void Server::handleNoticeCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "NOTICE command received: " << params << std::endl;
+}
+
+void Server::handleQuitCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "QUIT command received: " << params << std::endl;
+}
+
+void Server::handleTopicCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "TOPIC command received: " << params << std::endl;
+}
+
+void Server::handlePingCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "PING command received: " << params << std::endl;
+}
+
+void Server::handlePongCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "PONG command received: " << params << std::endl;
+}
+
+void Server::handleKickCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "KICK command received: " << params << std::endl;
+}
+
+void Server::handleInviteCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "INVITE command received: " << params << std::endl;
 }
