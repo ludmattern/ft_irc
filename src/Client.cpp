@@ -6,14 +6,14 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:16:17 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 13:55:14 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/24 16:57:55 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 
 Client::Client(int fd)
-    : _fd(fd), _is_authenticated(false), _is_registered(false), _to_disconnect(false) {}
+	: _fd(fd), _is_authenticated(false), _is_registered(false), _to_disconnect(false) {}
 
 Client::~Client() {}
 
@@ -32,90 +32,102 @@ bool Client::shouldDisconnect() const { return _to_disconnect; }
 
 // Setters
 void Client::setIp(const std::string& ip) {
-    _ip = ip;
-    updatePrefix();
+	_ip = ip;
+	updatePrefix();
 }
 
 void Client::setNickname(const std::string& nickname) {
-    _nickname = nickname;
-    updatePrefix();
+	_nickname = nickname;
+	updatePrefix();
 }
 
 void Client::setUsername(const std::string& username) {
-    _username = username;
-    updatePrefix();
+	_username = username;
+	updatePrefix();
 }
 
 void Client::setRealname(const std::string& realname) {
-    _realname = realname;
+	_realname = realname;
 }
 
 void Client::setPassword(const std::string& password) {
-    _password = password;
+	_password = password;
 }
 
 void Client::setAuthenticated(bool authenticated) {
-    _is_authenticated = authenticated;
+	_is_authenticated = authenticated;
 }
 
 void Client::setRegistered(bool registered) {
-    _is_registered = registered;
+	_is_registered = registered;
 }
 
 void Client::markForDisconnection(bool to_disconnect) {
-    _to_disconnect = to_disconnect;
+	_to_disconnect = to_disconnect;
 }
 
 // Buffer handling
 void Client::appendToInputBuffer(const char* data, size_t length) {
-    _input_buffer.append(data, length);
-    if (_input_buffer.size() > MAX_BUFFER_SIZE)
-    {
-        _to_disconnect = true;
-    }}
-
-bool Client::extractCommand(std::string& command) {
-    size_t pos = _input_buffer.find("\r\n");
-    if (pos != std::string::npos) {
-        command = _input_buffer.substr(0, pos);
-        _input_buffer.erase(0, pos + 2);
-        return true;
-    }
-    return false;
+	if (_input_buffer.size() + length > MAX_BUFFER_SIZE) 
+	{
+		_to_disconnect = true;
+		return;
+	}
+	_input_buffer.append(data, length);
 }
 
-void Client::addToOutputBuffer(const std::string& data) {
-    _output_buffer.append(data);
+
+bool Client::extractCommand(std::string& command) 
+{
+	size_t pos = _input_buffer.find("\r\n");
+	if (pos != std::string::npos) {
+		if (pos > MAX_MESSAGE_LENGTH) 
+		{
+			_to_disconnect = true;
+			return false;
+		}
+		command = _input_buffer.substr(0, pos);
+		_input_buffer.erase(0, pos + 2);
+		return true;
+	}
+	return false;
+}
+
+
+void Client::addToOutputBuffer(const std::string& data) 
+{
+	_output_buffer.append(data);
+
 }
 
 const std::string& Client::getOutputBuffer() const {
-    return _output_buffer;
+	return _output_buffer;
 }
 
 void Client::eraseFromOutputBuffer(size_t length) {
-    _output_buffer.erase(0, length);
+	_output_buffer.erase(0, length);
 }
 
 std::string& Client::getInputBuffer() {
-    return _input_buffer;
+	return _input_buffer;
 }
 
 // Channel management
 void Client::joinChannel(const std::string& channel) {
-    _channels.insert(channel);
+	_channels.insert(channel);
 }
 
 void Client::leaveChannel(const std::string& channel) {
-    _channels.erase(channel);
+	_channels.erase(channel);
 }
 
 const std::set<std::string>& Client::getChannels() const {
-    return _channels;
+	return _channels;
 }
 
 // Prefix generation
 void Client::updatePrefix() {
-    std::stringstream ss;
-    ss << _nickname << "!" << _username << "@" << _ip;
-    _prefix = ss.str();
+	std::stringstream ss;
+	ss << _nickname << "!" << _username << "@" << _ip;
+	_prefix = ss.str();
 }

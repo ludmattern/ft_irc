@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 11:28:55 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 16:57:53 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,53 +20,54 @@ Channel::~Channel() {}
 
 // Getters
 const std::string& Channel::getName() const {
-    return _name;
+	return _name;
 }
 
 const std::string& Channel::getTopic() const {
-    return _topic;
+	return _topic;
 }
 
 // Setters
 void Channel::setTopic(const std::string& topic) {
-    _topic = topic;
+	_topic = topic;
 }
 
 // Client management
 void Channel::addClient(Client* client) {
-    _clients.insert(client);
+	_clients.insert(client);
 }
 
 void Channel::removeClient(Client* client) {
-    _clients.erase(client);
+	_clients.erase(client);
 }
 
 bool Channel::hasClient(Client* client) const {
-    return _clients.find(client) != _clients.end();
+	return _clients.find(client) != _clients.end();
 }
 
 const std::set<Client*>& Channel::getClients() const {
-    return _clients;
+	return _clients;
 }
 
 // mode management
 void Channel::addMode(char mode) {
-    _modes.insert(mode);
+	_modes.insert(mode);
 }
 
 void Channel::removeMode(char mode) {
-    _modes.erase(mode);
+	_modes.erase(mode);
 }
 
 bool Channel::hasMode(char mode) const {
-    return _modes.find(mode) != _modes.end();
+	return _modes.find(mode) != _modes.end();
 }
 
 // message sending
 void Channel::broadcastMessage(const std::string& message, Client* sender) {
-    for (std::set<Client*>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
-        if (*it != sender) {
-            (*it)->addToOutputBuffer(message);
-        }
-    }
+	for (std::set<Client*>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		if (*it != sender)
+		{
+			(*it)->addToOutputBuffer(message);
+		}
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerClientHandling.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:09:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/23 18:57:49 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 16:57:50 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void Server::readFromClient(int client_fd)
 		while (client->extractCommand(command))
 		{
 			std::cout << "Command received from FD " << client_fd << ": " << command << std::endl;
-			// Process received commands
 			processClientCommand(client, command);
 		}
 	}
@@ -82,22 +81,27 @@ void Server::writeToClient(int client_fd)
 
 	int bytes_sent = send(client_fd, message.c_str(), message.size(), 0);
 	if (bytes_sent < 0)
-		throw std::runtime_error("Runtime error: Failed on send");
+	{
+		if (errno != EWOULDBLOCK && errno != EAGAIN)
+			throw std::runtime_error("Runtime error: Failed on send");
+	}
 	else
 	{
 		client->eraseFromOutputBuffer(bytes_sent);
-		if (!(client->getOutputBuffer().empty()))
-			return ;
-		for (size_t i = 0; i < _poll_fds.size(); ++i)
+		if (client->getOutputBuffer().empty())
 		{
-			if (_poll_fds[i].fd == client_fd)
+			for (size_t i = 0; i < _poll_fds.size(); ++i)
 			{
-				_poll_fds[i].events = POLLIN;
-				break;
+				if (_poll_fds[i].fd == client_fd)
+				{
+					_poll_fds[i].events = POLLIN;
+					break;
+				}
 			}
 		}
 	}
 }
+
 
 void Server::closeClientConnection(int client_fd)
 {
