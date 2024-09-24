@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerCommands.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 13:50:03 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:08:57 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@ void Server::setupCommandHandlers()
 	_commandHandlers["NICK"] = &Server::handleNickCommand;
 	_commandHandlers["USER"] = &Server::handleUserCommand;
 	_commandHandlers["JOIN"] = &Server::handleJoinCommand;
+	_commandHandlers["PART"] = &Server::handlePartCommand;
+	_commandHandlers["PRIVMSG"] = &Server::handlePrivmsgCommand;
+	_commandHandlers["NOTICE"] = &Server::handleNoticeCommand;
+	_commandHandlers["QUIT"] = &Server::handleQuitCommand;
+	_commandHandlers["TOPIC"] = &Server::handleTopicCommand;
+	_commandHandlers["PING"] = &Server::handlePingCommand;
+	_commandHandlers["PONG"] = &Server::handlePongCommand;
+	_commandHandlers["KICK"] = &Server::handleKickCommand;
+	_commandHandlers["INVITE"] = &Server::handleInviteCommand;
+	_commandHandlers["TOPIC"] = &Server::handleTopicCommand;
 }
 
 void Server::processClientCommand(Client* client, const std::string& commandLine)
@@ -29,7 +39,7 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
 	std::string params;
 	getline(iss, params);
 	if (!params.empty() && params[0] == ' ')
-		params.erase(0, 1); // Remove leading space
+		params.erase(0, 1);
 
 	std::map<std::string, CommandHandler>::iterator it = _commandHandlers.find(command);
 	if (it != _commandHandlers.end())
@@ -127,9 +137,8 @@ void Server::registerClientIfReady(Client* client)
 
 void Server::handleJoinCommand(Client* client, const std::string& params)
 {
-	if (!validateJoinCommand(client, params)) {
+	if (!validateJoinCommand(client, params))
 		return;
-	}
 
 	std::string channelName;
 	std::istringstream iss(params);
@@ -186,11 +195,10 @@ void Server::addClientToChannel(Channel* channel, Client* client)
 void Server::sendChannelInfoToClient(Channel* channel, Client* client)
 {
 	// Send the topic if it exists
-	if (!channel->getTopic().empty()) {
+	if (!channel->getTopic().empty())
 		sendReply(client, RPL_TOPIC, channel->getName(), channel->getTopic());
-	} else {
+	else
 		sendReply(client, "331", channel->getName(), "No topic is set");
-	}
 
 	// Build the names list
 	std::string namesList;
@@ -215,4 +223,50 @@ void Server::sendChannelInfoToClient(Channel* channel, Client* client)
 	sendReply(client, RPL_ENDOFNAMES, channel->getName(), "End of /NAMES list");
 
 	logToServer("Client " + client->getNickname() + " joined channel " + channel->getName());
+}
+
+
+void Server::handlePartCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "PART command received: " << params << std::endl;
+}
+
+void Server::handlePrivmsgCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "PRIVMSG command received: " << params << std::endl;
+}
+
+void Server::handleNoticeCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "NOTICE command received: " << params << std::endl;
+}
+
+void Server::handleQuitCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "QUIT command received: " << params << std::endl;
+}
+
+void Server::handleTopicCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "TOPIC command received: " << params << std::endl;
+}
+
+void Server::handlePingCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "PING command received: " << params << std::endl;
+}
+
+void Server::handlePongCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "PONG command received: " << params << std::endl;
+}
+
+void Server::handleKickCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "KICK command received: " << params << std::endl;
+}
+
+void Server::handleInviteCommand(Client* client, const std::string& params) {
+	(void)client;
+    std::cout << "INVITE command received: " << params << std::endl;
 }

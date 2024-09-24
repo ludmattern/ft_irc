@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:16:17 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 11:28:21 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 13:55:14 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ void Client::markForDisconnection(bool to_disconnect) {
 // Buffer handling
 void Client::appendToInputBuffer(const char* data, size_t length) {
     _input_buffer.append(data, length);
-}
+    if (_input_buffer.size() > MAX_BUFFER_SIZE)
+    {
+        _to_disconnect = true;
+    }}
 
 bool Client::extractCommand(std::string& command) {
     size_t pos = _input_buffer.find("\r\n");
