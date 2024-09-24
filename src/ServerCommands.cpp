@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 11:21:28 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 13:50:03 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,22 +172,47 @@ void Server::addClientToChannel(Channel* channel, Client* client)
     channel->addClient(client);
     client->joinChannel(channel->getName());
 
+    // Construct the JOIN message
     std::string joinMessage = ":" + client->getPrefix() + " JOIN :" + channel->getName() + "\r\n";
+
+    // Send the JOIN message to the client
+    sendRawMessageToClient(client, joinMessage);
+
+    // Broadcast the JOIN message to other clients in the channel
     channel->broadcastMessage(joinMessage, client);
 }
 
+
 void Server::sendChannelInfoToClient(Channel* channel, Client* client)
 {
-    if (!channel->getTopic().empty()) {
-        sendReply(client, "332", channel->getName(), channel->getTopic());
-    }
+	// Send the topic if it exists
+	if (!channel->getTopic().empty()) {
+		sendReply(client, RPL_TOPIC, channel->getName(), channel->getTopic());
+	} else {
+		sendReply(client, "331", channel->getName(), "No topic is set");
+	}
 
-    std::string namesList = "=" + channel->getName() + " :";
-    for (std::set<Client*>::const_iterator it = channel->getClients().begin(); it != channel->getClients().end(); ++it) {
-        namesList += (*it)->getNickname() + " ";
-    }
+	// Build the names list
+	std::string namesList;
+	for (std::set<Client*>::const_iterator it = channel->getClients().begin(); it != channel->getClients().end(); ++it) {
+		namesList += (*it)->getNickname() + " ";
+	}
 
-    sendReply(client, "353", namesList, "");
-    sendReply(client, "366", channel->getName(), "End of /NAMES list");
+	// Remove trailing space
+	if (!namesList.empty()) {
+		namesList.erase(namesList.size() - 1);
+	}
+
+	// Correctly format the parameters for RPL_NAMREPLY
+	// :<server> 353 <nick> <symbol> <channel> :<names list>
+	std::string symbol = "="; // "=" denotes a public channel
+	std::string params = symbol + " " + channel->getName();
+
+	// Send RPL_NAMREPLY
+	sendReply(client, RPL_NAMREPLY, params, namesList);
+
+	// Send RPL_ENDOFNAMES
+	sendReply(client, RPL_ENDOFNAMES, channel->getName(), "End of /NAMES list");
+
 	logToServer("Client " + client->getNickname() + " joined channel " + channel->getName());
 }
