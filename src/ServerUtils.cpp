@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:15:29 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 13:13:30 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:10:28 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,14 @@ void Server::sendRawMessageToClient(Client* client, const std::string& message)
 			break;
 		}
 	}
+}
+
+void Server::broadcastToChannel(Channel* channel, const std::string& message, Client* sender)
+{
+    const std::set<Client*>& clients = channel->getClients();
+    for (std::set<Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it) {
+        if (*it != sender) {
+            sendRawMessageToClient(*it, message);
+        }
+    }
 }

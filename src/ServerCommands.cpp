@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 13:50:03 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:09:28 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void Server::setupCommandHandlers()
 	_commandHandlers["NICK"] = &Server::handleNickCommand;
 	_commandHandlers["USER"] = &Server::handleUserCommand;
 	_commandHandlers["JOIN"] = &Server::handleJoinCommand;
+	_commandHandlers["PRIVMSG"] = &Server::handlePrivmsgCommand;
 }
 
 void Server::processClientCommand(Client* client, const std::string& commandLine)
@@ -215,4 +216,62 @@ void Server::sendChannelInfoToClient(Channel* channel, Client* client)
 	sendReply(client, RPL_ENDOFNAMES, channel->getName(), "End of /NAMES list");
 
 	logToServer("Client " + client->getNickname() + " joined channel " + channel->getName());
+}
+
+void Server::handlePrivmsgCommand(Client* client, const std::string& params) {
+    if (!client->isRegistered()) {
+        sendError(client, "451", "PRIVMSG", "You are not registered");
+        return;
+    }
+
+    std::istringstream iss(params);
+    std::string target;
+    iss >> target;
+
+    std::string message;
+    getline(iss, message);
+
+    if (target.empty() || message.empty()) {
+        sendError(client, ERR_NEEDMOREPARAMS, "PRIVMSG", "Not enough parameters");
+        return;
+    }
+
+    if (message[0] == ':')
+        message.erase(0, 1); // Supprimer le ':' initial
+
+    // Vérifier si la cible est un canal
+    if (target[0] == '#' || target[0] == '&') {
+        std::map<std::string, Channel*>::iterator it = _channels.find(target);
+        if (it == _channels.end()) {
+            sendError(client, "403", target, "No such channel");
+            return;
+        }
+
+        Channel* channel = it->second;
+        if (!channel->hasClient(client)) {
+            sendError(client, "404", target, "Cannot send to channel");
+            return;
+        }
+
+        // Envoyer le message à tous les membres du canal
+        std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
+        broadcastToChannel(channel, fullMessage, client);
+    } else {
+        // Gérer les messages privés à un utilisateur
+        Client* recipient = NULL;
+        for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+            if (it->second->getNickname() == target) {
+                recipient = it->second;
+                break;
+            }
+        }
+        if (recipient == NULL) {
+            sendError(client, "401", target, "No such nick/channel");
+            return;
+        }
+
+        // Envoyer le message au destinataire
+        std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
+        sendRawMessageToClient(recipient, fullMessage);
+    }
 }

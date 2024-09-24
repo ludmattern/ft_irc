@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 13:44:52 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 15:10:48 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ private:
 	void handlePingCommand(Client* client, const std::string& params);
 	void handleJoinCommand(Client* client, const std::string& params);
 	bool validateJoinCommand(Client* client, const std::string& params);
+	void handlePrivmsgCommand(Client* client, const std::string& params);
 
 	// Attempt to register a client (after PASS, NICK, USER)
 	void registerClientIfReady(Client* client);
@@ -153,6 +154,7 @@ private:
     Channel* getOrCreateChannel(const std::string& channelName);
     void addClientToChannel(Channel* channel, Client* client);
     void sendChannelInfoToClient(Channel* channel, Client* client);
+	void broadcastToChannel(Channel* channel, const std::string& message, Client* sender);
 };
 
 #endif
