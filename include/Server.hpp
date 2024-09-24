@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 11:15:15 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/24 13:44:52 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,29 @@
 #define RPL_YOURHOST       "002"
 #define RPL_CREATED        "003"
 #define RPL_MYINFO         "004"
+#define RPL_TOPIC          "332"
+#define RPL_NAMREPLY       "353"
+#define RPL_ENDOFNAMES     "366"
+#define RPL_NOTOPIC        "331"
+#define RPL_TOPIC          "332"
+
+// Other Numeric Replies
+#define ERR_NOSUCHCHANNEL    "403"
+#define ERR_CANNOTSENDTOCHAN "404"
+#define ERR_TOOMANYCHANNELS  "405"
+#define ERR_WASNOSUCHNICK    "406"
+#define ERR_TOOMANYTARGETS   "407"
+#define ERR_NOORIGIN         "409"
+#define ERR_NORECIPIENT      "411"
+#define ERR_NOTEXTTOSEND     "412"
+#define ERR_UNKNOWNCOMMAND   "421"
+#define ERR_NONICKNAMEGIVEN  "431"
+#define ERR_ERRONEUSNICKNAME "432"
+#define ERR_NICKNAMEINUSE    "433"
+#define ERR_USERNOTINCHANNEL "441"
+#define ERR_NOTONCHANNEL     "442"
+#define ERR_USERONCHANNEL    "443"
+#define ERR_NOTREGISTERED    "451"
 
 // IRC Standard Errors
 #define ERR_NEEDMOREPARAMS "461"
