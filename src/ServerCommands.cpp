@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/25 12:49:16 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:51:49 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
 
 
 
-void Server::handlePassCommand(Client* client, const std::vector<std::string>& params) {
+void Server::handlePassCommand(Client* client, const std::vector<std::string>& params) 
+{
 	if (client->isRegistered())
 		sendError(client, ERR_ALREADYREGISTRED, "", "You may not reregister");
 	else if (params.empty())
@@ -185,7 +186,6 @@ void Server::handleJoinCommand(Client* client, const std::vector<std::string>& p
 	sendChannelInfoToClient(channel, client);
 }
 
-
 bool Server::validateJoinCommand(Client* client, const std::vector<std::string>& params)
 {
 	if (!client->isRegistered())
@@ -202,7 +202,6 @@ bool Server::validateJoinCommand(Client* client, const std::vector<std::string>&
 
 	return true;
 }
-
 
 Channel* Server::getOrCreateChannel(const std::string& channelName)
 {
@@ -222,7 +221,6 @@ void Server::addClientToChannel(Channel* channel, Client* client)
 
 	std::string joinMessage = ":" + client->getPrefix() + " JOIN :" + channel->getName() + "\r\n";
 	sendRawMessageToClient(client, joinMessage);
-
 	channel->broadcastMessage(joinMessage, client);
 }
 
