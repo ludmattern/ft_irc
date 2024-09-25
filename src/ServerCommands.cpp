@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/25 09:25:51 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:49:16 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,6 @@ void Server::registerClientIfReady(Client* client)
 		if (client->getPassword() != _password)
 		{
 			sendError(client, ERR_PASSWDMISMATCH, "", "Password incorrect");
-			client->markForDisconnection(true);
 			return ;
 		}
 	}
@@ -272,7 +271,7 @@ void Server::handlePrivmsgCommand(Client* client, const std::vector<std::string>
 	std::string message = params[1];
 
 	if (message[0] == ':')
-		message.erase(0, 1); // Supprimer le ':' initial
+		message.erase(0, 1);
 
 	if (target[0] == GLOBAL_CHANNEL || target[0] == LOCAL_CHANNEL)
 	{
