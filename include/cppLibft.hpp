@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   cppLibft.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/23 15:32:29 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/25 09:52:59 by lmattern         ###   ########.fr       */
+/*   Created: 2024/09/25 09:34:01 by lmattern          #+#    #+#             */
+/*   Updated: 2024/09/25 09:34:27 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#ifndef CPPLIBFT_HPP
+#define CPPLIBFT_HPP
 
-int main(int argc, char* argv[])
+#include <sstream>
+
+template <typename T>
+std::string toString(const T& value)
 {
-	try
-	{
-		Server server(argc, argv);
-		server.run();
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << BRED"Error: "RESET << RED << e.what() << RESET << std::endl;
-		return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
+    std::ostringstream oss;
+    oss << value;
+    return oss.str();
 }
+
+#endif

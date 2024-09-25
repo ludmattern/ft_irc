@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerSendings.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/24 16:57:52 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/25 09:39:32 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,32 @@
 #include <sstream>
 #include <arpa/inet.h>
 #include <csignal>
+#include <termios.h>
+#include "cppLibft.hpp"
+
+struct termios oldt, newt;
+
+void disableControlCharacterEcho()
+{
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+
+    newt.c_lflag &= ~(ECHOCTL);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+}
+
+void restoreTerminalSettings()
+{
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+}
 
 Server* global_server_instance = NULL;
 
-Server::Server(int argc, char **argv)
-	: _server_name("MyIRCServer"), _is_running(true)
+Server::Server(int argc, char **argv) : _serverName("MyIRCServer"), _isRunning(true)
 {
 	global_server_instance = this;
 
+	disableControlCharacterEcho();
 	parseArguments(argc, argv);
 	initializeServerSocket();
 	setupCommandHandlers();
@@ -31,9 +49,9 @@ Server::Server(int argc, char **argv)
 
 Server::~Server()
 {
-	for (size_t i = 0; i < _poll_fds.size(); ++i)
+	for (size_t i = 0; i < _pollDescriptors.size(); ++i)
 	{
-		close(_poll_fds[i].fd);
+		close(_pollDescriptors[i].fd);
 	}
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 		delete it->second;
@@ -60,14 +78,14 @@ void Server::parseArguments(int argc, char **argv)
 
 void Server::initializeServerSocket()
 {
-	_server_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (_server_fd < 0)
+	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+	if (_serverSocket < 0)
 		throw std::runtime_error("Runtime error: Failed on socket creating");
 
 	int opt = 1;
-	if (setsockopt(_server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
+	if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
 	{
-		close(_server_fd);
+		close(_serverSocket);
 		throw std::runtime_error("Runtime error: Failed on setsocket");
 	}
 
@@ -77,73 +95,104 @@ void Server::initializeServerSocket()
 	server_addr.sin_addr.s_addr = INADDR_ANY;  // All local interfaces
 	server_addr.sin_port = htons(_port);       // Convert port to network byte order
 
-	if (bind(_server_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
+	if (bind(_serverSocket, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
 	{
-		close(_server_fd);
+		close(_serverSocket);
 		throw std::runtime_error("Runtime error: Failed on bind");
 	}
 
-	if (listen(_server_fd, SOMAXCONN) < 0)
+	if (listen(_serverSocket, SOMAXCONN) < 0)
 	{
-		close(_server_fd);
+		close(_serverSocket);
 		throw std::runtime_error("Runtime error: Failed on listen");
 	}
 
-	setSocketNonBlocking(_server_fd);
+	setSocketNonBlocking(_serverSocket);
 
 	struct pollfd server_pollfd;
-	server_pollfd.fd = _server_fd;
+	server_pollfd.fd = _serverSocket;
 	server_pollfd.events = POLLIN;
 	server_pollfd.revents = 0;
-	_poll_fds.push_back(server_pollfd);
+	_pollDescriptors.push_back(server_pollfd);
 
-	std::cout << "Server started on port " << _port << std::endl;
+	logToServer("Server started on port " + toString(_port), "INFO");
 }
 
 void Server::handleSignal(int signal)
 {
 	if (signal == SIGINT || signal == SIGQUIT)
 	{
-		std::cout << " Signal received (" << signal << "). Closing server..." << std::endl;
+		global_server_instance->logToServer("Signal received (" + toString(signal) + ")", "INFO");
+		global_server_instance->logToServer("Closing server...", "WARNING");
+		restoreTerminalSettings();
 		global_server_instance->setRunningState(false);
 	}
 }
 
 void Server::setRunningState(bool is_running)
 {
-	this->_is_running = is_running;
+	this->_isRunning = is_running;
 }
 
 void Server::run()
 {
-	while (_is_running)
+	while (_isRunning)
 	{
-		int poll_count = poll(&_poll_fds[0], _poll_fds.size(), -1);
+		int poll_count = poll(&_pollDescriptors[0], _pollDescriptors.size(), -1);
 		if (poll_count < 0)
 		{
-			if (_is_running)
+			if (_isRunning)
 				throw std::runtime_error("Runtime error: Failed on poll");
-			break ;
+			break;
 		}
 
-		for (size_t i = 0; i < _poll_fds.size(); ++i)
+		for (size_t i = 0; i < _pollDescriptors.size(); ++i)
 		{
-			if (!_is_running) break ;
-
-			if (_poll_fds[i].fd == _server_fd && (_poll_fds[i].revents & POLLIN))
-				handleNewConnection();
-			else if (_poll_fds[i].revents & POLLIN)
-				readFromClient(_poll_fds[i].fd);
-			else if (_poll_fds[i].revents & POLLOUT)
-				writeToClient(_poll_fds[i].fd);
-			if (_poll_fds[i].fd != _server_fd && shouldClientDisconnect(_poll_fds[i].fd))
-			{
-				if (_poll_fds[i].revents & POLLOUT)
-					writeToClient(_poll_fds[i].fd);
-				closeClientConnection(_poll_fds[i].fd);
-			}
+			if (!_isRunning)
+				break;
+			handlePollEvent(_pollDescriptors[i]);
 		}
 	}
+}
+
+void Server::handlePollEvent(struct pollfd& pollDescriptor)
+{
+	if (isServerSocket(pollDescriptor))
+	{
+		if (pollDescriptor.revents & POLLIN)
+			handleNewConnection();
+	}
+	else if (isClientSocket(pollDescriptor))
+		checkClientEvents(pollDescriptor);
+}
+
+bool Server::isServerSocket(const struct pollfd& pollDescriptor) const
+{
+	return pollDescriptor.fd == _serverSocket;
+}
+
+bool Server::isClientSocket(const struct pollfd& pollDescriptor) const
+{
+	return pollDescriptor.fd != _serverSocket;
+}
+
+void Server::checkClientEvents(struct pollfd& pollDescriptor)
+{
+	if (pollDescriptor.revents & POLLIN)
+		readFromClient(pollDescriptor.fd);
+
+	if (pollDescriptor.revents & POLLOUT)
+		writeToClient(pollDescriptor.fd);
+
+	if (shouldClientDisconnect(pollDescriptor.fd))
+		handleClientDisconnection(pollDescriptor);
+}
+
+void Server::handleClientDisconnection(struct pollfd& pollDescriptor)
+{
+    if (pollDescriptor.revents & POLLOUT)
+        writeToClient(pollDescriptor.fd);
+    closeClientConnection(pollDescriptor.fd);
 }
 
 void Server::setSocketNonBlocking(int fd)
@@ -152,7 +201,7 @@ void Server::setSocketNonBlocking(int fd)
 	{
 		perror("Error setting non-blocking mode");
 		close(fd);
-		exit(EXIT_FAILURE);
+		throw std::runtime_error("Runtime error: Failed on fcntl");
 	}
 }
 
@@ -160,8 +209,5 @@ bool Server::shouldClientDisconnect(int client_fd)
 {
 	Client* client = _clients[client_fd];
 
-	if (client->shouldDisconnect())
-		return true;
-	else
-		return false;
+	return (client->shouldDisconnect());
 }

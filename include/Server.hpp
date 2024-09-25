@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 16:57:56 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/25 09:49:17 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 #define RPL_TOPIC          "332"
 
 // Other Numeric Replies
+#define ERR_NOSUCHNICK       "401"
 #define ERR_NOSUCHCHANNEL    "403"
 #define ERR_CANNOTSENDTOCHAN "404"
 #define ERR_TOOMANYCHANNELS  "405"
@@ -70,6 +71,28 @@
 #define MIN_PORT 1
 #define MAX_PORT 65535
 #define RESERVED_PORT 1024
+
+//Misc Constants
+#define GLOBAL_CHANNEL '#'
+#define LOCAL_CHANNEL '&'
+
+// Colors
+#define RESET       "\033[0m"
+#define BLACK       "\033[30m"
+#define RED         "\033[31m"
+#define GREEN       "\033[32m"
+#define YELLOW      "\033[33m"
+#define BLUE        "\033[34m"
+#define MAGENTA     "\033[35m"
+#define CYAN        "\033[36m"
+#define WHITE       "\033[37m"
+
+// Text styles
+#define BOLD        "\033[1m"
+#define UNDERLINE   "\033[4m"
+#define BRED		"\033[1;31m"
+
+
 /**
  * Server class
  * This class handles the operation of the IRC server, including client connections,
@@ -86,40 +109,45 @@ public:
 
 private:
 	// Server socket descriptor
-	int _server_fd;
+	int _serverSocket;
 	
 	// Server parameters
 	int _port;
 	std::string _password;
 
 	// Polling file descriptors, channels and client list
-	std::vector<struct pollfd> _poll_fds;
+	std::vector<struct pollfd> _pollDescriptors;
 	std::map<int, Client*> _clients;
 	std::map<std::string, Channel*> _channels;
 
 	// Server information
-	std::string _server_name;
-	bool _is_running;
+	std::string _serverName;
+	bool _isRunning;
 
 	// === Network event handling ===
+	void handlePollEvent(struct pollfd& pollDescriptor);
+	bool isServerSocket(const struct pollfd& pollDescriptor) const;
+	bool isClientSocket(const struct pollfd& pollDescriptor) const;
+	void checkClientEvents(struct pollfd& pollDescriptor);
 	void initializeServerSocket();          // Initialize the server socket
 	void setSocketNonBlocking(int fd);      // Set a socket to non-blocking mode
 	void handleNewConnection();       // Accept a new client connection
-	void readFromClient(int client_fd);    // Read data from a client
-	void writeToClient(int client_fd);   // Write data to a client
-	void closeClientConnection(int client_fd); // Disconnect a client
-	void setPollToWrite(int client_fd); // Modify poll event to POLLOUT for a client
-	bool shouldClientDisconnect(int client_fd); // Check if a client should be disconnected
+	void handleClientDisconnection(struct pollfd& pollDescriptor);
+	void readFromClient(int clientFd);    // Read data from a client
+	void writeToClient(int clientFd);   // Write data to a client
+	void closeClientConnection(int clientFd); // Disconnect a client
+	void setPollToWrite(int clientFd); // Modify poll event to POLLOUT for a client
+	bool shouldClientDisconnect(int clientFd); // Check if a client should be disconnected
 
 	// Signal handling (e.g., server shutdown via Ctrl+C)
 	static void handleSignal(int signal);
-	void setRunningState(bool is_running);
+	void setRunningState(bool isRunning);
 
 	// Argument parsing for server startup
 	void parseArguments(int argc, char **argv);
 
 	// === IRC Command Handling ===
-typedef void (Server::*CommandHandler)(Client*, const std::vector<std::string>&);
+	typedef void (Server::*CommandHandler)(Client*, const std::vector<std::string>&);
 
 	std::map<std::string, CommandHandler> _commandHandlers; // Map of IRC commands to their handlers
 
@@ -154,7 +182,7 @@ typedef void (Server::*CommandHandler)(Client*, const std::vector<std::string>&)
 	void sendError(Client* client, const std::string& code, const std::string& command, const std::string& message); // Send an error message
 
 	// Utility functions
-	void logToServer(const std::string& message); // Display a message to the server console
+	void logToServer(const std::string& message, const std::string& level); // Log a message to the server
 	void sendRawMessageToClient(Client* client, const std::string& message); // Send a raw message to a client
 	bool isNicknameTaken(const std::string& nickname) const; // Check if a nickname is already in use
 

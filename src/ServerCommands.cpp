@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerCommands.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 16:57:47 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/25 09:25:51 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,7 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
 			break;
 		} 
 		else 
-		{
 			params.push_back(param);
-		}
 	}
 
 	std::transform(command.begin(), command.end(), command.begin(), ::toupper);
@@ -83,9 +81,7 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
 		(this->*handler)(client, params);
 	}
 	else 
-	{
 		sendError(client, ERR_UNKNOWNCOMMAND, command, "Unknown command");
-	}
 }
 
 
@@ -195,7 +191,7 @@ bool Server::validateJoinCommand(Client* client, const std::vector<std::string>&
 {
 	if (!client->isRegistered())
 	{
-		sendError(client, "451", "JOIN", "You are not registered");
+		sendError(client, ERR_NOTREGISTERED, "JOIN", "You are not registered");
 		return false;
 	}
 
@@ -225,13 +221,9 @@ void Server::addClientToChannel(Channel* channel, Client* client)
 	channel->addClient(client);
 	client->joinChannel(channel->getName());
 
-	// Construct the JOIN message
 	std::string joinMessage = ":" + client->getPrefix() + " JOIN :" + channel->getName() + "\r\n";
-
-	// Send the JOIN message to the client
 	sendRawMessageToClient(client, joinMessage);
 
-	// Broadcast the JOIN message to other clients in the channel
 	channel->broadcastMessage(joinMessage, client);
 }
 
@@ -242,37 +234,31 @@ void Server::sendChannelInfoToClient(Channel* channel, Client* client)
 	if (!channel->getTopic().empty())
 		sendReply(client, RPL_TOPIC, channel->getName(), channel->getTopic());
 	else
-		sendReply(client, "331", channel->getName(), "No topic is set");
+		sendReply(client, RPL_NOTOPIC, channel->getName(), "No topic is set");
 
 	// Build the names list
 	std::string namesList;
-	for (std::set<Client*>::const_iterator it = channel->getClients().begin(); it != channel->getClients().end(); ++it) {
+	for (std::set<Client*>::const_iterator it = channel->getClients().begin(); it != channel->getClients().end(); ++it)
 		namesList += (*it)->getNickname() + " ";
-	}
 
 	// Remove trailing space
-	if (!namesList.empty()) {
+	if (!namesList.empty())
 		namesList.erase(namesList.size() - 1);
-	}
 
-	// Correctly format the parameters for RPL_NAMREPLY
 	// :<server> 353 <nick> <symbol> <channel> :<names list>
 	std::string symbol = "="; // "=" denotes a public channel
 	std::string params = symbol + " " + channel->getName();
-
-	// Send RPL_NAMREPLY
 	sendReply(client, RPL_NAMREPLY, params, namesList);
 
-	// Send RPL_ENDOFNAMES
 	sendReply(client, RPL_ENDOFNAMES, channel->getName(), "End of /NAMES list");
 
-	logToServer("Client " + client->getNickname() + " joined channel " + channel->getName());
+	logToServer("Client " + client->getNickname() + " joined channel " + channel->getName(), "INFO");
 }
 void Server::handlePrivmsgCommand(Client* client, const std::vector<std::string>& params)
 {
 	if (!client->isRegistered())
 	{
-		sendError(client, "451", "PRIVMSG", "You are not registered");
+		sendError(client, ERR_NOTREGISTERED, "PRIVMSG", "You are not registered");
 		return;
 	}
 
@@ -288,38 +274,41 @@ void Server::handlePrivmsgCommand(Client* client, const std::vector<std::string>
 	if (message[0] == ':')
 		message.erase(0, 1); // Supprimer le ':' initial
 
-	// Vérifier si la cible est un canal
-	if (target[0] == '#' || target[0] == '&') {
+	if (target[0] == GLOBAL_CHANNEL || target[0] == LOCAL_CHANNEL)
+	{
 		std::map<std::string, Channel*>::iterator it = _channels.find(target);
-		if (it == _channels.end()) {
-			sendError(client, "403", target, "No such channel");
+		if (it == _channels.end())
+		{
+			sendError(client, ERR_NOSUCHCHANNEL, target, "No such channel");
 			return;
 		}
 
 		Channel* channel = it->second;
 		if (!channel->hasClient(client)) {
-			sendError(client, "404", target, "Cannot send to channel");
+			sendError(client, ERR_CANNOTSENDTOCHAN, target, "Cannot send to channel");
 			return;
 		}
 
-		// Envoyer le message à tous les membres du canal
 		std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
 		broadcastToChannel(channel, fullMessage, client);
-	} else {
-		// Gérer les messages privés à un utilisateur
+	}
+	else
+	{
 		Client* recipient = NULL;
-		for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
-			if (it->second->getNickname() == target) {
+		for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+		{
+			if (it->second->getNickname() == target)
+			{
 				recipient = it->second;
 				break;
 			}
 		}
-		if (recipient == NULL) {
-			sendError(client, "401", target, "No such nick/channel");
+		if (recipient == NULL)
+		{
+			sendError(client, ERR_NOSUCHNICK, target, "No such nick/channel");
 			return;
 		}
 
-		// Envoyer le message au destinataire
 		std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
 		sendRawMessageToClient(recipient, fullMessage);
 	}
@@ -330,7 +319,7 @@ void Server::handlePartCommand(Client* client, const  std::vector<std::string>& 
 	(void)client;
 	(void)params;
 
-	std::cout << "PART command received: "  << std::endl;
+	logToServer("PART command received: ", "INFO");
 }
 
 
@@ -338,45 +327,45 @@ void Server::handleNoticeCommand(Client* client, const  std::vector<std::string>
 	(void)client;
 	(void)params;
 
-	std::cout << "NOTICE command received: "  << std::endl;
+	logToServer("NOTICE command received: ", "INFO");
 }
 
 void Server::handleQuitCommand(Client* client, const  std::vector<std::string>& params) {
 	(void)client;
 	(void)params;
 
-	std::cout << "QUIT command received: " << std::endl;
+	logToServer("QUIT command received: ", "INFO");
 }
 
 void Server::handleTopicCommand(Client* client, const  std::vector<std::string>& params) {
 	(void)client;
 	(void)params;
 
-	std::cout << "TOPIC command received: " << std::endl;
+	logToServer("TOPIC command received: ", "INFO");
 }
 
 void Server::handlePingCommand(Client* client, const  std::vector<std::string>& params) {
 	(void)client;
 	(void)params;
 
-	std::cout << "PING command received: " << std::endl;
+	logToServer("PING command received: ", "INFO");
 }
 
 void Server::handlePongCommand(Client* client, const  std::vector<std::string>& params) {
 	(void)client;
 	(void)params;
-	std::cout << "PONG command received: " << std::endl;
+	logToServer("PONG command received: ", "INFO");
 }
 
 void Server::handleKickCommand(Client* client, const  std::vector<std::string>& params) {
 	(void)client;
 	(void)params;
 
-	std::cout << "KICK command received: " << std::endl;
+	logToServer("KICK command received: ", "INFO");
 }
 
 void Server::handleInviteCommand(Client* client, const  std::vector<std::string>& params) {
 	(void)client;
 	(void)params;
-	std::cout << "INVITE command received: " << std::endl;
+	logToServer("INVITE command received: ", "INFO");
 }
