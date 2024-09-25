@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ServerClientHandling.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:09:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 16:57:50 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/25 10:08:42 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "cppLibft.hpp"
 #include <arpa/inet.h>
 #include <string>
 #include <cstdio>
@@ -22,7 +23,7 @@ void Server::handleNewConnection()
 	struct sockaddr_in client_addr;
 	socklen_t client_len = sizeof(client_addr);
 
-	client_fd = accept(_server_fd, (struct sockaddr*)&client_addr, &client_len);
+	client_fd = accept(_serverSocket, (struct sockaddr*)&client_addr, &client_len);
 	if (client_fd < 0)
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
@@ -36,7 +37,7 @@ void Server::handleNewConnection()
 	client_pollfd.fd = client_fd;
 	client_pollfd.events = POLLIN;
 	client_pollfd.revents = 0;
-	_poll_fds.push_back(client_pollfd);
+	_pollDescriptors.push_back(client_pollfd);
 
 	Client* new_client = new Client(client_fd);
 	char client_ip[INET_ADDRSTRLEN];
@@ -61,7 +62,7 @@ void Server::readFromClient(int client_fd)
 		std::string command;
 		while (client->extractCommand(command))
 		{
-			std::cout << "Command received from FD " << client_fd << ": " << command << std::endl;
+			logToServer("Command received from FD " + toString(client_fd) + ": " + command, "INFO");
 			processClientCommand(client, command);
 		}
 	}
@@ -90,11 +91,11 @@ void Server::writeToClient(int client_fd)
 		client->eraseFromOutputBuffer(bytes_sent);
 		if (client->getOutputBuffer().empty())
 		{
-			for (size_t i = 0; i < _poll_fds.size(); ++i)
+			for (size_t i = 0; i < _pollDescriptors.size(); ++i)
 			{
-				if (_poll_fds[i].fd == client_fd)
+				if (_pollDescriptors[i].fd == client_fd)
 				{
-					_poll_fds[i].events = POLLIN;
+					_pollDescriptors[i].events = POLLIN;
 					break;
 				}
 			}
@@ -108,13 +109,13 @@ void Server::closeClientConnection(int client_fd)
 	close(client_fd);
 	delete _clients[client_fd];
 	_clients.erase(client_fd);
-	for (size_t i = 0; i < _poll_fds.size(); ++i)
+	for (size_t i = 0; i < _pollDescriptors.size(); ++i)
 	{
-		if (_poll_fds[i].fd == client_fd)
+		if (_pollDescriptors[i].fd == client_fd)
 		{
-			_poll_fds.erase(_poll_fds.begin() + i);
+			_pollDescriptors.erase(_pollDescriptors.begin() + i);
 			break;
 		}
 	}
-	std::cout << "Client " << client_fd << " disconnected." << std::endl;
+	logToServer("Client " + toString(client_fd) + " disconnected.", "INFO");
 }
