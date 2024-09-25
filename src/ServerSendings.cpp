@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/25 10:26:01 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/25 11:22:13 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ struct termios oldt, newt;
 
 void disableControlCharacterEcho()
 {
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
+	tcgetattr(STDIN_FILENO, &oldt);
+	newt = oldt;
 
-    newt.c_lflag &= ~(ECHOCTL);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+	newt.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 }
 
 void restoreTerminalSettings()
 {
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
 }
 
 Server* global_server_instance = NULL;
@@ -49,17 +49,22 @@ Server::Server(int argc, char **argv) : _serverName("MyIRCServer"), _isRunning(t
 
 Server::~Server()
 {
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+		delete it->second;
+	_channels.clear();
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		close(it->first);
+		delete it->second;
+	}
+	_clients.clear();
 	for (size_t i = 0; i < _pollDescriptors.size(); ++i)
 	{
 		close(_pollDescriptors[i].fd);
 	}
-	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
-		delete it->second;
-	_clients.clear();
-	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
-		delete it->second;
-	_clients.clear();
+	_pollDescriptors.clear();
 }
+
 
 void Server::parseArguments(int argc, char **argv)
 {
@@ -193,9 +198,9 @@ void Server::checkClientEvents(struct pollfd& pollDescriptor)
 
 void Server::handleClientDisconnection(struct pollfd& pollDescriptor)
 {
-    if (pollDescriptor.revents & POLLOUT)
-        writeToClient(pollDescriptor.fd);
-    closeClientConnection(pollDescriptor.fd);
+	if (pollDescriptor.revents & POLLOUT)
+		writeToClient(pollDescriptor.fd);
+	closeClientConnection(pollDescriptor.fd);
 }
 
 void Server::setSocketNonBlocking(int fd)
