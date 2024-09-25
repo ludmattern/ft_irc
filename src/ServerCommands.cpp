@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerCommands.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/25 09:25:51 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:36:10 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
 
 
 
-void Server::handlePassCommand(Client* client, const std::vector<std::string>& params) {
+void Server::handlePassCommand(Client* client, const std::vector<std::string>& params) 
+{
 	if (client->isRegistered())
 		sendError(client, ERR_ALREADYREGISTRED, "", "You may not reregister");
 	else if (params.empty())
@@ -186,7 +187,6 @@ void Server::handleJoinCommand(Client* client, const std::vector<std::string>& p
 	sendChannelInfoToClient(channel, client);
 }
 
-
 bool Server::validateJoinCommand(Client* client, const std::vector<std::string>& params)
 {
 	if (!client->isRegistered())
@@ -203,7 +203,6 @@ bool Server::validateJoinCommand(Client* client, const std::vector<std::string>&
 
 	return true;
 }
-
 
 Channel* Server::getOrCreateChannel(const std::string& channelName)
 {
@@ -223,7 +222,6 @@ void Server::addClientToChannel(Channel* channel, Client* client)
 
 	std::string joinMessage = ":" + client->getPrefix() + " JOIN :" + channel->getName() + "\r\n";
 	sendRawMessageToClient(client, joinMessage);
-
 	channel->broadcastMessage(joinMessage, client);
 }
 
