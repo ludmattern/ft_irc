@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/26 22:37:25 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/27 00:45:02 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,39 +107,6 @@ public:
 	// Main method to run the server
 	void run();
 
-		// === Network event handling ===
-	void handlePollEvent(struct pollfd& pollDescriptor);
-	bool isServerSocket(const struct pollfd& pollDescriptor) const;
-	bool isClientSocket(const struct pollfd& pollDescriptor) const;
-	void checkClientEvents(struct pollfd& pollDescriptor);
-	void initializeServerSocket();          // Initialize the server socket
-	void setSocketNonBlocking(int fd);      // Set a socket to non-blocking mode
-	void handleNewConnection();       // Accept a new client connection
-	void handleClientDisconnection(struct pollfd& pollDescriptor);
-	void readFromClient(int clientFd);    // Read data from a client
-	void writeToClient(int clientFd);   // Write data to a client
-	void closeClientConnection(int clientFd); // Disconnect a client
-	void setPollToWrite(int clientFd); // Modify poll event to POLLOUT for a client
-	bool shouldClientDisconnect(int clientFd); // Check if a client should be disconnected
-
-	// Signal handling (e.g., server shutdown via Ctrl+C)
-	static void handleSignal(int signal);
-	void setRunningState(bool isRunning);
-
-	// Argument parsing for server startup
-	void parseArguments(int argc, char **argv);
-
-	// === IRC Command Handling ===
-	typedef void (Server::*CommandHandler)(Client*, const std::vector<std::string>&);
-
-	std::map<std::string, CommandHandler> _commandHandlers; // Map of IRC commands to their handlers
-
-	// Initialize command handlers
-	void setupCommandHandlers();
-
-	// Process a command sent by a client
-	void processClientCommand(Client* client, const std::string& commandLine);
-
 	// Handlers for various IRC commands
 
 	// Attempt to register a client (after PASS, NICK, USER)
@@ -183,6 +150,42 @@ private:
 	// Server information
 	std::string _serverName;
 	bool _isRunning;
+
+
+
+	void handlePollEvent(struct pollfd& pollDescriptor);
+	bool isServerSocket(const struct pollfd& pollDescriptor) const;
+	bool isClientSocket(const struct pollfd& pollDescriptor) const;
+	void checkClientEvents(struct pollfd& pollDescriptor);
+	void initializeServerSocket();          // Initialize the server socket
+	void setSocketNonBlocking(int fd);      // Set a socket to non-blocking mode
+	void handleNewConnection();       // Accept a new client connection
+	void handleClientDisconnection(struct pollfd& pollDescriptor);
+	void readFromClient(int clientFd);    // Read data from a client
+	void writeToClient(int clientFd);   // Write data to a client
+	void closeClientConnection(int clientFd); // Disconnect a client
+	void setPollToWrite(int clientFd); // Modify poll event to POLLOUT for a client
+	bool shouldClientDisconnect(int clientFd); // Check if a client should be disconnected
+
+		// === Network event handling ===
+
+	// Signal handling (e.g., server shutdown via Ctrl+C)
+	static void handleSignal(int signal);
+	void setRunningState(bool isRunning);
+
+	// Argument parsing for server startup
+	void parseArguments(int argc, char **argv);
+
+	// === IRC Command Handling ===
+	typedef void (Server::*CommandHandler)(Client*, const std::vector<std::string>&);
+
+	std::map<std::string, CommandHandler> _commandHandlers; // Map of IRC commands to their handlers
+
+	// Initialize command handlers
+	void setupCommandHandlers();
+
+	// Process a command sent by a client
+	void processClientCommand(Client* client, const std::string& commandLine);
 };
 
 #endif

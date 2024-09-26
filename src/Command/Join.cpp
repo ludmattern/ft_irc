@@ -55,7 +55,7 @@ void Join::execute(Server& server, Client& client, const std::vector<std::string
 {
 	if (!client.isRegistered())
 	{
-		server.sendError(&client, "451", "JOIN", "You are not registered");
+		server.sendError(&client, ERR_NOTREGISTERED, "JOIN", "You are not registered");
 		return;
 	}
 
