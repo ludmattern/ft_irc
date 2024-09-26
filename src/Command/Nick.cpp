@@ -35,14 +35,14 @@ void Nick::execute(Server& server, Client& client, const std::vector<std::string
 {
 	if (params.empty())
 	{
-		server.sendError(&client, "431", "", "No nickname given");
+		server.sendError(&client, ERR_NONICKNAMEGIVEN, "", "No nickname given");
 		return;
 	}
 
 	std::string nickname = params[0];
 
 	if (server.isNicknameTaken(nickname))
-		server.sendError(&client, "433", nickname, "Nickname is already in use");
+		server.sendError(&client, ERR_NICKNAMEINUSE, nickname, "Nickname is already in use");
 	else
 	{
 		client.setNickname(nickname);

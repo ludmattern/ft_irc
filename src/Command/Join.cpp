@@ -29,6 +29,7 @@ void Server::sendChannelInfoToClient(Channel* channel, Client* client)
 
 	logToServer("Client " + client->getNickname() + " joined channel " + channel->getName(), "INFO");
 }
+
 Channel* Server::getOrCreateChannel(const std::string& channelName)
 {
 	std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
@@ -60,7 +61,7 @@ void Join::execute(Server& server, Client& client, const std::vector<std::string
 
 	if (params.empty())
 	{
-		server.sendError(&client, "461", "JOIN", "Not enough parameters");
+		server.sendError(&client, ERR_NEEDMOREPARAMS, "JOIN", "Not enough parameters");
 		return;
 	}
 
