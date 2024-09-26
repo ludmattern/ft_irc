@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/25 09:49:17 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/26 22:37:25 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,24 +107,7 @@ public:
 	// Main method to run the server
 	void run();
 
-private:
-	// Server socket descriptor
-	int _serverSocket;
-	
-	// Server parameters
-	int _port;
-	std::string _password;
-
-	// Polling file descriptors, channels and client list
-	std::vector<struct pollfd> _pollDescriptors;
-	std::map<int, Client*> _clients;
-	std::map<std::string, Channel*> _channels;
-
-	// Server information
-	std::string _serverName;
-	bool _isRunning;
-
-	// === Network event handling ===
+		// === Network event handling ===
 	void handlePollEvent(struct pollfd& pollDescriptor);
 	bool isServerSocket(const struct pollfd& pollDescriptor) const;
 	bool isClientSocket(const struct pollfd& pollDescriptor) const;
@@ -158,20 +141,6 @@ private:
 	void processClientCommand(Client* client, const std::string& commandLine);
 
 	// Handlers for various IRC commands
-	void handlePassCommand(Client* client, const  std::vector<std::string>& params);
-	void handleNickCommand(Client* client, const  std::vector<std::string>& params);
-	void handleUserCommand(Client* client, const  std::vector<std::string>& params);
-	void handleJoinCommand(Client* client, const  std::vector<std::string>& params);
-	bool validateJoinCommand(Client* client, const  std::vector<std::string>& params);
-	void handlePrivmsgCommand(Client* client, const  std::vector<std::string>& params);
-	void handlePartCommand(Client* client, const  std::vector<std::string>& params);
-	void handleNoticeCommand(Client* client, const  std::vector<std::string>& params);
-	void handleQuitCommand(Client* client, const  std::vector<std::string>& params);
-	void handleTopicCommand(Client* client, const  std::vector<std::string>& params);
-	void handlePingCommand(Client* client, const  std::vector<std::string>& params);
-	void handlePongCommand(Client* client, const  std::vector<std::string>& params);
-	void handleKickCommand(Client* client, const  std::vector<std::string>& params);
-	void handleInviteCommand(Client* client, const  std::vector<std::string>& params);
 
 	// Attempt to register a client (after PASS, NICK, USER)
 	void registerClientIfReady(Client* client);
@@ -189,11 +158,31 @@ private:
 	// Clean up resources
 	void cleanupResources();
 
+	Channel* getChannelByName(const std::string& channelName);
+    Client* getClientByNickname(const std::string& nickname);
+
 	// === Channel Handling ===
 	Channel* getOrCreateChannel(const std::string& channelName);
 	void addClientToChannel(Channel* channel, Client* client);
 	void sendChannelInfoToClient(Channel* channel, Client* client);
 	void broadcastToChannel(Channel* channel, const std::string& message, Client* sender);
+
+private:
+	// Server socket descriptor
+	int _serverSocket;
+	
+	// Server parameters
+	int _port;
+	std::string _password;
+
+	// Polling file descriptors, channels and client list
+	std::vector<struct pollfd> _pollDescriptors;
+	std::map<int, Client*> _clients;
+	std::map<std::string, Channel*> _channels;
+
+	// Server information
+	std::string _serverName;
+	bool _isRunning;
 };
 
 #endif
