@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/26 22:41:24 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/27 00:17:53 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,6 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
     }
     else 
     {
-        sendError(client, "421", commandName, "Unknown command");
+		sendError(client, ERR_UNKNOWNCOMMAND, commandName, "Unknown command");
     }
 }

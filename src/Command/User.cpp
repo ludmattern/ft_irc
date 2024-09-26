@@ -7,13 +7,13 @@ void User::execute(Server& server, Client& client, const std::vector<std::string
 {
 	if (client.isRegistered())
 	{
-		server.sendError(&client, "462", "", "You may not reregister");
+		server.sendError(&client, ERR_ALREADYREGISTRED, "", "You may not reregister");
 		return;
 	}
 
 	if (params.size() < 4)
 	{
-		server.sendError(&client, "461", "USER", "Not enough parameters");
+		server.sendError(&client, ERR_NEEDMOREPARAMS, "USER", "Not enough parameters");
 		return;
 	}
 
