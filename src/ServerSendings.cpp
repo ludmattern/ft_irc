@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/26 22:49:00 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/28 14:38:54 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <csignal>
 #include <termios.h>
 #include "cppLibft.hpp"
-
+#include "Parser.hpp"
 struct termios oldt, newt;
 
 void disableControlCharacterEcho()
@@ -38,7 +38,8 @@ Server* global_server_instance = NULL;
 Server::Server(int argc, char **argv) : _serverName("MyIRCServer"), _isRunning(true)
 {
 	global_server_instance = this;
-
+	
+	_commandHandler = new Parser();
 	disableControlCharacterEcho();
 	parseArguments(argc, argv);
 	initializeServerSocket();
@@ -48,6 +49,7 @@ Server::Server(int argc, char **argv) : _serverName("MyIRCServer"), _isRunning(t
 
 Server::~Server()
 {
+	delete _commandHandler;
 	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
 		delete it->second;
 	_channels.clear();
