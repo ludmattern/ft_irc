@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/25 09:49:17 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/27 00:45:02 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,33 @@ public:
 	// Main method to run the server
 	void run();
 
+	// Handlers for various IRC commands
+
+	// Attempt to register a client (after PASS, NICK, USER)
+	void registerClientIfReady(Client* client);
+
+	// === Response and Error Handling ===
+	void sendWelcomeMessages(Client* client); // Send welcome messages to the client
+	void sendReply(Client* client, const std::string& code, const std::string& params, const std::string& message); // Send a standard reply
+	void sendError(Client* client, const std::string& code, const std::string& command, const std::string& message); // Send an error message
+
+	// Utility functions
+	void logToServer(const std::string& message, const std::string& level); // Log a message to the server
+	void sendRawMessageToClient(Client* client, const std::string& message); // Send a raw message to a client
+	bool isNicknameTaken(const std::string& nickname) const; // Check if a nickname is already in use
+
+	// Clean up resources
+	void cleanupResources();
+
+	Channel* getChannelByName(const std::string& channelName);
+    Client* getClientByNickname(const std::string& nickname);
+
+	// === Channel Handling ===
+	Channel* getOrCreateChannel(const std::string& channelName);
+	void addClientToChannel(Channel* channel, Client* client);
+	void sendChannelInfoToClient(Channel* channel, Client* client);
+	void broadcastToChannel(Channel* channel, const std::string& message, Client* sender);
+
 private:
 	// Server socket descriptor
 	int _serverSocket;
@@ -124,7 +151,8 @@ private:
 	std::string _serverName;
 	bool _isRunning;
 
-	// === Network event handling ===
+
+
 	void handlePollEvent(struct pollfd& pollDescriptor);
 	bool isServerSocket(const struct pollfd& pollDescriptor) const;
 	bool isClientSocket(const struct pollfd& pollDescriptor) const;
@@ -138,6 +166,8 @@ private:
 	void closeClientConnection(int clientFd); // Disconnect a client
 	void setPollToWrite(int clientFd); // Modify poll event to POLLOUT for a client
 	bool shouldClientDisconnect(int clientFd); // Check if a client should be disconnected
+
+		// === Network event handling ===
 
 	// Signal handling (e.g., server shutdown via Ctrl+C)
 	static void handleSignal(int signal);
@@ -156,44 +186,6 @@ private:
 
 	// Process a command sent by a client
 	void processClientCommand(Client* client, const std::string& commandLine);
-
-	// Handlers for various IRC commands
-	void handlePassCommand(Client* client, const  std::vector<std::string>& params);
-	void handleNickCommand(Client* client, const  std::vector<std::string>& params);
-	void handleUserCommand(Client* client, const  std::vector<std::string>& params);
-	void handleJoinCommand(Client* client, const  std::vector<std::string>& params);
-	bool validateJoinCommand(Client* client, const  std::vector<std::string>& params);
-	void handlePrivmsgCommand(Client* client, const  std::vector<std::string>& params);
-	void handlePartCommand(Client* client, const  std::vector<std::string>& params);
-	void handleNoticeCommand(Client* client, const  std::vector<std::string>& params);
-	void handleQuitCommand(Client* client, const  std::vector<std::string>& params);
-	void handleTopicCommand(Client* client, const  std::vector<std::string>& params);
-	void handlePingCommand(Client* client, const  std::vector<std::string>& params);
-	void handlePongCommand(Client* client, const  std::vector<std::string>& params);
-	void handleKickCommand(Client* client, const  std::vector<std::string>& params);
-	void handleInviteCommand(Client* client, const  std::vector<std::string>& params);
-
-	// Attempt to register a client (after PASS, NICK, USER)
-	void registerClientIfReady(Client* client);
-
-	// === Response and Error Handling ===
-	void sendWelcomeMessages(Client* client); // Send welcome messages to the client
-	void sendReply(Client* client, const std::string& code, const std::string& params, const std::string& message); // Send a standard reply
-	void sendError(Client* client, const std::string& code, const std::string& command, const std::string& message); // Send an error message
-
-	// Utility functions
-	void logToServer(const std::string& message, const std::string& level); // Log a message to the server
-	void sendRawMessageToClient(Client* client, const std::string& message); // Send a raw message to a client
-	bool isNicknameTaken(const std::string& nickname) const; // Check if a nickname is already in use
-
-	// Clean up resources
-	void cleanupResources();
-
-	// === Channel Handling ===
-	Channel* getOrCreateChannel(const std::string& channelName);
-	void addClientToChannel(Channel* channel, Client* client);
-	void sendChannelInfoToClient(Channel* channel, Client* client);
-	void broadcastToChannel(Channel* channel, const std::string& message, Client* sender);
 };
 
 #endif

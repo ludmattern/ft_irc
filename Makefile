@@ -1,40 +1,42 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/06/03 18:12:42 by lmattern          #+#    #+#              #
-#    Updated: 2024/09/24 10:45:25 by lmattern         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 .PHONY: all clean fclean re
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -MP
 
 SRCS_DIR = src
+COMMAND_DIR = src/Command
 INCLUDE_DIR = include
 OBJS_DIR = build
 
-SRC_FILES = main ServerUtils ServerSendings ServerCommands ServerClientHandling Client Channel
-SRCS = $(addprefix $(SRCS_DIR)/,$(addsuffix .cpp,$(SRC_FILES)))
-OBJS = $(patsubst $(SRCS_DIR)/%.cpp,$(OBJS_DIR)/%.o,$(SRCS))
+# Récupérer tous les fichiers .cpp dans src et src/Command
+SRC_SRCS = $(wildcard $(SRCS_DIR)/*.cpp)
+COMMAND_SRCS = $(wildcard $(COMMAND_DIR)/*.cpp)
+SRCS = $(SRC_SRCS) $(COMMAND_SRCS)
+
+# Création des fichiers objets pour tous les fichiers sources
+OBJS = $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
+
 DEPS = $(OBJS:.o=.d)
 NAME = ircserv
+
+# Ajouter les répertoires source à VPATH
+VPATH = $(SRCS_DIR):$(COMMAND_DIR)
+
+# Gérer les répertoires des objets
+OBJS_DIRS = $(sort $(dir $(OBJS)))
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ $^
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.cpp | $(OBJS_DIR)
-	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -c $< -o $@
+# Assurer que les répertoires des objets existent
+$(OBJS_DIRS):
+	mkdir -p $@
 
-$(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
+# Règle de compilation pour tous les fichiers objets
+$(OBJS_DIR)/%.o: %.cpp | $(OBJS_DIRS)
+	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -c $< -o $@
 
 clean:
 	rm -f $(OBJS) $(DEPS)
