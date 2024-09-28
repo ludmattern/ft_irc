@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/25 11:22:13 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/26 22:49:00 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ Server::Server(int argc, char **argv) : _serverName("MyIRCServer"), _isRunning(t
 	disableControlCharacterEcho();
 	parseArguments(argc, argv);
 	initializeServerSocket();
-	setupCommandHandlers();
 	signal(SIGINT, &Server::handleSignal);
 	signal(SIGQUIT, &Server::handleSignal);
 }
@@ -218,4 +217,24 @@ bool Server::shouldClientDisconnect(int client_fd)
 	Client* client = _clients[client_fd];
 
 	return (client->shouldDisconnect());
+}
+
+
+Channel* Server::getChannelByName(const std::string& channelName)
+{
+    std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
+    if (it != _channels.end())
+        return it->second;
+    else
+        return NULL;
+}
+
+Client* Server::getClientByNickname(const std::string& nickname)
+{
+    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+    {
+        if (it->second->getNickname() == nickname)
+            return it->second;
+    }
+    return NULL;
 }
