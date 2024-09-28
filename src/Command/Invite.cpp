@@ -3,6 +3,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+Invite::Invite() {}
+Invite::~Invite() {}
+
 void Invite::execute(Server& server, Client& client, const std::vector<std::string>& params)
 {
 	(void)client;

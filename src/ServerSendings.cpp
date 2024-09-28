@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerSendings.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/26 22:49:00 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/28 14:32:43 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,4 +237,8 @@ Client* Server::getClientByNickname(const std::string& nickname)
             return it->second;
     }
     return NULL;
+}
+
+void Server::removeChannel(const std::string& channelName) {
+    _channels.erase(channelName);
 }

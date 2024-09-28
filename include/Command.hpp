@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Command.hpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
+/*   Updated: 2024/09/28 14:37:22 by lmattern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 
@@ -17,93 +29,93 @@ public:
 
 class Pass : public Command {
 public:
-    Pass() {}
-    virtual ~Pass() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Pass();
+    ~Pass();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Nick : public Command {
 public:
-    Nick() {}
-    virtual ~Nick() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Nick();
+    ~Nick();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class User : public Command {
 public:
-    User() {}
-    virtual ~User() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    User();
+    ~User();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Join : public Command {
 public:
-    Join() {}
-    virtual ~Join() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Join();
+    ~Join();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class PrivMsg : public Command {
 public:
-    PrivMsg() {}
-    virtual ~PrivMsg() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    PrivMsg();
+    ~PrivMsg();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Quit : public Command {
 public:
-    Quit() {}
-    virtual ~Quit() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Quit();
+    ~Quit();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Notice : public Command {
 public:
-    Notice() {}
-    virtual ~Notice() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Notice();
+    ~Notice();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Part : public Command {
 public:
-    Part() {}
-    virtual ~Part() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Part();
+    ~Part();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Topic : public Command {
 public:
-    Topic() {}
-    virtual ~Topic() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Topic();
+    ~Topic();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Ping : public Command {
 public:
-    Ping() {}
-    virtual ~Ping() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Ping();
+    ~Ping();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Pong : public Command {
 public:
-    Pong() {}
-    virtual ~Pong() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Pong();
+    ~Pong();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Kick : public Command {
 public:
-    Kick() {}
-    virtual ~Kick() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Kick();
+    ~Kick();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 class Invite : public Command {
 public:
-    Invite() {}
-    virtual ~Invite() {}
-    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+    Invite();
+    ~Invite();
+    void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
 // Vous pouvez ajouter d'autres commandes ici

@@ -3,6 +3,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+PrivMsg::PrivMsg() {}
+PrivMsg::~PrivMsg() {}
+
 void PrivMsg::execute(Server& server, Client& client, const std::vector<std::string>& params)
 {
 	if (!client.isRegistered())

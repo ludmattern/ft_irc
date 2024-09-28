@@ -3,6 +3,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+Pong::Pong() {}
+Pong::~Pong() {}
+
 void Pong::execute(Server& server, Client& client, const std::vector<std::string>& params)
 {
 	(void)client;

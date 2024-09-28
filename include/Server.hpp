@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/27 00:45:02 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/28 14:32:15 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ public:
 	void addClientToChannel(Channel* channel, Client* client);
 	void sendChannelInfoToClient(Channel* channel, Client* client);
 	void broadcastToChannel(Channel* channel, const std::string& message, Client* sender);
+	void removeChannel(const std::string& channelName);
 
 private:
 	// Server socket descriptor
