@@ -3,6 +3,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+Join::Join() {}
+Join::~Join() {}
+
 void Server::sendChannelInfoToClient(Channel* channel, Client* client)
 {
 	// Send the topic if it exists

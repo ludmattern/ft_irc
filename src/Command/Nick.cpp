@@ -3,6 +3,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+Nick::Nick() {}
+Nick::~Nick() {}
+
 bool Server::isNicknameTaken(const std::string& nickname) const
 {
 	for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)

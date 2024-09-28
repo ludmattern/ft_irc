@@ -3,6 +3,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+Kick::Kick() {}
+Kick::~Kick() {}
+
 void Kick::execute(Server& server, Client& client, const std::vector<std::string>& params)
 {
 	(void)client;

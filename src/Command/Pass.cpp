@@ -3,6 +3,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+Pass::Pass() {}
+Pass::~Pass() {}
+
 void Pass::execute(Server& server, Client& client, const std::vector<std::string>& params) 
 {
     if (client.isRegistered())

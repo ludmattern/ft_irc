@@ -6,11 +6,12 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:09:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/25 10:08:42 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:15:56 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "Command.hpp"
 #include "cppLibft.hpp"
 #include <arpa/inet.h>
 #include <string>
@@ -67,7 +68,12 @@ void Server::readFromClient(int client_fd)
 		}
 	}
 	else if (bytes_read == 0)
-		client->markForDisconnection(true);
+	{
+        std::vector<std::string> params;
+        Quit quitCommand;
+        quitCommand.execute(*this, *client, params);
+        client->markForDisconnection(true);
+	}
 	else
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
@@ -104,18 +110,38 @@ void Server::writeToClient(int client_fd)
 }
 
 
-void Server::closeClientConnection(int client_fd)
-{
-	close(client_fd);
-	delete _clients[client_fd];
-	_clients.erase(client_fd);
-	for (size_t i = 0; i < _pollDescriptors.size(); ++i)
-	{
-		if (_pollDescriptors[i].fd == client_fd)
-		{
-			_pollDescriptors.erase(_pollDescriptors.begin() + i);
-			break;
-		}
-	}
-	logToServer("Client " + toString(client_fd) + " disconnected.", "INFO");
+void Server::closeClientConnection(int client_fd) {
+    Client* client = _clients[client_fd];
+
+    // Notify all channels about the client quitting
+    const std::set<std::string>& channels = client->getChannels();
+    std::string prefix = client->getPrefix();
+    std::string message = ":" + prefix + " QUIT :Client disconnected\r\n";
+
+    for (std::set<std::string>::const_iterator it = channels.begin(); it != channels.end(); ++it) {
+        Channel* channel = getChannelByName(*it);
+        if (channel) {
+            broadcastToChannel(channel, message, client);
+            channel->removeClient(client);
+            if (channel->getClients().empty()) {
+                removeChannel(*it);
+                delete channel;
+            }
+        }
+    }
+
+    // Close the socket and remove the client
+    close(client_fd);
+    delete client;
+    _clients.erase(client_fd);
+
+    // Remove from poll descriptors
+    for (size_t i = 0; i < _pollDescriptors.size(); ++i) {
+        if (_pollDescriptors[i].fd == client_fd) {
+            _pollDescriptors.erase(_pollDescriptors.begin() + i);
+            break;
+        }
+    }
+
+    logToServer("Client " + toString(client_fd) + " disconnected.", "INFO");
 }

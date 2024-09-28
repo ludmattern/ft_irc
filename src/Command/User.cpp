@@ -3,6 +3,9 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+User::User() {}
+User::~User() {}
+
 void User::execute(Server& server, Client& client, const std::vector<std::string>& params)
 {
 	if (client.isRegistered())
