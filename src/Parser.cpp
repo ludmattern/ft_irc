@@ -6,46 +6,50 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/27 00:42:54 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/28 14:51:32 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Command.hpp"
+#include "Parser.hpp"
 #include<algorithm>
 
 
-Command* CommandFactory::createCommand(const std::string& commandName) 
+Parser::Parser()
 {
-	if (commandName == "PASS")
-		return new Pass();
-	else if (commandName == "NICK")
-		return new Nick();
-	else if (commandName == "USER")
-		return new User();
-	else if (commandName == "JOIN")
-		return new Join();
-	else if (commandName == "PRIVMSG")
-		return new PrivMsg();
-	else if (commandName == "QUIT")
-		return new Quit();
-	else if (commandName == "NOTICE")
-		return new Notice();
-	else if (commandName == "PART")
-		return new Part();
-	else if (commandName == "TOPIC")
-		return new Topic();
-	else if (commandName == "PING")
-		return new Ping();
-	else if (commandName == "PONG")
-		return new Pong();
-	else if (commandName == "KICK")
-		return new Kick();
-	else if (commandName == "INVITE")
-		return new Invite();
-	else 
-		return NULL;
-	
+	_commands["PASS"] = new Pass();
+	_commands["NICK"] = new Nick();
+	_commands["USER"] = new User();
+	_commands["QUIT"] = new Quit();
+	_commands["PING"] = new Ping();
+	_commands["PONG"] = new Pong();
+	_commands["JOIN"] = new Join();
+	_commands["PART"] = new Part();
+	_commands["KICK"] = new Kick();
+	_commands["MODE"] = new Mode();
+	_commands["PRIVMSG"] = new PrivMsg();
+	_commands["NOTICE"] = new Notice();
+	_commands["TOPIC"] = new Topic();
+	_commands["INVITE"] = new Invite();
+}
+
+Parser::~Parser()
+{
+	for (std::map<std::string, Command*>::iterator it = _commands.begin(); it != _commands.end(); ++it) {
+		delete it->second;
+	}
+	_commands.clear();
+}
+
+
+void Parser::executeCommand(const std::string& commandName, Server& server, Client& client, const std::vector<std::string>& params)
+{
+	std::map<std::string, Command*>::iterator it = _commands.find(commandName);
+	if (it != _commands.end())
+		it->second->execute(server, client, params);
+	else
+		server.sendError(&client, "421", commandName, "Unknown command");
 }
 
 void Server::processClientCommand(Client* client, const std::string& commandLine) 
@@ -91,14 +95,5 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
 	}
 
 	std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::toupper);
-	Command* cmd = CommandFactory::createCommand(commandName);
-	if (cmd) 
-	{
-		cmd->execute(*this, *client, params);
-		delete cmd;
-	}
-	else 
-	{
-		sendError(client, ERR_UNKNOWNCOMMAND, commandName, "Unknown command");
-	}
+	_commandHandler->executeCommand(commandName, *this, *client, params);
 }

@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 14:32:15 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:16:54 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include <netinet/in.h>
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "Parser.hpp"
 
 // IRC Standard Replies (RPL)
 #define RPL_WELCOME        "001"
@@ -152,6 +153,7 @@ private:
 	std::string _serverName;
 	bool _isRunning;
 
+	Parser* _commandHandler;
 
 
 	void handlePollEvent(struct pollfd& pollDescriptor);
@@ -180,7 +182,6 @@ private:
 	// === IRC Command Handling ===
 	typedef void (Server::*CommandHandler)(Client*, const std::vector<std::string>&);
 
-	std::map<std::string, CommandHandler> _commandHandlers; // Map of IRC commands to their handlers
 
 	// Initialize command handlers
 	void setupCommandHandlers();

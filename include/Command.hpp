@@ -118,10 +118,16 @@ public:
     void execute(Server& server, Client& client, const std::vector<std::string>& params);
 };
 
-// Vous pouvez ajouter d'autres commandes ici
+class Mode : public Command {
+public:
+    Mode() {}
+    virtual ~Mode() {}
+    virtual void execute(Server& server, Client& client, const std::vector<std::string>& params);
+};
+
 class CommandFactory {
 public:
     static Command* createCommand(const std::string& commandName);
 };
 
-#endif // COMMAND_HPP
+#endif
