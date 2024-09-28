@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 14:44:33 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/28 14:51:32 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,40 @@
 #include<algorithm>
 
 
-Parser::Parser() {
-    _commands["PASS"] = new Pass();
-    _commands["NICK"] = new Nick();
-    _commands["USER"] = new User();
-    _commands["QUIT"] = new Quit();
-    _commands["PING"] = new Ping();
-    _commands["PONG"] = new Pong();
-    _commands["JOIN"] = new Join();
-    _commands["PART"] = new Part();
-    _commands["KICK"] = new Kick();
-    _commands["MODE"] = new Mode();
-    _commands["PRIVMSG"] = new PrivMsg();
-    _commands["NOTICE"] = new Notice();
-    _commands["TOPIC"] = new Topic();
-    _commands["INVITE"] = new Invite();
+Parser::Parser()
+{
+	_commands["PASS"] = new Pass();
+	_commands["NICK"] = new Nick();
+	_commands["USER"] = new User();
+	_commands["QUIT"] = new Quit();
+	_commands["PING"] = new Ping();
+	_commands["PONG"] = new Pong();
+	_commands["JOIN"] = new Join();
+	_commands["PART"] = new Part();
+	_commands["KICK"] = new Kick();
+	_commands["MODE"] = new Mode();
+	_commands["PRIVMSG"] = new PrivMsg();
+	_commands["NOTICE"] = new Notice();
+	_commands["TOPIC"] = new Topic();
+	_commands["INVITE"] = new Invite();
 }
 
 Parser::~Parser()
 {
-    for (std::map<std::string, Command*>::iterator it = _commands.begin(); it != _commands.end(); ++it) {
-        delete it->second;
-    }
-    _commands.clear();
+	for (std::map<std::string, Command*>::iterator it = _commands.begin(); it != _commands.end(); ++it) {
+		delete it->second;
+	}
+	_commands.clear();
 }
 
 
-void Parser::executeCommand(const std::string& commandName, Server& server, Client& client, const std::vector<std::string>& params) {
-    std::map<std::string, Command*>::iterator it = _commands.find(commandName);
-    if (it != _commands.end()) {
-        it->second->execute(server, client, params);
-    } else {
-        server.sendError(&client, "421", commandName, "Unknown command");
-    }
+void Parser::executeCommand(const std::string& commandName, Server& server, Client& client, const std::vector<std::string>& params)
+{
+	std::map<std::string, Command*>::iterator it = _commands.find(commandName);
+	if (it != _commands.end())
+		it->second->execute(server, client, params);
+	else
+		server.sendError(&client, "421", commandName, "Unknown command");
 }
 
 void Server::processClientCommand(Client* client, const std::string& commandLine) 
@@ -94,6 +95,5 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
 	}
 
 	std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::toupper);
-    _commandHandler->executeCommand(commandName, *this, *client, params);
-
+	_commandHandler->executeCommand(commandName, *this, *client, params);
 }
