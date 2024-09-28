@@ -22,7 +22,7 @@ void Join::execute(Server& server, Client& client, const std::vector<std::string
 
 	std::string channelName = params[0];
 
-	Channel* channel = server.getOrCreateChannel(channelName);
+	Channel* channel = server.getOrCreateChannel(client ,channelName);
 
 	server.addClientToChannel(channel, &client);
 	server.sendChannelInfoToClient(channel, &client);
