@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:53:55 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/28 14:54:51 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/28 16:47:29 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void Server::sendChannelInfoToClient(Channel* channel, Client* client)
 	logToServer("Client " + client->getNickname() + " joined channel " + channel->getName(), "INFO");
 }
 
-Channel* Server::getOrCreateChannel(const std::string& channelName)
+Channel* Server::getOrCreateChannel(Client& client, const std::string& channelName)
 {
 	std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
 	if (it == _channels.end()) {
-		Channel* newChannel = new Channel(channelName);
+		Channel* newChannel = new Channel(client, channelName);
 		_channels[channelName] = newChannel;
 		return newChannel;
 	}

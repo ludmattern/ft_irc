@@ -6,15 +6,19 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/24 16:57:53 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/28 16:54:50 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 #include <algorithm>
+#include <iostream>
 
 // Constructor
-Channel::Channel(const std::string& name) : _name(name) {}
+Channel::Channel(Client& client, const std::string& name) : _name(name) 
+{
+	_operators.insert(&client);
+}
 
 Channel::~Channel() {}
 
@@ -33,12 +37,15 @@ void Channel::setTopic(const std::string& topic) {
 }
 
 // Client management
-void Channel::addClient(Client* client) {
+void Channel::addClient(Client* client) 
+{
 	_clients.insert(client);
 }
 
 void Channel::removeClient(Client* client) {
 	_clients.erase(client);
+	if (hasOperator(client))
+		_operators.erase(client);
 }
 
 bool Channel::hasClient(Client* client) const {
@@ -47,6 +54,26 @@ bool Channel::hasClient(Client* client) const {
 
 const std::set<Client*>& Channel::getClients() const {
 	return _clients;
+}
+
+void Channel::addOperator(Client* client)
+{
+    _operators.insert(client);
+}
+
+void Channel::removeOperator(Client* client)
+{
+    _operators.erase(client);
+}
+
+bool Channel::hasOperator(Client* client) const 
+{
+    return _operators.find(client) != _operators.end();
+}
+
+const std::set<Client*>& Channel::getOperators() const
+{
+    return _operators;
 }
 
 // mode management

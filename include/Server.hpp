@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 15:16:54 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/28 16:34:45 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ public:
     Client* getClientByNickname(const std::string& nickname);
 
 	// === Channel Handling ===
-	Channel* getOrCreateChannel(const std::string& channelName);
+	Channel* getOrCreateChannel(Client& client, const std::string& channelName);
 	void addClientToChannel(Channel* channel, Client* client);
 	void sendChannelInfoToClient(Channel* channel, Client* client);
 	void broadcastToChannel(Channel* channel, const std::string& message, Client* sender);
