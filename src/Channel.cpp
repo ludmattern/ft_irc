@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 16:54:50 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/28 16:59:18 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void Channel::addClient(Client* client)
 	_clients.insert(client);
 }
 
-void Channel::removeClient(Client* client) {
+void Channel::removeClient(Client* client)
+{
 	_clients.erase(client);
 	if (hasOperator(client))
 		_operators.erase(client);
