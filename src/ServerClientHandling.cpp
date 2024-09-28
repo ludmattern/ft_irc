@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:09:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 15:15:56 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:22:11 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,7 @@ void Server::readFromClient(int client_fd)
 	else if (bytes_read == 0)
 	{
         std::vector<std::string> params;
-        Quit quitCommand;
-        quitCommand.execute(*this, *client, params);
-        client->markForDisconnection(true);
+		_commandHandler->executeCommand("QUIT", *this, *client, params);
 	}
 	else
 	{
