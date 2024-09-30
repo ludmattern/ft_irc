@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:17:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 08:24:31 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 09:24:54 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Topic::execute(Server& server, Client& client, const std::vector<std::strin
 {
 	(void)client;
 	(void)params;
-	server.logToServer("TOPIC command received", "INFO");
+	server.logToSferver("TOPIC command received", "INFO");
 }
 
 
