@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:09:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 09:15:36 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:00:35 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,16 @@ void Server::readFromClient(int client_fd)
 			logToServer("Command received from FD " + toString(client_fd) + ": " + command, "INFO");
 			processClientCommand(client, command);
 		}
+		return ;
 	}
-	else if (bytes_read == 0)
+	if (bytes_read == 0)
 	{
-        std::vector<std::string> params;
+		std::vector<std::string> params;
 		_commandHandler->executeCommand("QUIT", *this, *client, params);
+		return ;
 	}
-	else
-	{
-		if (errno != EWOULDBLOCK && errno != EAGAIN)
-			throw std::runtime_error("Failed on recv");
-	}
+	if (errno != EWOULDBLOCK && errno != EAGAIN)
+		throw std::runtime_error("Failed on recv");
 }
 
 void Server::writeToClient(int client_fd)
@@ -89,57 +88,83 @@ void Server::writeToClient(int client_fd)
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
 			throw std::runtime_error("Failed on send");
+		return ;
 	}
-	else
+	client->eraseFromOutputBuffer(bytes_sent);
+	if (!(client->getOutputBuffer().empty()))
+		return ;
+	for (size_t i = 0; i < _pollDescriptors.size(); ++i)
 	{
-		client->eraseFromOutputBuffer(bytes_sent);
-		if (client->getOutputBuffer().empty())
+		if (_pollDescriptors[i].fd == client_fd)
 		{
-			for (size_t i = 0; i < _pollDescriptors.size(); ++i)
-			{
-				if (_pollDescriptors[i].fd == client_fd)
-				{
-					_pollDescriptors[i].events = POLLIN;
-					break;
-				}
-			}
+			_pollDescriptors[i].events = POLLIN;
+			break ;
 		}
 	}
 }
 
+void Server::closeClientConnection(int client_fd)
+{
+	if (_clients.find(client_fd) == _clients.end())
+	{
+		logToServer("Client FD " + toString(client_fd) + " not found", "ERROR");
+		return;
+	}
 
-void Server::closeClientConnection(int client_fd) {
-    Client* client = _clients[client_fd];
+	Client* client = _clients[client_fd];
 
-    // Notify all channels about the client quitting
-    const std::set<std::string>& channels = client->getChannels();
-    std::string prefix = client->getPrefix();
-    std::string message = ":" + prefix + " QUIT :Client disconnected\r\n";
+	std::string quitMessage = ":" + client->getPrefix() + " QUIT :Client disconnected\r\n";
+	notifyChannelsAboutClientQuit(client, quitMessage);
 
-    for (std::set<std::string>::const_iterator it = channels.begin(); it != channels.end(); ++it) {
-        Channel* channel = getChannelByName(*it);
-        if (channel) {
-            broadcastToChannel(channel, message, client);
-            channel->removeClient(client);
-            if (channel->getClients().empty()) {
-                removeChannel(*it);
-                delete channel;
-            }
-        }
-    }
+	closeClientSocket(client_fd);
 
-    // Close the socket and remove the client
-    close(client_fd);
-    delete client;
-    _clients.erase(client_fd);
+	removeClientFromPollDescriptors(client_fd);
 
-    // Remove from poll descriptors
-    for (size_t i = 0; i < _pollDescriptors.size(); ++i) {
-        if (_pollDescriptors[i].fd == client_fd) {
-            _pollDescriptors.erase(_pollDescriptors.begin() + i);
-            break;
-        }
-    }
+	logToServer("Client " + toString(client_fd) + " disconnected.", "INFO");
+}
 
-    logToServer("Client " + toString(client_fd) + " disconnected.", "INFO");
+void Server::notifyChannelsAboutClientQuit(Client* client, const std::string& message)
+{
+	const std::set<std::string>& channelNames = client->getChannels();
+
+	for (std::set<std::string>::const_iterator it = channelNames.begin(); it != channelNames.end(); ++it)
+	{
+		Channel* channel = getChannelByName(*it);
+		if (!channel)
+		{
+			logToServer("Channel " + *it + " not found", "ERROR");
+			continue;
+		}
+
+		broadcastToChannel(channel, message, client);
+
+		channel->removeClient(client);
+		client->leaveChannel(*it);
+
+		if (channel->getClients().empty())
+		{
+			removeChannel(*it);
+			delete channel;
+		}
+	}
+}
+
+void Server::closeClientSocket(int client_fd)
+{
+	Client* client = _clients[client_fd];
+	close(client_fd);
+	delete client;
+	_clients.erase(client_fd);
+}
+
+void Server::removeClientFromPollDescriptors(int client_fd)
+{
+	for (size_t i = 0; i < _pollDescriptors.size(); ++i)
+	{
+		if (_pollDescriptors[i].fd == client_fd)
+		{
+			_pollDescriptors.erase(_pollDescriptors.begin() + i);
+			break;
+		}
+	}
 }
