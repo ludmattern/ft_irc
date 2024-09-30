@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 16:34:45 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/30 09:57:30 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ public:
 	// Main method to run the server
 	void run();
 
-	// Handlers for various IRC commands
-
 	// Attempt to register a client (after PASS, NICK, USER)
 	void registerClientIfReady(Client* client);
 
@@ -169,7 +167,9 @@ private:
 	void closeClientConnection(int clientFd); // Disconnect a client
 	void setPollToWrite(int clientFd); // Modify poll event to POLLOUT for a client
 	bool shouldClientDisconnect(int clientFd); // Check if a client should be disconnected
-
+    void notifyChannelsAboutClientQuit(Client* client, const std::string& message);
+    void closeClientSocket(int client_fd);
+    void removeClientFromPollDescriptors(int client_fd);
 		// === Network event handling ===
 
 	// Signal handling (e.g., server shutdown via Ctrl+C)
