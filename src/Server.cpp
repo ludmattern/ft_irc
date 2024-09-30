@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ServerSendings.cpp                                 :+:      :+:    :+:   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/28 15:17:06 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 09:15:04 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,29 +73,30 @@ void Server::parseArguments(int argc, char **argv)
 		throw std::invalid_argument("Usage: " + std::string(argv[0]) + " <listening port> <connection password>");
 	char *endptr;
 	long port = std::strtol(argv[1], &endptr, 10);
-	if (*endptr != '\0' || endptr == argv[1])
-		throw std::invalid_argument("Error: Port must be a valid integer.");
+	if (*endptr || endptr == argv[1])
+		throw std::invalid_argument("Port must be a valid integer.");
 	if (port < MIN_PORT || port > MAX_PORT)
-		throw std::invalid_argument("Error: Port must be a positive integer between 1 and 65535.");
+		throw std::invalid_argument("Port must be a positive integer between 1 and 65535.");
 	if (port < RESERVED_PORT)
 		std::cerr << "Warning: Ports below 1024 are typically reserved for system services." << std::endl;
 	std::string password = argv[2];
-
-	_port = static_cast<int>(port);
+	if (password.empty())
+		throw std::invalid_argument("Password must not be empty.");
 	_password = password;
+	_port = static_cast<int>(port);
 }
 
 void Server::initializeServerSocket()
 {
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket < 0)
-		throw std::runtime_error("Runtime error: Failed on socket creating");
+		throw std::runtime_error("Failed on socket creating");
 
 	int opt = 1;
 	if (setsockopt(_serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
 	{
 		close(_serverSocket);
-		throw std::runtime_error("Runtime error: Failed on setsocket");
+		throw std::runtime_error("Failed on setsocket");
 	}
 
 	struct sockaddr_in server_addr;
@@ -107,13 +108,13 @@ void Server::initializeServerSocket()
 	if (bind(_serverSocket, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
 	{
 		close(_serverSocket);
-		throw std::runtime_error("Runtime error: Failed on bind");
+		throw std::runtime_error("Failed on bind");
 	}
 
 	if (listen(_serverSocket, SOMAXCONN) < 0)
 	{
 		close(_serverSocket);
-		throw std::runtime_error("Runtime error: Failed on listen");
+		throw std::runtime_error("Failed on listen");
 	}
 
 	setSocketNonBlocking(_serverSocket);
@@ -151,7 +152,7 @@ void Server::run()
 		if (poll_count < 0)
 		{
 			if (_isRunning)
-				throw std::runtime_error("Runtime error: Failed on poll");
+				throw std::runtime_error("Failed on poll");
 			break;
 		}
 
@@ -210,7 +211,7 @@ void Server::setSocketNonBlocking(int fd)
 	{
 		perror("Error setting non-blocking mode");
 		close(fd);
-		throw std::runtime_error("Runtime error: Failed on fcntl");
+		throw std::runtime_error("Failed on fcntl");
 	}
 }
 

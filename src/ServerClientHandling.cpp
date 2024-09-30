@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:09:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 15:22:11 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 09:15:36 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void Server::handleNewConnection()
 	if (client_fd < 0)
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
-			throw std::runtime_error("Runtime error: Failed on accept");
+			throw std::runtime_error("Failed on accept");
 		return ;
 	}
 
@@ -75,7 +75,7 @@ void Server::readFromClient(int client_fd)
 	else
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
-			throw std::runtime_error("Runtime error: Failed on recv");
+			throw std::runtime_error("Failed on recv");
 	}
 }
 
@@ -88,7 +88,7 @@ void Server::writeToClient(int client_fd)
 	if (bytes_sent < 0)
 	{
 		if (errno != EWOULDBLOCK && errno != EAGAIN)
-			throw std::runtime_error("Runtime error: Failed on send");
+			throw std::runtime_error("Failed on send");
 	}
 	else
 	{
