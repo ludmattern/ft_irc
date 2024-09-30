@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 10:24:31 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 14:04:25 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@
 #define RPL_YOURHOST       "002"
 #define RPL_CREATED        "003"
 #define RPL_MYINFO         "004"
-#define RPL_TOPIC          "332"
 #define RPL_NAMREPLY       "353"
 #define RPL_ENDOFNAMES     "366"
 #define RPL_NOTOPIC        "331"
@@ -59,6 +58,7 @@
 #define ERR_NOTONCHANNEL     "442"
 #define ERR_USERONCHANNEL    "443"
 #define ERR_NOTREGISTERED    "451"
+#define ERR_CHANOPRIVSNEEDED "482"
 
 // IRC Standard Errors
 #define ERR_NEEDMOREPARAMS "461"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 16:33:23 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/30 14:03:02 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ public:
 	// Gestion des operateur
 	void addOperator(Client* client);
 	void removeOperator(Client* client);
-	bool hasOperator(Client* client) const;
+	bool isOperator(Client* client) const;
 	const std::set<Client*>& getOperators() const;
 
 	// Gestion des modes
