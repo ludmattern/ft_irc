@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 16:00:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 08:32:54 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:26:05 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void Notice::execute(Server& server, Client& client, const std::vector<std::stri
 		message = message.substr(1);
 	}
 
-	std::string fullMessage = ":" + client.getPrefix() + " NOTICE " + target + " :" + message + "\r\n";
+	std::string fullMessage = ":" + client.getPrefix() + " NOTICE " + target + " :" + message + CRLF;
 
 	if (target[0] == GLOBAL_CHANNEL || target[0] == LOCAL_CHANNEL) {
 		Channel* channel = server.getChannelByName(target);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/24 16:46:47 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/30 10:25:23 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 #define MAX_BUFFER_SIZE 512
 #define MAX_MESSAGE_LENGTH 510
+#define CRLF "\r\n"
 /**
  * Client class
  * This class manages a single client connection, including its state, data buffers,

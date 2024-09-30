@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:16:17 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/25 12:30:19 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:24:49 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void Client::appendToInputBuffer(const char* data, size_t length) {
 
 bool Client::extractCommand(std::string& command) 
 {
-	size_t pos = _input_buffer.find("\r\n");
+	size_t pos = _input_buffer.find(CRLF);
 	if (pos != std::string::npos) {
 		if (pos > MAX_MESSAGE_LENGTH) 
 		{

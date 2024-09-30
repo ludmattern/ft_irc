@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandsUtils.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:53:55 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/28 16:47:29 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/30 10:25:34 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void Server::addClientToChannel(Channel* channel, Client* client)
 	channel->addClient(client);
 	client->joinChannel(channel->getName());
 
-	std::string joinMessage = ":" + client->getPrefix() + " JOIN :" + channel->getName() + "\r\n";
+	std::string joinMessage = ":" + client->getPrefix() + " JOIN :" + channel->getName() + CRLF;
 	sendRawMessageToClient(client, joinMessage);
 	channel->broadcastMessage(joinMessage, client);
 }
