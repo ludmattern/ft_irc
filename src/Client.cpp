@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:16:17 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 10:24:49 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:44:51 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,8 @@ const std::set<std::string>& Client::getChannels() const {
 	return _channels;
 }
 
-// Prefix generation
-void Client::updatePrefix() {
+void Client::updatePrefix()
+{
 	std::stringstream ss;
 	ss << _nickname << "!" << _username << "@" << _ip;
 	_prefix = ss.str();

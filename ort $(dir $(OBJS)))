@@ -1,0 +1,383 @@
+[33mcommit 349e1f9ca5b5915448a292583a0b82328ee9e247[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Mon Sep 30 10:27:10 2024 +0200
+
+    added CRLF
+
+[33mcommit 93f7fa14b078c54c1656298c4ab4753df47acacb[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Mon Sep 30 10:01:12 2024 +0200
+
+    refactored the closeClientConnection methode
+
+[33mcommit 12978930b8fa6fedf85f258d8438a4e6eb3ddf3c[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Mon Sep 30 09:31:52 2024 +0200
+
+    patched the yml file
+
+[33mcommit 09346adcda8eee8dc4c5f245a2e0537432ed2a45[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Mon Sep 30 09:30:23 2024 +0200
+
+    patch the BRED error
+
+[33mcommit dd44916b440154565fc412ccefd05f995d7cbc18[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Mon Sep 30 09:27:36 2024 +0200
+
+    updated the yml file
+
+[33mcommit 70702955be22d5bc69d56f68b1ebe9cf69a0653f[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Mon Sep 30 09:25:28 2024 +0200
+
+    error test with yml file
+
+[33mcommit 1f774f0992b96a302f7dc3a646787291ca9ae6c1[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Mon Sep 30 09:24:17 2024 +0200
+
+    Create c-cpp.yml
+
+[33mcommit 282447a499515daa35cf35ffc637a76c700a6e4d[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Mon Sep 30 09:17:37 2024 +0200
+
+    created the commands headers files, changed the error msgs in the ServerSendings renamed Server file
+
+[33mcommit 66f696da9bbe62df4f2554c09792aebdfb0860f4[m
+Author: Felix Prevot <fprevot@z2r4p6.42lyon.fr>
+Date:   Sat Sep 28 17:44:46 2024 +0200
+
+    secure
+
+[33mcommit f773fd314a22af7c35cc839c2f1843e49fc54812[m
+Author: Felix Prevot <fprevot@z2r4p6.42lyon.fr>
+Date:   Sat Sep 28 16:57:37 2024 +0200
+
+    add operator on channel its working fine
+
+[33mcommit 2d9d394a5af6325db596ab85c292a1faf09403b9[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Sat Sep 28 16:19:40 2024 +0200
+
+    added the NOTICE cmd
+
+[33mcommit 71c3b48864018a9de20baffea8446615665e4ca1[m
+Merge: 458dc0a e7b0171
+Author: lmattern <ludmattern@gmail.com>
+Date:   Sat Sep 28 15:18:14 2024 +0200
+
+    Merge branch 'main' of github.com:ludmattern/ft_irc
+
+[33mcommit 458dc0a93df5a03a63b8362dc188e16e348884f1[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Sat Sep 28 15:16:21 2024 +0200
+
+    added the PART and the QUIT cmds
+
+[33mcommit e7b0171c19c8dba260b05d667dffb6b20692c6aa[m
+Author: Felix Prevot <fprevot@z2r4p6.42lyon.fr>
+Date:   Sat Sep 28 14:55:32 2024 +0200
+
+    add cmd Utils
+
+[33mcommit 118490ba6c35ab9d186bbb884e62f7f7e46adb98[m
+Author: Felix Prevot <fprevot@z2r4p6.42lyon.fr>
+Date:   Sat Sep 28 14:51:45 2024 +0200
+
+    add parser class
+
+[33mcommit 3348b261b0615257b583540ffef84bf515f031d7[m
+Author: Felix Prevot <fprevot@z2r4p6.42lyon.fr>
+Date:   Sat Sep 28 14:50:49 2024 +0200
+
+    add parser class
+
+[33mcommit 77511ac3a8f8c267cfc79ced130d32e6f9dc03d6[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Sat Sep 28 14:03:05 2024 +0200
+
+    removed server cmd file
+
+[33mcommit 9503dbc8f7b9904331a1d26faed9f9a6985a38ec[m
+Merge: 9998cd0 f06ec74
+Author: lmattern <ludmattern@gmail.com>
+Date:   Sat Sep 28 13:57:57 2024 +0200
+
+    Merge branch 'new3'
+
+[33mcommit f06ec74e7f8af509505f9052939addc6d40acc3b[m
+Author: Felix Prevot <fprevot@z2r3p7.42lyon.fr>
+Date:   Fri Sep 27 00:47:36 2024 +0200
+
+    restore again and sort header new archi is ready to be use
+
+[33mcommit b7036aa47962f0f8c9698109f9fa618db3fb1aaf[m
+Author: Felix Prevot <fprevot@z2r3p7.42lyon.fr>
+Date:   Fri Sep 27 00:27:40 2024 +0200
+
+    restore error
+
+[33mcommit 8e943cb3913ad759ed041cbf075ce157a80c1338[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Thu Sep 26 23:48:12 2024 +0200
+
+    Patched the Makefile compilation error, added wildcard function
+
+[33mcommit 975c0c43e310a33158a170feefe738be161347e3[m
+Author: Felix Prevot <fprevot@z2r3p7.42lyon.fr>
+Date:   Thu Sep 26 23:14:29 2024 +0200
+
+    new archi
+
+[33mcommit 9998cd03a495efc6804564e27928ff4b908cbae2[m
+Merge: 0700bf6 d4763be
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Wed Sep 25 12:52:16 2024 +0200
+
+    merge
+
+[33mcommit 0700bf673487c35469b4c3a72b38090f0763012c[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Wed Sep 25 12:51:33 2024 +0200
+
+    removed the automatic disconnection on failing authentication
+
+[33mcommit d4763be182601ae2628d292c5bec6b60762c4286[m
+Author: Felix Prevot <fprevot@z2r2p5.42lyon.fr>
+Date:   Wed Sep 25 11:54:03 2024 +0200
+
+    leaks
+
+[33mcommit 7cc8abf1117ea7b189b13e886fb56582e713f2c8[m
+Author: Felix Prevot <fprevot@z2r2p5.42lyon.fr>
+Date:   Wed Sep 25 10:27:27 2024 +0200
+
+    free memory
+
+[33mcommit 30cadab73ac575ca8316f191b0caba6b0c97e956[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Wed Sep 25 10:09:43 2024 +0200
+
+    added functionnality to the logToServer and replaced the old debug prompt with it. added the cppLibft. refactored the main loop
+
+[33mcommit e0046a2816877a3d325dd5c71fb732e9c2f7f932[m
+Author: Felix Prevot <fprevot@z2r3p1.42lyon.fr>
+Date:   Tue Sep 24 16:58:17 2024 +0200
+
+    start parsing and more protection on buffer
+
+[33mcommit 0d04b3510d647d098a272f534b9a5c25b2df7c9e[m
+Author: Felix Prevot <fprevot@z2r3p1.42lyon.fr>
+Date:   Tue Sep 24 15:36:02 2024 +0200
+
+    repair cmd handling
+
+[33mcommit d077c2fcb3bd4bc65e490221d2082e3c49d9bb08[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Tue Sep 24 15:21:24 2024 +0200
+
+    merged without conflicts
+
+[33mcommit 3ceb32d3857e65dd5722709d197ad9d1ef84716a[m
+Merge: f2b7853 c79ab82
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Tue Sep 24 15:19:44 2024 +0200
+
+    implemented the PRVTMSG (mostly)
+
+[33mcommit f2b78532f1cf5a33468743d8ee7337e45d2aefde[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Tue Sep 24 15:16:56 2024 +0200
+
+    implemented the PRVTMSG (mostly)
+
+[33mcommit c79ab82753bc3c2a7eb1f42e0edb29d405caee41[m
+Author: Felix Prevot <fprevot@z2r3p1.42lyon.fr>
+Date:   Tue Sep 24 15:12:52 2024 +0200
+
+    add cmd
+
+[33mcommit b76422ce30b819fc6f2ce5b204f4ff22fe45bf38[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Tue Sep 24 13:51:10 2024 +0200
+
+    implemented the JOIN cmd
+
+[33mcommit b83d720baf50dd06d106f66187311fb888b2210a[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Tue Sep 24 13:16:53 2024 +0200
+
+    started the channels implementation
+
+[33mcommit 02d4b1a5b5c0c7942aa2f81c1c5024b39bce18da[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 18:59:03 2024 +0200
+
+    improved naming of the methodes and refactoring the files
+
+[33mcommit 10ade2dc6949f436440290c2fe2985a74df62e82[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 17:50:32 2024 +0200
+
+    improved the parsing of the program arguments
+
+[33mcommit 9c6e0c6ef078c20cb47d4fca3eaae9f4563b5914[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 17:33:41 2024 +0200
+
+    refactored code and misc
+
+[33mcommit f5ce98c13c91fd2e32e0670ba7bcb34832a3bbb5[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 17:18:52 2024 +0200
+
+    changed the gitignore
+
+[33mcommit 81b9bf8be345f567cf887be4edafe0e04a49a24f[m
+Author: Felix Prevot <fprevot@z2r5p3.42lyon.fr>
+Date:   Mon Sep 23 17:16:32 2024 +0200
+
+    message on signal
+
+[33mcommit b44349298b571e9d7b857d9e0b40c8d1af3d47e2[m
+Merge: 135c89e 2c052a7
+Author: Felix Prevot <fprevot@z2r5p3.42lyon.fr>
+Date:   Mon Sep 23 17:14:42 2024 +0200
+
+    fix conflicts
+
+[33mcommit 135c89e6e328bec9e9161a5483db8f07ad91565c[m
+Author: Felix Prevot <fprevot@z2r5p3.42lyon.fr>
+Date:   Mon Sep 23 17:13:36 2024 +0200
+
+    push exep
+
+[33mcommit 2c052a707f031a03fddbb3ab48cea652500b9e4e[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 17:13:09 2024 +0200
+
+    patch the wrong message when signal is received and removed the Server::stop methode
+
+[33mcommit ba6dfb9070be1a8a6e40ff64c39c57ad78723c0e[m
+Merge: 570456b b4fa6bb
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 17:10:16 2024 +0200
+
+    Merge branch 'main' of github.com:ludmattern/ft_irc with exceptions and signals 2
+
+[33mcommit 570456bc27b4aafc5b1b85876ce9e49bcb781981[m
+Merge: a4bc1c9 d97d804
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 17:09:32 2024 +0200
+
+    Merge branch 'main' of github.com:ludmattern/ft_irc with exceptions and signals
+
+[33mcommit b4fa6bb51442b7ef4c71b652a4e024a72ff46590[m
+Author: Felix Prevot <fprevot@z2r5p3.42lyon.fr>
+Date:   Mon Sep 23 17:06:38 2024 +0200
+
+    push exep
+
+[33mcommit a4bc1c9a3b4d6fbcec4477729c65118c5bd449ad[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 17:06:37 2024 +0200
+
+    add signalse
+
+[33mcommit d97d8048688c63818e5263744ec4ecaf158181d2[m
+Merge: e4bcbfa d40a7df
+Author: Felix Prevot <fprevot@z2r5p3.42lyon.fr>
+Date:   Mon Sep 23 16:01:28 2024 +0200
+
+    resolve conflicts
+
+[33mcommit e4bcbfad234ab210f72486e261a45466be510eef[m
+Author: Felix Prevot <fprevot@z2r5p3.42lyon.fr>
+Date:   Mon Sep 23 15:59:54 2024 +0200
+
+    add exept
+
+[33mcommit d40a7df80d996c48ba66f08c16f244c75686a2aa[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 15:34:04 2024 +0200
+
+    updated the .gitignore
+
+[33mcommit e586ce362d7ff32cd168b392836a627f75fcc5db[m
+Merge: f0862c9 6b08550
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 15:31:45 2024 +0200
+
+    Merge branch 'main' of github.com:ludmattern/ft_irc
+
+[33mcommit f0862c93cd433885e086f8676967f12f83b5ed8a[m
+Author: Ludovic Mattern <lmattern@z2r5p1.42lyon.fr>
+Date:   Mon Sep 23 15:31:27 2024 +0200
+
+    pushed back git ignore
+
+[33mcommit 6b08550eb18690e3112dce137f2b79c33ec4123e[m
+Author: Felix Prevot <fprevot@z2r5p3.42lyon.fr>
+Date:   Mon Sep 23 14:53:00 2024 +0200
+
+    updated and corrected the password managment and disconnect methode
+
+[33mcommit 46c9d089b2697b40f505c7442e03a0afd8b8b6df[m
+Merge: 93dd268 5b8d7b2
+Author: lmattern <ludmattern@gmail.com>
+Date:   Fri Sep 20 11:42:32 2024 +0200
+
+    Merge pull request #1 from ludmattern/felixBranch
+    
+    merging
+
+[33mcommit 5b8d7b2e1bb08f4890488afc12b95c44c926ac58[m
+Author: Felix Prevot <fprevot@z2r1p8.42lyon.fr>
+Date:   Fri Sep 20 11:40:16 2024 +0200
+
+    push merged version
+
+[33mcommit cfb2017bb8f39d23e4fc3ca003c3856ceda3fc66[m
+Author: Felix Prevot <fprevot@z2r1p8.42lyon.fr>
+Date:   Thu Sep 19 16:45:18 2024 +0200
+
+    push
+
+[33mcommit 218634261f8563ff62537fa4d22cf6e58ca64f97[m
+Author: Felix Prevot <fprevot@z2r1p8.42lyon.fr>
+Date:   Thu Sep 19 16:04:56 2024 +0200
+
+    push
+
+[33mcommit 93dd268a5bea11680b2b561b455d1edc9a7a5a86[m
+Author: ludmatternm <ludmattern@gmail.com>
+Date:   Thu Sep 19 14:11:12 2024 +0200
+
+    Step one done, waiting for merge
+
+[33mcommit 7c909341daaf577b8eb69abad6db31d622cd4db7[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Tue Sep 17 10:29:09 2024 +0200
+
+    reset
+
+[33mcommit 48aedec6714cad6bb820002dcbd4c70839245cd5[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Sat Aug 24 13:19:21 2024 +0200
+
+    refactoring cpp files
+
+[33mcommit 55ffd8d65827084d1e36012bf11a7407a41d505c[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Tue Aug 20 18:24:59 2024 +0200
+
+    initial commit (general structure)
+
+[33mcommit 9947478ac1d2194e08a81e09d5f0980588f22925[m
+Author: lmattern <ludmattern@gmail.com>
+Date:   Tue Aug 20 18:08:25 2024 +0200
+
+    Initial commit

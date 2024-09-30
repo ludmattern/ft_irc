@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:17:22 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 10:26:12 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:52:21 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 PrivMsg::PrivMsg() {}
 PrivMsg::~PrivMsg() {}
 
-void PrivMsg::execute(Server& server, Client& client, const std::vector<std::string>& params)
+void PrivMsg::execute(Server &server, Client &client, const std::vector<std::string> &params)
 {
 	if (!client.isRegistered())
 	{
@@ -39,13 +39,13 @@ void PrivMsg::execute(Server& server, Client& client, const std::vector<std::str
 
 	if (target[0] == GLOBAL_CHANNEL || target[0] == LOCAL_CHANNEL)
 	{
-		Channel* channel = server.getChannelByName(target);
+		Channel *channel = server.getChannelByName(target);
 		if (channel == NULL)
 		{
 			server.sendError(&client, ERR_NOSUCHCHANNEL, target, "No such channel");
 			return;
 		}
-		if (!channel->hasClient(&client)) 
+		if (!channel->hasClient(&client))
 		{
 			server.sendError(&client, ERR_CANNOTSENDTOCHAN, target, "Cannot send to channel");
 			return;
@@ -55,7 +55,7 @@ void PrivMsg::execute(Server& server, Client& client, const std::vector<std::str
 	}
 	else
 	{
-		Client* recipient = server.getClientByNickname(target);
+		Client *recipient = server.getClientByNickname(target);
 		if (recipient == NULL)
 		{
 			server.sendError(&client, ERR_NOSUCHNICK, target, "No such nick/channel");

@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 08:22:27 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:52:48 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@
 #include "Commands/Topic.hpp"
 #include "Commands/Invite.hpp"
 #include "Parser.hpp"
-#include<algorithm>
-
+#include <algorithm>
 
 Parser::Parser()
 {
@@ -50,36 +49,36 @@ Parser::Parser()
 
 Parser::~Parser()
 {
-	for (std::map<std::string, Command*>::iterator it = _commands.begin(); it != _commands.end(); ++it) {
+	for (std::map<std::string, Command *>::iterator it = _commands.begin(); it != _commands.end(); ++it)
+	{
 		delete it->second;
 	}
 	_commands.clear();
 }
 
-
-void Parser::executeCommand(const std::string& commandName, Server& server, Client& client, const std::vector<std::string>& params)
+void Parser::executeCommand(const std::string &commandName, Server &server, Client &client, const std::vector<std::string> &params)
 {
-	std::map<std::string, Command*>::iterator it = _commands.find(commandName);
+	std::map<std::string, Command *>::iterator it = _commands.find(commandName);
 	if (it != _commands.end())
 		it->second->execute(server, client, params);
 	else
 		server.sendError(&client, "421", commandName, "Unknown command");
 }
 
-void Server::processClientCommand(Client* client, const std::string& commandLine) 
+void Server::processClientCommand(Client *client, const std::string &commandLine)
 {
 	std::string line = commandLine;
 	std::string prefix;
 
-	if (!line.empty() && line[0] == ':') 
+	if (!line.empty() && line[0] == ':')
 	{
 		size_t pos = line.find(' ');
-		if (pos != std::string::npos) 
+		if (pos != std::string::npos)
 		{
 			prefix = line.substr(1, pos - 1);
 			line = line.substr(pos + 1);
-		} 
-		else 
+		}
+		else
 		{
 			sendError(client, ERR_UNKNOWNCOMMAND, "", "Malformed command");
 			return;
@@ -92,9 +91,9 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
 
 	std::vector<std::string> params;
 	std::string param;
-	while (iss >> param) 
+	while (iss >> param)
 	{
-		if (param[0] == ':') 
+		if (param[0] == ':')
 		{
 			std::string rest;
 			getline(iss, rest);
@@ -103,8 +102,8 @@ void Server::processClientCommand(Client* client, const std::string& commandLine
 			param = param.substr(1);
 			params.push_back(param);
 			break;
-		} 
-		else 
+		}
+		else
 			params.push_back(param);
 	}
 
