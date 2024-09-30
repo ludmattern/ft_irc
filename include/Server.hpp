@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 10:24:31 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 17:44:04 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@
 #define ERR_UNKNOWNCOMMAND "421"
 #define ERR_NICKNAMEINUSE  "433"
 #define ERR_NONICKNAMEGIVEN "431"
-
+#define ERR_CHANOPRIVSNEEDED "482"
 // Server Params
 #define MIN_PORT 1
 #define MAX_PORT 65535
@@ -170,8 +170,8 @@ private:
     void notifyChannelsAboutClientQuit(Client* client, const std::string& message);
     void closeClientSocket(int client_fd);
     void removeClientFromPollDescriptors(int client_fd);
-		// === Network event handling ===
-
+		// === Network event handling =
+	
 	// Signal handling (e.g., server shutdown via Ctrl+C)
 	static void handleSignal(int signal);
 	void setRunningState(bool isRunning);
