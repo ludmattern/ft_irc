@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:17:31 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 08:32:36 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:26:24 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void Quit::execute(Server& server, Client& client, const std::vector<std::string
 	if (!quitMessage.empty()) {
 		message += " :" + quitMessage;
 	}
-	message += "\r\n";
+	message += CRLF;
 
 	for (std::set<std::string>::const_iterator it = channels.begin(); it != channels.end(); ++it) {
 		Channel* channel = server.getChannelByName(*it);

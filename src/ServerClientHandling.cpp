@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:09:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 10:00:35 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:25:45 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void Server::closeClientConnection(int client_fd)
 
 	Client* client = _clients[client_fd];
 
-	std::string quitMessage = ":" + client->getPrefix() + " QUIT :Client disconnected\r\n";
+	std::string quitMessage = ":" + client->getPrefix() + " QUIT :Client disconnected" + CRLF;
 	notifyChannelsAboutClientQuit(client, quitMessage);
 
 	closeClientSocket(client_fd);

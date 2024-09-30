@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 09:57:30 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:24:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@
 //Misc Constants
 #define GLOBAL_CHANNEL '#'
 #define LOCAL_CHANNEL '&'
+#define CRLF "\r\n"
 
 // Colors
 #define RESET       "\033[0m"
@@ -92,7 +93,6 @@
 #define BOLD        "\033[1m"
 #define UNDERLINE   "\033[4m"
 #define BRED		"\033[1;31m"
-
 
 /**
  * Server class

@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:17:22 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 08:24:28 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:26:12 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void PrivMsg::execute(Server& server, Client& client, const std::vector<std::str
 			server.sendError(&client, ERR_CANNOTSENDTOCHAN, target, "Cannot send to channel");
 			return;
 		}
-		std::string fullMessage = ":" + client.getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
+		std::string fullMessage = ":" + client.getPrefix() + " PRIVMSG " + target + " :" + message + CRLF;
 		server.broadcastToChannel(channel, fullMessage, &client);
 	}
 	else
@@ -61,7 +61,7 @@ void PrivMsg::execute(Server& server, Client& client, const std::vector<std::str
 			server.sendError(&client, ERR_NOSUCHNICK, target, "No such nick/channel");
 			return;
 		}
-		std::string fullMessage = ":" + client.getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
+		std::string fullMessage = ":" + client.getPrefix() + " PRIVMSG " + target + " :" + message + CRLF;
 		server.sendRawMessageToClient(recipient, fullMessage);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:29:21 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 08:32:57 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:26:18 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void Part::execute(Server& server, Client& client, const std::vector<std::string
 		if (!partMessage.empty()) {
 			message += " :" + partMessage;
 		}
-		message += "\r\n";
+		message += CRLF;
 
 		// Notify all clients in the channel, including the sender
 		server.broadcastToChannel(channel, message, NULL); // Include all clients

@@ -6,13 +6,16 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:15:29 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/25 10:07:44 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/09/30 10:26:54 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include <sstream>
-
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <map>
 
 void Server::sendWelcomeMessages(Client* client)
 {
@@ -23,7 +26,6 @@ void Server::sendWelcomeMessages(Client* client)
 	sendReply(client, RPL_MYINFO, _serverName + " 1.0", "Available user modes: ...");
 }
 
-// Send standard reply to client
 void Server::sendReply(Client* client, const std::string& code, const std::string& params, const std::string& message)
 {
 	std::string nickname = client->getNickname();
@@ -34,11 +36,10 @@ void Server::sendReply(Client* client, const std::string& code, const std::strin
 		reply += " " + params;
 	if (!message.empty())
 		reply += " :" + message;
-	reply += "\r\n";
+	reply += CRLF;
 	sendRawMessageToClient(client, reply);
 }
 
-// Send error to client
 void Server::sendError(Client* client, const std::string& code, const std::string& command, const std::string& message)
 {
 	std::string nickname = client->getNickname();
@@ -47,60 +48,50 @@ void Server::sendError(Client* client, const std::string& code, const std::strin
 	std::string error = ":" + _serverName + " " + code + " " + nickname;
 	if (!command.empty())
 		error += " " + command;
-	error += " :" + message + "\r\n";
+	error += " :" + message + CRLF;
 	sendRawMessageToClient(client, error);
 }
 
-#include <iostream>
-#include <string>
-#include <map>
-#include <sstream>
-#include <algorithm>
+void Server::logToServer(const std::string& message, const std::string& level)
+{
+	if (message.empty())
+		return;
 
-#define RESET "\033[0m"
-#define BOLD "\033[1m"
+	std::string color;
+	if (level == "INFO")
+		color = GREEN;
+	else if (level == "WARNING")
+		color = YELLOW;
+	else if (level == "ERROR")
+		color = RED;
+	else if (level == "DEBUG")
+		color = CYAN;
+	else
+		color = RESET;
 
-void Server::logToServer(const std::string& message, const std::string& level) {
-    if (message.empty())
-        return;
+	std::string formattedMessage = message;
 
-    std::string color;
-    if (level == "INFO")
-        color = GREEN;
-    else if (level == "WARNING")
-        color = YELLOW;
-    else if (level == "ERROR")
-        color = RED;
-    else if (level == "DEBUG")
-        color = CYAN;
-    else
-        color = RESET; // Par défaut
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		std::string channelName = it->first;
+		size_t pos = formattedMessage.find(channelName);
+		if (pos != std::string::npos)
+			formattedMessage.replace(pos, channelName.length(), BOLD + channelName + RESET);
+	}
 
-    std::string formattedMessage = message;
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		std::string clientName = it->second->getNickname();
+		size_t pos = formattedMessage.find(clientName);
+		if (pos != std::string::npos)
+			formattedMessage.replace(pos, clientName.length(), BOLD + color + clientName + RESET + color);
+	}
 
-    // Parcourir les channels et utilisateurs pour les mettre en gras
-    for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
-        std::string channelName = it->first;
-        size_t pos = formattedMessage.find(channelName);
-        if (pos != std::string::npos) {
-            formattedMessage.replace(pos, channelName.length(), BOLD + channelName + RESET);
-        }
-    }
-
-    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
-        std::string clientName = it->second->getNickname();
-        size_t pos = formattedMessage.find(clientName);
-        if (pos != std::string::npos) {
-            formattedMessage.replace(pos, clientName.length(), BOLD + color + clientName + RESET + color);
-        }
-    }
-
-    std::cout << color << formattedMessage << RESET << std::endl;
+	std::cout << color << formattedMessage << RESET << std::endl;
 }
 
 
 
-// Send raw message to client
 void Server::sendRawMessageToClient(Client* client, const std::string& message)
 {
 	logToServer("Sending to " + client->getNickname() + RESET": " + message, "DEBUG");
@@ -117,10 +108,10 @@ void Server::sendRawMessageToClient(Client* client, const std::string& message)
 
 void Server::broadcastToChannel(Channel* channel, const std::string& message, Client* sender)
 {
-    const std::set<Client*>& clients = channel->getClients();
-    for (std::set<Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it) 
+	const std::set<Client*>& clients = channel->getClients();
+	for (std::set<Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it) 
 	{
-        if (*it != sender) 
-            sendRawMessageToClient(*it, message);
-    }
+		if (*it != sender) 
+			sendRawMessageToClient(*it, message);
+	}
 }
