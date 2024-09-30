@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:44:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 16:59:18 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/30 14:02:59 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void Channel::addClient(Client* client)
 void Channel::removeClient(Client* client)
 {
 	_clients.erase(client);
-	if (hasOperator(client))
+	if (isOperator(client))
 		_operators.erase(client);
 }
 
@@ -67,7 +67,7 @@ void Channel::removeOperator(Client* client)
     _operators.erase(client);
 }
 
-bool Channel::hasOperator(Client* client) const 
+bool Channel::isOperator(Client* client) const 
 {
     return _operators.find(client) != _operators.end();
 }
