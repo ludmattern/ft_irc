@@ -1,4 +1,16 @@
-#include "Command.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   User.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/30 08:17:47 by lmattern          #+#    #+#             */
+/*   Updated: 2024/09/30 08:29:52 by lmattern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Commands/User.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"

@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/09/30 08:26:56 by lmattern          #+#    #+#              #
+#    Updated: 2024/09/30 08:28:01 by lmattern         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 .PHONY: all clean fclean re
 
 CXX = c++
@@ -8,21 +20,15 @@ COMMAND_DIR = src/Command
 INCLUDE_DIR = include
 OBJS_DIR = build
 
-# Récupérer tous les fichiers .cpp dans src et src/Command
 SRC_SRCS = $(wildcard $(SRCS_DIR)/*.cpp)
 COMMAND_SRCS = $(wildcard $(COMMAND_DIR)/*.cpp)
 SRCS = $(SRC_SRCS) $(COMMAND_SRCS)
 
-# Création des fichiers objets pour tous les fichiers sources
 OBJS = $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
 
 DEPS = $(OBJS:.o=.d)
 NAME = ircserv
 
-# Ajouter les répertoires source à VPATH
-VPATH = $(SRCS_DIR):$(COMMAND_DIR)
-
-# Gérer les répertoires des objets
 OBJS_DIRS = $(sort $(dir $(OBJS)))
 
 all: $(NAME)
@@ -30,11 +36,9 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ $^
 
-# Assurer que les répertoires des objets existent
 $(OBJS_DIRS):
 	mkdir -p $@
 
-# Règle de compilation pour tous les fichiers objets
 $(OBJS_DIR)/%.o: %.cpp | $(OBJS_DIRS)
 	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -c $< -o $@
 

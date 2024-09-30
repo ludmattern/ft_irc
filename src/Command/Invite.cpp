@@ -1,4 +1,16 @@
-#include "Command.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Invite.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/30 08:15:02 by lmattern          #+#    #+#             */
+/*   Updated: 2024/09/30 08:24:07 by lmattern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Commands/Invite.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"

@@ -3,15 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   Parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/28 14:51:32 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/30 08:22:27 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Command.hpp"
+#include "Commands/Pass.hpp"
+#include "Commands/Nick.hpp"
+#include "Commands/User.hpp"
+#include "Commands/Quit.hpp"
+#include "Commands/Ping.hpp"
+#include "Commands/Pong.hpp"
+#include "Commands/Join.hpp"
+#include "Commands/Part.hpp"
+#include "Commands/Kick.hpp"
+#include "Commands/Mode.hpp"
+#include "Commands/PrivMsg.hpp"
+#include "Commands/Notice.hpp"
+#include "Commands/Topic.hpp"
+#include "Commands/Invite.hpp"
 #include "Parser.hpp"
 #include<algorithm>
 
