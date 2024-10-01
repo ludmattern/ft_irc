@@ -1,28 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/01 12:44:31 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 17:06:07 by lmattern         ###   ########.fr       */
+/*   Created: 2024/10/01 17:26:22 by lmattern          #+#    #+#             */
+/*   Updated: 2024/10/01 17:29:49 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/Server.hpp"
+#include "commands/Command.hpp"
 
-int main(int argc, char **argv)
-{
-    try {
-        Server& server = Server::getInstance();
-        server.init(argc, argv);
-        server.run();
-    }
-    catch (const std::exception &e)
-	{
-        std::cerr << "Error: "  << e.what() << std::endl;
-        return (EXIT_FAILURE);
-    }
-    return (EXIT_SUCCESS);
-}
+Command::Command() : _server(Server::getInstance()) {}
+

@@ -6,13 +6,14 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 16:45:47 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:30:36 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMAND_HPP
 #define COMMAND_HPP
 
+#include "network/Server.hpp"
 #include "network/Client.hpp"
 #include <vector>
 #include <string>
@@ -22,13 +23,11 @@ class Client;
 
 class Command {
 public:
-    Command() {}
-    Command(Server* server) : _server(server) {}
+    Command();
     virtual ~Command() {}
     virtual void execute(Client& client, const std::vector<std::string>& params) = 0;
-
 protected:
-	Server* _server;
+	Server& _server;
 };
 
 
@@ -48,7 +47,7 @@ public:
 
 class Nick : public Command {
 public:
-	Nick(Server* server);
+	Nick();
 	~Nick();
 	void execute(Client& client, const std::vector<std::string>& params);
 	bool isNicknameTaken(const std::string& nickname);

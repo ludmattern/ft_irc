@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 16:46:57 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:07:36 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,24 @@
 
 class Server {
 public:
+
+	static Server& getInstance()
+	{
+		static Server instance;
+		return instance;
+	}
+
+	void init(int argc, char **argv);
+	
 	void run();
-	Server(int argc, char **argv);
-	~Server();
 
 	std::vector<Client*> getClients() const;
 	Parser* parser;
 
 private:
 
+	Server();
+	~Server();
 
 	bool _isRunning;
 	int _serverSocket;
@@ -58,7 +67,6 @@ private:
 	std::vector<pollfd> _fds;
 	std::map<std::string, Channel*> _channels;
 	std::map<int, Client*> _clients;
-    std::map<int, std::string> _clientInputBuffers;
 
 	void	clientConnect();
 	void	clientDisconnect(int fd);

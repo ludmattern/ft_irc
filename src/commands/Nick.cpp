@@ -6,17 +6,14 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:16:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 16:24:34 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:31:21 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands/Command.hpp"
-#include "network/Server.hpp"
-#include "network/Client.hpp"
-#include "network/Channel.hpp"
 #include "replies.hpp"
 
-Nick::Nick(Server* server) : Command(server) {}
+Nick::Nick() : Command() {}
 Nick::~Nick() {}
 
 void Nick::execute(Client& client, const std::vector<std::string>& params)
@@ -34,13 +31,13 @@ void Nick::execute(Client& client, const std::vector<std::string>& params)
 	else
 	{
 		client.setNickname(nickname);
+		client.reply(RPL_NICK(client.getNickname(), "new nickname set"));
 	}
-	client.reply(RPL_NICK(client.getNickname(), "new nickname set"));
 }
 
 bool Nick::isNicknameTaken(const std::string& nickname)
 {
-	std::vector<Client*> clients = _server->getClients();
+	std::vector<Client*> clients = _server.getClients();
 	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
 	{
 		if ((*it)->getNickname() == nickname)
