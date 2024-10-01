@@ -6,18 +6,64 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 17:19:08 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:51:53 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/Server.hpp"
 #include "network/Client.hpp"
+#include "network/Parser.hpp"
+#include "libs/cppLibft.hpp"
+#include "replies.hpp"
 #include <sstream>
 #include <arpa/inet.h>
 #include <csignal>
 #include <termios.h>
-#include "network/Parser.hpp"
 
+struct termios oldt, newt;
+
+void restoreTerminalSettings()
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+}
+
+void Server::handleSignal(int signal)
+{
+	if (signal == SIGINT || signal == SIGQUIT)
+	{
+		std::string message = "Signal received (" + toString(signal) + ")";
+		log(message);
+		log("Closing server...");
+		restoreTerminalSettings();
+		Server& server = Server::getInstance();
+		server._isRunning = false;
+	}
+}
+
+void disableControlCharacterEcho()
+{
+	tcgetattr(STDIN_FILENO, &oldt);
+	newt = oldt;
+
+	newt.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+}
+
+
+void Server::init(int argc, char **argv) {
+	if (!_isRunning)
+	{
+		parseArguments(argc, argv);
+		initServer();
+		disableControlCharacterEcho();
+		parser = new Parser();
+		_isRunning = true;
+		signal(SIGINT, &Server::handleSignal);
+		signal(SIGQUIT, &Server::handleSignal);
+	}
+	else
+		throw std::runtime_error("Server is already initialized.");
+}
 
 Server::Server() : _isRunning(false), _serverSocket(-1), _port(0), _password("")
 {}
@@ -25,17 +71,6 @@ Server::Server() : _isRunning(false), _serverSocket(-1), _port(0), _password("")
 Server::~Server()
 {}
 
-void Server::init(int argc, char **argv) {
-	if (!_isRunning)
-	{
-		parseArguments(argc, argv);
-		initServer();
-		parser = new Parser();
-		_isRunning = true;
-	}
-	else
-		throw std::runtime_error("Server is already initialized.");
-}
 
 void Server::parseArguments(int argc, char **argv)
 {
