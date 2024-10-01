@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 11:57:59 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 15:00:30 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-#include "Channel.hpp"
+#include "network/Channel.hpp"
 #include <string>
 #include <set>
 #include <poll.h>
@@ -24,6 +24,7 @@ public:
 	void write(const std::string& message);
 	void joinChannel(Channel* channel);
 	void partChannel(Channel* channel);
+    Client(int fd, std::string hostname);
 
 private:
 

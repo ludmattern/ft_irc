@@ -1,38 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Command.hpp                                        :+:      :+:    :+:   */
+/*   Pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 15:01:57 by fprevot          ###   ########.fr       */
+/*   Created: 2024/10/01 14:35:46 by fprevot           #+#    #+#             */
+/*   Updated: 2024/10/01 14:58:37 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_HPP
-#define COMMAND_HPP
 
+#include "network/Server.hpp"
 #include "network/Client.hpp"
-#include <vector>
-#include <string>
+#include "network/Channel.hpp"
+#include "commands/Command.hpp"
 
-class Server;
-class Client;
+Pass::Pass() {}
 
-class Command {
-public:
-    Command() {}
-    virtual ~Command() {}
-    virtual void execute(Client& client, const std::vector<std::string>& params) = 0;
-};
+Pass::~Pass() {}
 
-
-class Pass : public Command {
-public:
-    Pass();
-    ~Pass();
-    void execute(Client& client, const std::vector<std::string>& params);
-};
-
-#endif
+void Pass::execute(Client& client, const std::vector<std::string>& params)
+{
+	(void)client;
+	(void)params;
+    std::cout << "WORKING\n";
+}

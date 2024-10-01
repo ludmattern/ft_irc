@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+         #
+#    By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/30 08:26:56 by lmattern          #+#    #+#              #
-#    Updated: 2024/09/30 13:14:19 by lmattern         ###   ########.fr        #
+#    Updated: 2024/10/01 15:04:53 by fprevot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -MMD -MP
 
 SRCS_DIR = src
-COMMAND_DIR = src/Command
+COMMAND_DIR = src/commands
 INCLUDE_DIR = include
 OBJS_DIR = build
 
