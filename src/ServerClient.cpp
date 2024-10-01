@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:08:06 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 15:06:50 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 15:17:41 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <string>
 #include <cstdio>
 #include <iostream>
-
+#include "replies.hpp"
 void Server::clientConnect()
 {
 	int client_fd;
@@ -78,11 +78,11 @@ void Server::clientRead(int client_fd)
         // Accumuler les données reçues dans le buffer du client
         std::string& clientBuffer = _clientInputBuffers[client_fd];
         clientBuffer.append(buffer, bytes_read);
-
         std::string command;
         // Extraire les commandes complètes depuis le buffer
         while (extractCommand(client_fd, command))
         {
+            log(command);
             processClientCommand(client, command);
         }
         return;

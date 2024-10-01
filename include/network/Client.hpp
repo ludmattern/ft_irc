@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 15:09:41 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 15:14:03 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,6 @@ public:
 	void write(const std::string& message) const;
 	void joinChannel(Channel* channel, bool isOperator);
 	void partChannel(Channel* channel);
-
-	int getFd() const;
-	std::string getNickname() const;
-	std::string getUsername() const;
-	std::string getRealname() const;
-	std::string getHostname() const;
-	ClientStatus getStatus() const;
-	const std::set<Channel*>& getChannels() const;
-	std::string getPrefix() const;
-
-	void setNickname(const std::string& nickname);
-	void setUsername(const std::string& username);
-	void setRealname(const std::string& realname);
-	void setStatus(ClientStatus status);
 
 	int getFd() const;
 	std::string getNickname() const;
