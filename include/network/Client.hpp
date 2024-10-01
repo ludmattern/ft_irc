@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 11:52:53 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:57:59 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 #include <poll.h>
 
 class Client {
+public:
+	void reply(int code, const std::string& message);
+	void write(const std::string& message);
+	void joinChannel(Channel* channel);
+	void partChannel(Channel* channel);
+
 private:
 
     struct pollfd _fd;
@@ -29,10 +35,6 @@ private:
     bool _isAuthenticated;
 
     std::set<Channel*> _channels;
-
-public:
-	void reply(int code, const std::string& message);
-	void write(const std::string& message);
 };
 
 #endif
