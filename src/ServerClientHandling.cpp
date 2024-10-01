@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:09:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 17:57:30 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 10:24:53 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void Server::closeClientConnection(int client_fd)
 
 void Server::notifyChannelsAboutClientQuit(Client* client, const std::string& message)
 {
-	const std::set<std::string>& channelNames = client->getChannels();
+	const std::set<std::string> channelNames = client->getChannels();
 
 	for (std::set<std::string>::const_iterator it = channelNames.begin(); it != channelNames.end(); ++it)
 	{
