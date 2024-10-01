@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 17:07:36 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:49:20 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ private:
 	void handlePollEvent(struct pollfd& pd);
 	bool isServerSocket(const struct pollfd& pd) const;
 	bool isClientSocket(const struct pollfd& pd) const;
+
+	/* Signals */
+	static void handleSignal(int signal);
 };
 
 #endif
