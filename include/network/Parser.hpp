@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parser.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:20:05 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 11:24:02 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 15:00:24 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 class Server;
 
-#include "Command.hpp"
+#include "commands/Command.hpp"
 
 class Parser
 {
@@ -30,7 +30,7 @@ class Parser
 
         Parser();
         ~Parser();
-        void executeCommand(const std::string& commandName, Server& server, Client& client, const std::vector<std::string>& params);
+        void executeCommand(const std::string& commandName, Client& client, const std::vector<std::string>& params);
     private:
 
         std::map<std::string, Command*> _commands;
