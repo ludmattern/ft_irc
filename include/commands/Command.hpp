@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 15:01:57 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:04:20 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ class Client;
 
 class Command {
 public:
-    Command() {}
-    virtual ~Command() {}
-    virtual void execute(Client& client, const std::vector<std::string>& params) = 0;
+	Command() {}
+	virtual ~Command() {}
+	virtual void execute(Client& client, const std::vector<std::string>& params) = 0;
 };
 
 
 class Pass : public Command {
 public:
-    Pass();
-    ~Pass();
-    void execute(Client& client, const std::vector<std::string>& params);
+	Pass();
+	~Pass();
+	void execute(Client& client, const std::vector<std::string>& params);
 };
 
 #endif

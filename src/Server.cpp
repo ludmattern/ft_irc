@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 14:59:46 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:04:03 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Server::Server(int argc, char **argv) : _isRunning(true)
 {	
 	parseArguments(argc, argv);
 	initServer();
-	_commandHandler = new Parser();
+	parser = new Parser();
 }
 
 Server::~Server()
@@ -100,10 +100,6 @@ void Server::setSocketNonBlocking(int fd)
 }
 
 
-
-
-
-
 void Server::run()
 {
 	while (_isRunning)
@@ -135,10 +131,10 @@ void Server::handlePollEvent(struct pollfd& pd)
 			clientConnect();
 	}
 	else if (isClientSocket(pd))
-    {
-        if (pd.revents & POLLIN)
-		    clientRead(pd.fd);
-    }
+	{
+		if (pd.revents & POLLIN)
+			clientRead(pd.fd);
+	}
 }
 
 bool Server::isServerSocket(const struct pollfd& pd) const

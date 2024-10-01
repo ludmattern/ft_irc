@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 15:56:59 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:04:11 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ public:
 	Server(int argc, char **argv);
 	~Server();
 
-	Parser* _commandHandler;
+	Parser* parser;
 
 private:
 
