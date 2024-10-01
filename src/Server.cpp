@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 17:51:53 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:53:42 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,24 @@ void Server::init(int argc, char **argv) {
 		throw std::runtime_error("Server is already initialized.");
 }
 
-Server::Server() : _isRunning(false), _serverSocket(-1), _port(0), _password("")
-{}
-
 Server::~Server()
-{}
-
+{
+	delete parser;
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+		delete it->second;
+	_channels.clear();
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		close(it->first);
+		delete it->second;
+	}
+	_clients.clear();
+	for (size_t i = 0; i < _fds.size(); ++i)
+	{
+		close(_fds[i].fd);
+	}
+	_fds.clear();
+}
 
 void Server::parseArguments(int argc, char **argv)
 {
