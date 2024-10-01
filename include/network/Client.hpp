@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 15:14:03 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:04:14 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ public:
 
 private:
 
-    int _fd;
-    std::string _nickname;
-    std::string _username;
-    std::string _realname;
-    std::string _hostname;
+	int _fd;
+	std::string _nickname;
+	std::string _username;
+	std::string _realname;
+	std::string _hostname;
 
 	ClientStatus _status;
-    std::set<Channel*> _channels;
+	std::set<Channel*> _channels;
 };
 
 #endif

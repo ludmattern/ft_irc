@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 15:54:53 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:04:05 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void Parser::processClientCommand(Client *client, const std::string &commandLine
 		}
 		else
 		{
-            //Malformed cmd
+			//Malformed cmd
 			return;
 		}
 	}
