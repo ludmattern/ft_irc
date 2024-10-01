@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:15:29 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 16:27:51 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 10:42:45 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,18 +96,16 @@ void Server::sendRawMessageToClient(Client* client, const std::string& message)
 {
 	logToServer("Sending to " + client->getNickname() + RESET": " + message, "DEBUG");
 	client->addToOutputBuffer(message);
-	for (size_t i = 0; i < _pollDescriptors.size(); ++i)
-	{
-		if (_pollDescriptors[i].fd == client->getFd())
-		{
-			_pollDescriptors[i].events |= POLLOUT;
-			break;
-		}
-	}
+	writeToClient(client->getFd());
 }
 
 void Server::broadcastToChannel(Channel* channel, const std::string& message, Client* sender)
 {
+	if (!channel) 
+	{
+        logToServer("broadcastToChannel called with NULL channel", "ERROR");
+        return;
+    }
 	const std::set<Client*>& clients = channel->getClients();
 	for (std::set<Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it) 
 	{

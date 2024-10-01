@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:09:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 10:24:53 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 10:47:00 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,6 @@ void Server::writeToClient(int client_fd)
 	client->eraseFromOutputBuffer(bytes_sent);
 	if (!(client->getOutputBuffer().empty()))
 		return ;
-	for (size_t i = 0; i < _pollDescriptors.size(); ++i)
-	{
-		if (_pollDescriptors[i].fd == client_fd)
-		{
-			_pollDescriptors[i].events = POLLIN;
-			break ;
-		}
-	}
 }
 
 void Server::closeClientConnection(int client_fd)
@@ -117,9 +109,9 @@ void Server::closeClientConnection(int client_fd)
 	notifyChannelsAboutClientQuit(client, quitMessage);
 
 	closeClientSocket(client_fd);
-
+	
 	removeClientFromPollDescriptors(client_fd);
-
+	
 	logToServer("Client " + toString(client_fd) + " disconnected.", "INFO");
 }
 
