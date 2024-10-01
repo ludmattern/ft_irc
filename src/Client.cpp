@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 15:58:48 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:47:51 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ std::string Client::getPrefix() const
 	std::string username = _username.empty() ? "" : "!" + _username;
 	std::string hostname = "@" + _hostname;
 
-    return (_nickname + username + hostname);
+	return (_nickname + username + hostname);
 }
 
 void Client::write(const std::string& message) const
@@ -49,19 +49,20 @@ void Client::reply(const std::string& reply)
 
 void Client::joinChannel(Channel* channel/*, bool isOperator*/)
 {
+	(void)isOperator;
 	_channels.insert(channel);
 	//channel->addClient(this, isOperator);
 }
 
 const std::set<Channel*>& Client::getChannels() const
 {
-    return _channels;
+	return _channels;
 }
 
 void Client::partChannel(Channel* channel)
 {
 	_channels.erase(channel);
-	//channel->removeClient(this);
+	channel->removeClient(this);
 }
 
 void Client::setNickname(const std::string& nickname) {	_nickname = nickname; }
