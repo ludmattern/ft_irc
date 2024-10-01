@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:08:06 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 15:17:41 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 15:56:50 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void Server::clientConnect()
 }
 
 
-bool Server::extractCommand(int client_fd, std::string& command)
+bool Parser::extractCommand(int client_fd, std::string& command)
 {
     std::string& clientBuffer = _clientInputBuffers[client_fd];
     size_t pos = clientBuffer.find("\r\n");
@@ -75,15 +75,15 @@ void Server::clientRead(int client_fd)
     bytes_read = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
     if (bytes_read > 0)
     {
-        // Accumuler les données reçues dans le buffer du client
-        std::string& clientBuffer = _clientInputBuffers[client_fd];
+        std::string& clientBuffer = _commandHandler->_clientInputBuffers[client_fd];
         clientBuffer.append(buffer, bytes_read);
         std::string command;
-        // Extraire les commandes complètes depuis le buffer
-        while (extractCommand(client_fd, command))
+        std::string cmdName;
+        while (_commandHandler->extractCommand(client_fd, command))
         {
             log(command);
-            processClientCommand(client, command);
+            _commandHandler->processClientCommand(client, command);
+
         }
         return;
     }
