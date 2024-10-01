@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:16:09 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 17:37:33 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/09/30 18:01:17 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void Kick::execute(Server& server, Client& client, const std::vector<std::string
 		return;
 	}
 
-	if (!channel->hasOperator(&client)) 
+	if (!channel->isOperator(&client)) 
 	{
 		server.sendError(&client, ERR_CHANOPRIVSNEEDED, channelName, "You're not channel operator");
 		return;
@@ -63,7 +63,7 @@ void Kick::execute(Server& server, Client& client, const std::vector<std::string
 	}
 
 	std::string kickMessage = ":" + client.getNickname() + " KICK " + channelName + " " + targetNickname + " :" + reason;
-	channel->broadcastMessage(kickMessage, &client);
+	channel->broadcastMessage(kickMessage, NULL);
 	targetClient->addToOutputBuffer(": KICK " + channelName + " " + targetNickname + " :" + reason + "\n");
 	channel->removeClient(targetClient);
 }
