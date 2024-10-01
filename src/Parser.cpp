@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 15:01:20 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 15:54:53 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void Parser::executeCommand(const std::string &commandName, Client &client, cons
 		server.sendError(&client, "421", commandName, "Unknown command");*/
 }
 
-void Server::processClientCommand(Client *client, const std::string &commandLine)
+void Parser::processClientCommand(Client *client, const std::string &commandLine)
 {
 	std::string line = commandLine;
 	std::string prefix;
@@ -95,5 +95,5 @@ void Server::processClientCommand(Client *client, const std::string &commandLine
 	}
 
 	std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::toupper);
-	_commandHandler->executeCommand(commandName, *client, params);
+	executeCommand(commandName, *client, params);
 }

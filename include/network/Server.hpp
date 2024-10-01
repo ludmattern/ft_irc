@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 15:00:17 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 15:56:59 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ private:
 	std::vector<pollfd> _fds;
 	std::map<std::string, Channel*> _channels;
 	std::map<int, Client*> _clients;
-    std::map<int, std::string> _clientInputBuffers;
 
 	void	clientConnect();
 	void	clientDisconnect(int fd);
@@ -74,11 +73,6 @@ private:
 	void handlePollEvent(struct pollfd& pd);
 	bool isServerSocket(const struct pollfd& pd) const;
 	bool isClientSocket(const struct pollfd& pd) const;
-
-	//to parser
-	bool extractCommand(int client_fd, std::string& command);
-	void processClientCommand(Client *client, const std::string &commandLine);
-
 };
 
 #endif
