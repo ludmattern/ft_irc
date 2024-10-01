@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ServerClient.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:08:06 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 15:06:50 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 15:59:28 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/Server.hpp"
+#include "replies.hpp"
 #include <arpa/inet.h>
 #include <string>
 #include <cstdio>
@@ -83,6 +84,7 @@ void Server::clientRead(int client_fd)
         // Extraire les commandes complètes depuis le buffer
         while (extractCommand(client_fd, command))
         {
+			log("Received command: " + command);
             processClientCommand(client, command);
         }
         return;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 15:00:17 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:11:26 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ public:
 	Server(int argc, char **argv);
 	~Server();
 
+	std::vector<Client*> getClients() const;
 	Parser* _commandHandler;
 
 private:
@@ -58,6 +59,7 @@ private:
 	std::map<std::string, Channel*> _channels;
 	std::map<int, Client*> _clients;
     std::map<int, std::string> _clientInputBuffers;
+
 
 	void	clientConnect();
 	void	clientDisconnect(int fd);

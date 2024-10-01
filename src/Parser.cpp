@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 15:01:20 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:25:42 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 Parser::Parser()
 {
 	_commands["PASS"] = new Pass();
-	/*_commands["NICK"] = new Nick();
+	_commands["NICK"] = new Nick(Server);
 	_commands["USER"] = new User();
-	_commands["QUIT"] = new Quit();
+	/*_commands["QUIT"] = new Quit();
 	_commands["PING"] = new Ping();
 	_commands["PONG"] = new Pong();
 	_commands["JOIN"] = new Join();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 14:59:46 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:15:16 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,4 +149,12 @@ bool Server::isServerSocket(const struct pollfd& pd) const
 bool Server::isClientSocket(const struct pollfd& pd) const
 {
 	return pd.fd != _serverSocket;
+}
+
+std::vector<Client*> Server::getClients() const
+{
+	std::vector<Client*> clients;
+	for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
+		clients.push_back(it->second);
+	return clients;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 15:01:57 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 16:20:30 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,12 @@ class Client;
 class Command {
 public:
     Command() {}
+    Command(Server* server) : _server(server) {}
     virtual ~Command() {}
     virtual void execute(Client& client, const std::vector<std::string>& params) = 0;
+
+protected:
+	Server* _server;
 };
 
 
@@ -34,5 +38,21 @@ public:
     ~Pass();
     void execute(Client& client, const std::vector<std::string>& params);
 };
+
+class User : public Command {
+public:
+	User();
+	~User();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
+
+class Nick : public Command {
+public:
+	Nick(Server* server);
+	~Nick();
+	void execute(Client& client, const std::vector<std::string>& params);
+	bool isNicknameTaken(const std::string& nickname);
+};
+
 
 #endif
