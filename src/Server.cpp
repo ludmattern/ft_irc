@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/09/30 16:53:59 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 10:30:04 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,9 +189,6 @@ void Server::checkClientEvents(struct pollfd& pollDescriptor)
 {
 	if (pollDescriptor.revents & POLLIN)
 		readFromClient(pollDescriptor.fd);
-
-	if (pollDescriptor.revents & POLLOUT)
-		writeToClient(pollDescriptor.fd);
 
 	if (shouldClientDisconnect(pollDescriptor.fd))
 		handleClientDisconnection(pollDescriptor);
