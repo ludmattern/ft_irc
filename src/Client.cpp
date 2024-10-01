@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 14:44:03 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:49:12 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,3 +62,8 @@ void Client::partChannel(Channel* channel)
 	_channels.erase(channel);
 	channel->removeClient(this);
 }
+
+void Client::setNickname(const std::string& nickname) {	_nickname = nickname; }
+void Client::setUsername(const std::string& username) { _username = username; }
+void Client::setRealname(const std::string& realname) {	_realname = realname; }
+void Client::setStatus(ClientStatus status) { _status = status; }
