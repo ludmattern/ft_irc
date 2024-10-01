@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerClient.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:08:06 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 16:48:38 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:53:54 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,14 @@ void Server::clientRead(int client_fd)
 		}
 		return;
 	}
-	if (bytes_read == 0)
+	else if (bytes_read == 0)
 	{
 		std::vector<std::string> params;
 		parser->executeCommand("QUIT", *client, params);
 		return;
 	}
-	if (errno != EWOULDBLOCK && errno != EAGAIN)
+	else if (errno != EWOULDBLOCK && errno != EAGAIN)
+	{
 		throw std::runtime_error("Failed on recv");
+	}
 }
