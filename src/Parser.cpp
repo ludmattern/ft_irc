@@ -6,20 +6,21 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 16:47:59 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:12:03 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "network/Server.hpp"
 #include "commands/Command.hpp"
+#include "replies.hpp"
 #include <iostream>
 #include <algorithm>
 
 Parser::Parser()
 {
 	_commands["PASS"] = new Pass();
-	_commands["NICK"] = new Nick(Server);
+	_commands["NICK"] = new Nick();
 	_commands["USER"] = new User();
 	/*_commands["QUIT"] = new Quit();
 	_commands["PING"] = new Ping();
@@ -48,8 +49,8 @@ void Parser::executeCommand(const std::string &commandName, Client &client, cons
 	std::map<std::string, Command *>::iterator it = _commands.find(commandName);
 	if (it != _commands.end())
 		it->second->execute (client, params);
-	/*else
-		server.sendError(&client, "421", commandName, "Unknown command");*/
+	else
+		client.reply(ERR_UNKNOWNCOMMAND(client.getNickname(), commandName));
 }
 
 void Parser::processClientCommand(Client *client, const std::string &commandLine)

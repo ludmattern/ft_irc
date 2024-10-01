@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 16:48:09 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:19:08 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,23 @@
 #include <termios.h>
 #include "network/Parser.hpp"
 
-Server::Server(int argc, char **argv) : _isRunning(true)
-{	
-	parseArguments(argc, argv);
-	initServer();
-	parser = new Parser();
-}
+
+Server::Server() : _isRunning(false), _serverSocket(-1), _port(0), _password("")
+{}
 
 Server::~Server()
-{
+{}
+
+void Server::init(int argc, char **argv) {
+	if (!_isRunning)
+	{
+		parseArguments(argc, argv);
+		initServer();
+		parser = new Parser();
+		_isRunning = true;
+	}
+	else
+		throw std::runtime_error("Server is already initialized.");
 }
 
 void Server::parseArguments(int argc, char **argv)
