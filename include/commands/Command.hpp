@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 16:20:30 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:45:47 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ protected:
 
 class Pass : public Command {
 public:
-    Pass();
-    ~Pass();
-    void execute(Client& client, const std::vector<std::string>& params);
+	Pass();
+	~Pass();
+	void execute(Client& client, const std::vector<std::string>& params);
 };
 
 class User : public Command {
