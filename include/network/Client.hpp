@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 15:00:30 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 15:09:41 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,62 @@
 #include "network/Channel.hpp"
 #include <string>
 #include <set>
-#include <poll.h>
+
+enum ClientStatus {
+	HANDSHAKE,
+	AUTHENTICATED,
+	REGISTERED,
+	DISCONNECTED
+};
 
 class Client {
 public:
-	void reply(int code, const std::string& message);
-	void write(const std::string& message);
-	void joinChannel(Channel* channel);
+
+	Client(int fd, const std::string &hostname);
+	~Client();
+
+	void reply(const std::string& reply);
+	void write(const std::string& message) const;
+	void joinChannel(Channel* channel, bool isOperator);
 	void partChannel(Channel* channel);
-    Client(int fd, std::string hostname);
+
+	int getFd() const;
+	std::string getNickname() const;
+	std::string getUsername() const;
+	std::string getRealname() const;
+	std::string getHostname() const;
+	ClientStatus getStatus() const;
+	const std::set<Channel*>& getChannels() const;
+	std::string getPrefix() const;
+
+	void setNickname(const std::string& nickname);
+	void setUsername(const std::string& username);
+	void setRealname(const std::string& realname);
+	void setStatus(ClientStatus status);
+
+	int getFd() const;
+	std::string getNickname() const;
+	std::string getUsername() const;
+	std::string getRealname() const;
+	std::string getHostname() const;
+	ClientStatus getStatus() const;
+	const std::set<Channel*>& getChannels() const;
+	std::string getPrefix() const;
+
+	void setNickname(const std::string& nickname);
+	void setUsername(const std::string& username);
+	void setRealname(const std::string& realname);
+	void setStatus(ClientStatus status);
 
 private:
 
-    struct pollfd _fd;
+    int _fd;
     std::string _nickname;
     std::string _username;
     std::string _realname;
-    std::string _password;
-    bool _isAuthenticated;
+    std::string _hostname;
 
+	ClientStatus _status;
     std::set<Channel*> _channels;
 };
 
