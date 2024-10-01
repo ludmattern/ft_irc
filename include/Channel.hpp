@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 14:03:02 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:19:01 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ private:
 	std::string _name;
 	std::string _topic;
 	std::set<Client*> _clients;
-	std::set<Client*> _operators;
+	std::set<Client*> _operators; 
 	std::set<char> _modes;
 };
 
