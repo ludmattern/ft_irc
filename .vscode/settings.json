@@ -54,6 +54,23 @@
 		"typeinfo": "cpp",
 		"csignal": "cpp",
 		"*.tpp": "cpp",
-		"ctime": "cpp"
+		"ctime": "cpp",
+		"chrono": "cpp",
+		"condition_variable": "cpp",
+		"forward_list": "cpp",
+		"list": "cpp",
+		"buffer": "cpp",
+		"executor": "cpp",
+		"internet": "cpp",
+		"io_context": "cpp",
+		"netfwd": "cpp",
+		"ratio": "cpp",
+		"socket": "cpp",
+		"timer": "cpp",
+		"future": "cpp",
+		"mutex": "cpp",
+		"stop_token": "cpp",
+		"thread": "cpp",
+		"semaphore": "cpp"
 	}
 }
