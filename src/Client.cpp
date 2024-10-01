@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 14:49:12 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 14:50:50 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ std::string Client::getNickname() const { return _nickname; }
 std::string Client::getUsername() const { return _username; }
 std::string Client::getRealname() const { return _realname; }
 std::string Client::getHostname() const { return _hostname; }
+ClientStatus Client::getStatus() const { return _status; }
 std::string Client::getPrefix() const 
 {
 	std::string username = _username.empty() ? "" : "!" + _username;
