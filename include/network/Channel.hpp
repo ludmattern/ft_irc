@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 15:00:33 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/01 15:07:36 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,17 @@ class Client;
 class Channel {
 public:
 
+	void broadcast(const std::string& message);
+	void broadcast(const std::string& message, Client* sender);
+	
+	void addClient(Client* client, bool isOperator);
+	void removeClient(Client* client);
+
 private:
 	std::string _name;
 	std::string _topic;
 	std::set<char> _modes;
 	std::map<Client*, bool> _clients;
-
-	void broadcast(const std::string& message);
-	void broadcast(const std::string& message, Client* sender);
 };
 
 #endif
