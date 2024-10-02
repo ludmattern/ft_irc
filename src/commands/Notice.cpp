@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:42 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 11:29:43 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 11:31:16 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "commands/Command.hpp"
 
 Notice::Notice() {}
-
 Notice::~Notice() {}
 
 void Notice::execute(Client& client, const std::vector<std::string>& params)
