@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:16:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 14:27:29 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 16:03:56 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ void Nick::execute(Client& client, const std::vector<std::string>& params)
 		client.reply(ERR_NICKNAMEINUSE(client.getNickname()));
 	else
 	{
+		std::string oldPrefix = client.getPrefix();
 		client.setNickname(nickname);
-		client.reply(RPL_NICK(client.getNickname(), "new nickname set"));
+		client.write(":" + oldPrefix + " NICK :" + nickname);
 	}
-	
 }
+
 
 bool Nick::isNicknameTaken(const std::string& nickname)
 {
