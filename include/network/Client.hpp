@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/02 14:30:24 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 15:45:32 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ public:
 
 	void reply(const std::string& reply);
 	void write(const std::string& message) const;
-	void joinChannel(Channel* channel/*, bool isOperator*/);
+	void joinChannel(Channel* channel);
 	void partChannel(Channel* channel);
 
 	int getFd() const;
