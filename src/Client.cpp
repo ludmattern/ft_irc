@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 17:10:01 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:15:11 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "replies.hpp"
 #include <stdexcept>
 #include <sys/socket.h>
+#include "network/Server.hpp"
 
 // Constructor and destructor
 Client::Client(int fd, const std::string &hostname)
@@ -26,6 +27,7 @@ std::string Client::getNickname() const { return _nickname; }
 std::string Client::getUsername() const { return _username; }
 std::string Client::getRealname() const { return _realname; }
 std::string Client::getHostname() const { return _hostname; }
+std::string Client::getPass() const { return _password; }
 ClientStatus Client::getStatus() const { return _status; }
 std::string Client::getPrefix() const 
 {
@@ -64,7 +66,9 @@ void Client::partChannel(Channel* channel)
 	// channel->removeClient(this);
 }
 
+void Client::setPassword(const std::string& password) {	_password = password; }
 void Client::setNickname(const std::string& nickname) {	_nickname = nickname; }
 void Client::setUsername(const std::string& username) { _username = username; }
 void Client::setRealname(const std::string& realname) {	_realname = realname; }
 void Client::setStatus(ClientStatus status) { _status = status; }
+

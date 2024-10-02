@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 16:45:59 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:05:30 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,14 @@ public:
 	ClientStatus getStatus() const;
 	const std::set<Channel*>& getChannels() const;
 	std::string getPrefix() const;
+	std::string getPass() const;
+
 
 	void setNickname(const std::string& nickname);
 	void setUsername(const std::string& username);
 	void setRealname(const std::string& realname);
 	void setStatus(ClientStatus status);
+	void setPassword(const std::string& password);
 
 private:
 
@@ -56,7 +59,7 @@ private:
 	std::string _username;
 	std::string _realname;
 	std::string _hostname;
-
+	std::string _password;
 	ClientStatus _status;
 	std::set<Channel*> _channels;
 };

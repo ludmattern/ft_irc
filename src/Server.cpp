@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 17:56:16 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 14:02:14 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ bool Server::isClientSocket(const struct pollfd& pd) const
 {
 	return pd.fd != _serverSocket;
 }
-
+std::string Server::getPassword() const {return _password;}
 std::vector<Client*> Server::getClients() const
 {
 	std::vector<Client*> clients;

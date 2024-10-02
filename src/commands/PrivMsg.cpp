@@ -3,11 +3,11 @@
 #include "network/Channel.hpp"
 #include "commands/Command.hpp"
 
-Privmsg::Privmsg() {}
+PrivMsg::PrivMsg() {}
 
-Privmsg::~Privmsg() {}
+PrivMsg::~PrivMsg() {}
 
-void Privmsg::execute(Client& client, const std::vector<std::string>& params)
+void PrivMsg::execute(Client& client, const std::vector<std::string>& params)
 {
 	(void)client;
 	(void)params;
