@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 14:30:29 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 15:22:07 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ public:
 	std::vector<Client*> getClients() const;
 	std::string getPassword() const;
 
+	void closeClientConnection(int client_fd);
+
+
 	Parser* parser;
 
 private:
@@ -90,7 +93,8 @@ private:
 
 	/* Signals */
 	static void handleSignal(int signal);
-
+	void closeClientSocket(int client_fd);
+	void removeClientFromPollDescriptors(int client_fd);
 };
 
 #endif

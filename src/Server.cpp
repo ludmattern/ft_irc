@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/02 14:30:44 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 15:20:35 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,4 +225,41 @@ Channel* Server::addChannel(const std::string& name)
 	Channel* channel = new Channel(name);
 	_channels[name] = channel;
 	return channel;
+}
+
+
+
+
+void Server::closeClientConnection(int client_fd)
+{
+	if (_clients.find(client_fd) == _clients.end())
+	{
+		log("Client FD " + toString(client_fd) + " not found");
+		return;
+	}
+	Client* client = _clients[client_fd];
+	std::string quitMessage = ":" + client->getPrefix() + " QUIT :Client disconnected" + CRLF;
+	closeClientSocket(client_fd);
+	removeClientFromPollDescriptors(client_fd);
+	log("Client " + toString(client_fd) + " disconnected.");
+}
+
+void Server::closeClientSocket(int client_fd)
+{
+	Client* client = _clients[client_fd];
+	close(client_fd);
+	delete client;
+	_clients.erase(client_fd);
+}
+
+void Server::removeClientFromPollDescriptors(int client_fd)
+{
+	for (size_t i = 0; i < _fds.size(); ++i)
+	{
+		if (_fds[i].fd == client_fd)
+		{
+			_fds.erase(_fds.begin() + i);
+			break;
+		}
+	}
 }
