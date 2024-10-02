@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 17:56:16 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 14:13:19 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/Server.hpp"
 #include "network/Client.hpp"
+#include "network/Channel.hpp"
 #include "network/Parser.hpp"
 #include "libs/cppLibft.hpp"
 #include "replies.hpp"
@@ -209,4 +210,19 @@ std::vector<Client*> Server::getClients() const
 	for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
 		clients.push_back(it->second);
 	return clients;
+}
+
+Channel* Server::getChannel(const std::string& name)
+{
+	std::map<std::string, Channel*>::iterator it = _channels.find(name);
+	if (it != _channels.end())
+		return it->second;
+	return NULL;
+}
+
+Channel* Server::addChannel(const std::string& name)
+{
+	Channel* channel = new Channel(name);
+	_channels[name] = channel;
+	return channel;
 }

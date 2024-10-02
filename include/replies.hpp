@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:45:14 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 16:24:15 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:02:21 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #define ERR_TOOMANYCHANNELS(source, channel)            "405 " + source + " " + channel + " :You have joined too many channels"
 #define ERR_UNKNOWNCOMMAND(source, command)             "421 " + source + " " + command + " :Unknown command"
 #define ERR_NONICKNAMEGIVEN(source)                     "431 " + source + " :Nickname not given"
+#define ERR_NOUSERNAMEGIVEN(source)                     "432 " + source + " :No username given"
 #define ERR_NICKNAMEINUSE(source)                       "433 " + source + " " + source  + " :Nickname is already in use"
 #define ERR_USERNOTINCHANNEL(source, nickname, channel) "441 " + source + " " + nickname + " " + channel + " :They aren't on that channel"
 #define ERR_NOTONCHANNEL(source, channel)               "442 " + source + " " + channel + " :You're not on that channel"
@@ -37,6 +38,7 @@
 
 // replies
 #define RPL_WELCOME(source)                             "001 " + source + " :Welcome " + source + " to the ft_irc network"
+#define RPL_TOPIC(source, channel, topic)               "332 " + source + " " + channel + " :" + topic
 #define RPL_NAMREPLY(source, channel, users)            "353 " + source + " = " + channel + " :" + users
 #define RPL_ENDOFNAMES(source, channel)                 "366 " + source + " " + channel + " :End of /NAMES list."
 #define RPL_NICK(source, message)                       ":" + source + " NICK :" + message
