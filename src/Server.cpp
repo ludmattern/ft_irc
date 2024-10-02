@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/02 15:20:35 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 15:43:03 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ void Server::parseArguments(int argc, char **argv)
 	_port = static_cast<int>(port);
 }
 
-
 void Server::initServer()
 {
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -156,7 +155,6 @@ void Server::setSocketNonBlocking(int fd)
 	}
 }
 
-
 void Server::run()
 {
 	while (_isRunning)
@@ -177,8 +175,6 @@ void Server::run()
 		}
 	}
 }
-
-
 
 void Server::handlePollEvent(struct pollfd& pd)
 {
@@ -226,9 +222,6 @@ Channel* Server::addChannel(const std::string& name)
 	_channels[name] = channel;
 	return channel;
 }
-
-
-
 
 void Server::closeClientConnection(int client_fd)
 {

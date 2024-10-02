@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 15:30:31 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:47:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ Channel::Channel(const std::string& name) : _name(name) {}
 void Channel::addClient(Client& client)
 {
 	_clients[&client] = false;
+	client.joinChannel(this);
+}
+
+void Channel::addClient(Client& client, bool isOperator)
+{
+	_clients[&client] = isOperator;
 	client.joinChannel(this);
 }
 
