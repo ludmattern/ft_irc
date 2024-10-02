@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:45:14 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 14:30:12 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 15:50:29 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 #define ERR_CHANNELISFULL(source, channel)              "471 " + source + " " + channel + " :Cannot join channel (+l)"
 #define ERR_BADCHANNELKEY(source, channel)              "475 " + source + " " + channel + " :Cannot join channel (+k)"
 #define ERR_CHANOPRIVSNEEDED(source, channel)           "482 " + source + " " + channel + " :You're not channel operator"
-#define ERR_ALREADYREGISTRED(source, channel)           "462 " + source + " :You are alreqdy connected"
+#define ERR_ALREADYREGISTRED(source, channel)           "462 " + source + " :You may not reregister"
 
 // replies
 #define RPL_WELCOME(source)                             "001 " + source + " :Welcome " + source + " to the ft_irc network"
