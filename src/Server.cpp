@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/02 15:43:03 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 01:17:24 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,4 +255,25 @@ void Server::removeClientFromPollDescriptors(int client_fd)
 			break;
 		}
 	}
+}
+
+Channel* Server::getChannelByName(const std::string& channelName)
+{
+	std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
+	if (it != _channels.end())
+		return it->second;
+	else
+		return NULL;
+}
+
+Client* Server::getClientByNickname(const std::string& nickname)
+{
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		if (it->second->getNickname() == nickname)
+		{
+			return it->second;
+		}
+	}
+	return NULL;
 }

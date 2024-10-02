@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/02 14:15:35 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 01:17:23 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ Parser::Parser()
 	_commands["NICK"] = new Nick();
 	_commands["USER"] = new User();
 	_commands["QUIT"] = new Quit();
-	//_commands["PING"] = new Ping();
-	//_commands["PONG"] = new Pong();
 	_commands["JOIN"] = new Join();
 	_commands["PART"] = new Part();
 	_commands["KICK"] = new Kick();

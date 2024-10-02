@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 15:22:07 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 01:16:54 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ public:
 	std::string getPassword() const;
 
 	void closeClientConnection(int client_fd);
-
+	Channel* getChannelByName(const std::string& channelName);
+	Client* getClientByNickname(const std::string& nickname);
 
 	Parser* parser;
 

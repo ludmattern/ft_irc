@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:45:14 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 15:50:29 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 01:16:56 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@
 #define ERR_BADCHANNELKEY(source, channel)              "475 " + source + " " + channel + " :Cannot join channel (+k)"
 #define ERR_CHANOPRIVSNEEDED(source, channel)           "482 " + source + " " + channel + " :You're not channel operator"
 #define ERR_ALREADYREGISTRED(source, channel)           "462 " + source + " :You may not reregister"
-
+#define ERR_USERONCHANNEL(nickname, target, channel) ("443 " + (nickname) + " " + (target) + " " + (channel) + " :is already on channel\r\n")
+#define ERR_INVITEONLYCHAN(nickname, channel) ("473 " + (nickname) + " " + (channel) + " :Cannot join channel (+i)\r\n")
 // replies
 #define RPL_WELCOME(source)                             "001 " + source + " :Welcome " + source + " to the ft_irc network"
 #define RPL_TOPIC(source, channel, topic)               "332 " + source + " " + channel + " :" + topic
@@ -51,6 +52,7 @@
 #define RPL_QUIT(source, message)                       ":" + source + " QUIT :Quit: " + message
 #define RPL_KICK(source, channel, target, reason)       ":" + source + " KICK " + channel + " " + target + " :" + reason
 #define RPL_MODE(source, channel, modes, args)          ":" + source + " MODE " + channel + " " + modes + " " + args
+#define RPL_INVITING(nickname, target, channel) ("341 " + (nickname) + " " + (target) + " :" + (channel) + "\r\n")
 
 // Server Params
 #define MIN_PORT 1
