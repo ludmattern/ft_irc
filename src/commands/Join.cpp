@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:35 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 11:29:36 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 11:31:26 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <algorithm>
 
 Join::Join() {}
-
 Join::~Join() {}
 
 void Join::execute(Client& client, const std::vector<std::string>& params) 
