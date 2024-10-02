@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/02 14:05:30 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 14:30:24 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "network/Channel.hpp"
 #include <string>
 #include <set>
+
+class Channel;
 
 enum ClientStatus {
 	HANDSHAKE,
