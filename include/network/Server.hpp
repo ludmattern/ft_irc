@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 17:49:20 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:13:05 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ public:
 	
 	void run();
 
+	Channel* addChannel(const std::string& name);
+	Channel* getChannel(const std::string& name);
+
 	std::vector<Client*> getClients() const;
 	Parser* parser;
 
@@ -72,7 +75,6 @@ private:
 	void	clientDisconnect(int fd);
 	void	clientRead(int fd);
 
-	Channel* createChannel(const std::string& name);
 
 	void initServer();
 	void setSocketNonBlocking(int fd);
