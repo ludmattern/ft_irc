@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/02 15:45:32 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 01:16:51 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,16 @@ public:
 	std::string getPrefix() const;
 	std::string getPass() const;
 
-
 	void setNickname(const std::string& nickname);
 	void setUsername(const std::string& username);
 	void setRealname(const std::string& realname);
 	void setStatus(ClientStatus status);
 	void setPassword(const std::string& password);
 
+	void setAuthenticated(bool value);
+	bool isAuthenticated() const;
 private:
+	bool _authenticated;
 
 	int _fd;
 	std::string _nickname;

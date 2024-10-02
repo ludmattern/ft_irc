@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 14:30:37 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 01:17:20 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,3 +72,10 @@ void Client::setUsername(const std::string& username) { _username = username; }
 void Client::setRealname(const std::string& realname) {	_realname = realname; }
 void Client::setStatus(ClientStatus status) { _status = status; }
 
+void Client::setAuthenticated(bool value) {
+	_authenticated = value;
+}
+
+bool Client::isAuthenticated() const {
+	return _authenticated;
+}

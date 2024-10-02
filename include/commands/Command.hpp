@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 16:23:01 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 01:16:46 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ class Client;
 
 class Command {
 public:
-    Command();
-    virtual ~Command() {}
+	Command();
+	virtual ~Command() {}
 	void tryRegister(Client &client);
-    virtual void execute(Client& client, const std::vector<std::string>& params) = 0;
+	virtual void execute(Client& client, const std::vector<std::string>& params) = 0;
 protected:
 	Server& _server;
 };

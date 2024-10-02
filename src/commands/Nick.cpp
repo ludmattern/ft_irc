@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:16:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 16:51:16 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 01:17:06 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,27 @@ Nick::~Nick() {}
 
 void Nick::execute(Client& client, const std::vector<std::string>& params)
 {
-	if (client.getStatus() == HANDSHAKE)
-	{
-		client.reply(ERR_PASSWDMISMATCH(client.getNickname()));
-		return;
-	}
 	if (params.empty())
 	{
-		client.reply(ERR_NONICKNAMEGIVEN(client.getNickname()));
+		client.reply(ERR_NEEDMOREPARAMS(client.getNickname(), "NICK"));
 		return;
 	}
 
-	std::string nickname = params[0];
+	std::string newNickname = params[0];
 
-	if (isNicknameTaken(nickname))
+
+	if (isNicknameTaken(newNickname))
 	{
-		client.reply(ERR_NICKNAMEINUSE(nickname));
+		client.reply(ERR_NICKNAMEINUSE(newNickname));
+		return;
 	}
 	else
 	{
-		std::string oldPrefix = client.getPrefix();
-		client.setNickname(nickname);
-		client.write(":" + oldPrefix + " NICK :" + nickname);
+		client.setNickname(newNickname);
+		tryRegister(client);
 	}
 }
+
 
 
 bool Nick::isNicknameTaken(const std::string& nickname)
