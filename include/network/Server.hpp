@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 14:01:38 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 14:30:29 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ public:
 	
 	void run();
 
+	Channel* addChannel(const std::string& name);
+	Channel* getChannel(const std::string& name);
+
 	std::vector<Client*> getClients() const;
 	std::string getPassword() const;
 
@@ -74,7 +77,6 @@ private:
 	void	clientDisconnect(int fd);
 	void	clientRead(int fd);
 
-	Channel* createChannel(const std::string& name);
 
 	void initServer();
 	void setSocketNonBlocking(int fd);

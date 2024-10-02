@@ -1,0 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Channel.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
+/*   Updated: 2024/10/02 14:23:01 by lmattern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "network/Channel.hpp"
+#include  "replies.hpp"
+
+Channel::Channel(const std::string& name) : _name(name) {}
+
+void Channel::addClient(Client& client)
+{
+    _clients[&client] = false;
+}
+
+void Channel::removeClient(Client& client)
+{
+    _clients.erase(&client);
+}
+
+void Channel::setOperator(Client& client, bool isOperator)
+{
+    _clients[&client] = isOperator;
+}
+
+bool Channel::isOperator(Client& client) const
+{
+    std::map<Client*, bool>::const_iterator it = _clients.find(&client);
+    if (it != _clients.end())
+        return it->second;
+    else
+        return false;
+}
+
+void Channel::welcomeClient(Client& client)
+{
+	client.reply(RPL_TOPIC(client.getNickname(), _name, _topic));
+	client.reply(RPL_NAMREPLY(client.getNickname(), _name, "liste des clients"));
+}
