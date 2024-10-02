@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:46 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 15:29:27 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 15:29:43 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void Quit::execute(Client& client, const std::vector<std::string>& params)
 	{
 		message += " :" + quitMessage;
 	}
-	//add chan leaving and broadcast msg
+	//add chan leaving and broadcast msg on  chqn
 	_server.closeClientConnection(client.getFd());
 	
 }
