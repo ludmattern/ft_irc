@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:46 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 15:29:27 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 15:32:07 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void Quit::execute(Client& client, const std::vector<std::string>& params)
 	{
 		message += " :" + quitMessage;
 	}
-	//add chan leaving and broadcast msg
 	_server.closeClientConnection(client.getFd());
 	
 }
