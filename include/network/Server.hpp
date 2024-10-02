@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 17:49:20 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:01:38 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ public:
 	void run();
 
 	std::vector<Client*> getClients() const;
+	std::string getPassword() const;
+
 	Parser* parser;
 
 private:
@@ -86,6 +88,7 @@ private:
 
 	/* Signals */
 	static void handleSignal(int signal);
+
 };
 
 #endif

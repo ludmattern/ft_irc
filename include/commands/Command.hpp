@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 10:37:44 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 14:16:13 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class Command {
 public:
     Command();
     virtual ~Command() {}
+	void tryRegister(Client &client);
     virtual void execute(Client& client, const std::vector<std::string>& params) = 0;
 protected:
 	Server& _server;
@@ -74,10 +75,10 @@ public:
 	void execute(Client& client, const std::vector<std::string>& params);
 };
 
-class Privmsg : public Command {
+class PrivMsg : public Command {
 public:
-	Privmsg();
-	~Privmsg();
+	PrivMsg();
+	~PrivMsg();
 	void execute(Client& client, const std::vector<std::string>& params);
 };
 
@@ -108,5 +109,10 @@ public:
 	~Kick();
 	void execute(Client& client, const std::vector<std::string>& params);
 };
-
+class Part : public Command {
+public:
+	Part();
+	~Part();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
 #endif

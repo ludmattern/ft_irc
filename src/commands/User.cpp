@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:17:47 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 15:57:51 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:27:55 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@ User::~User() {}
 
 void User::execute(Client& client, const std::vector<std::string>& params)
 {
-	if (client.getStatus() != HANDSHAKE)
+	if (client.getStatus() == HANDSHAKE)
+	{
+		client.reply(ERR_PASSWDMISMATCH(client.getNickname()));
+		return;
+	}
+	if (client.getStatus() == REGISTERED)
 	{
 		client.reply(ERR_ALREADYREGISTERED(client.getNickname()));
 		return;
@@ -37,4 +42,5 @@ void User::execute(Client& client, const std::vector<std::string>& params)
 
 	client.setUsername(username);
 	client.setRealname(realname);
+	tryRegister(client);
 }
