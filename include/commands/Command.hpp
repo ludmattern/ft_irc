@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 14:16:13 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 16:23:01 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ public:
 protected:
 	Server& _server;
 };
-
 
 class Pass : public Command {
 public:

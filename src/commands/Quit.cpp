@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:46 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 15:48:35 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 16:30:29 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ Quit::~Quit() {}
 void Quit::execute(Client& client, const std::vector<std::string>& params) 
 {
 	std::string quitMessage = "Client exited";
-	if (!params.empty()) 
+	if (!params.empty())
 	{
 		quitMessage = params[0];
 	}
@@ -36,7 +36,17 @@ void Quit::execute(Client& client, const std::vector<std::string>& params)
 	{
 		message += " :" + quitMessage;
 	}
-	//add chan leaving and broadcast msg on  chqn
+	message += "\r\n";
+
+	std::set<Channel*> channels = client.getChannels();
+	for (std::set<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
+	{
+		Channel* channel = *it;
+		channel->broadcast(message, &client);
+		channel->removeClient(client);
+	}
+
+
 	_server.closeClientConnection(client.getFd());
-	
 }
+
