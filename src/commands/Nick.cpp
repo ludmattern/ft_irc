@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:16:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 16:23:51 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/02 16:51:16 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void Nick::execute(Client& client, const std::vector<std::string>& params)
 	std::string nickname = params[0];
 
 	if (isNicknameTaken(nickname))
+	{
 		client.reply(ERR_NICKNAMEINUSE(nickname));
+	}
 	else
 	{
 		std::string oldPrefix = client.getPrefix();
