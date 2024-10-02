@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 17:53:42 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:56:16 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void disableControlCharacterEcho()
 	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 }
 
+Server::Server() : _isRunning(false) {}
 
 void Server::init(int argc, char **argv) {
 	if (!_isRunning)

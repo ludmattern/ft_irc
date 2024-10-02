@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/01 17:30:36 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 10:37:44 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,60 @@ public:
 	bool isNicknameTaken(const std::string& nickname);
 };
 
+class Quit : public Command {
+public:
+	Quit();
+	~Quit();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
+
+class Join : public Command {
+public:
+	Join();
+	~Join();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
+
+class Topic : public Command {
+public:
+	Topic();
+	~Topic();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
+
+class Privmsg : public Command {
+public:
+	Privmsg();
+	~Privmsg();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
+
+class Notice : public Command {
+public:
+	Notice();
+	~Notice();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
+
+class Invite : public Command {
+public:
+	Invite();
+	~Invite();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
+
+class Mode : public Command {
+public:
+	Mode();
+	~Mode();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
+
+class Kick : public Command {
+public:
+	Kick();
+	~Kick();
+	void execute(Client& client, const std::vector<std::string>& params);
+};
 
 #endif
