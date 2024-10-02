@@ -1,7 +1,7 @@
-#include "Command.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
+#include "commands/Command.hpp"
+#include "network/Server.hpp"
+#include "network/Client.hpp"
+#include "network/Channel.hpp"
 #include <sstream>
 #include <vector>
 #include <algorithm>
