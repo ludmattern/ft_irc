@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/02 14:23:10 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:28:08 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,10 @@ public:
 
 	void setOperator(Client& client, bool isOperator);
 	bool isOperator(Client& client) const;
-	// void broadcast(const std::string& message);
-	// void broadcast(const std::string& message, Client* sender);
+	void broadcast(const std::string& message);
+	void broadcast(const std::string& message, Client* sender);
 	
-	// void addClient(Client* client, bool isOperator);
-	// void removeClient(Client* client);
+	void addClient(Client* client, bool isOperator);
 
 private:
 	std::string _name;
