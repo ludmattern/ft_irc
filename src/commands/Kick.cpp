@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:37 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:08:13 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:23:13 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void Kick::execute(Client* client, const std::vector<std::string>& params)
 {
 	if (params.size() < 2) 
 	{
-		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "KICK"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("KICK")));
 		return;
 	}
 	std::string channelName = params[0];
@@ -54,7 +54,7 @@ void Kick::execute(Client* client, const std::vector<std::string>& params)
 	Client* targetClient = _server.getClientByNickname(targetNickname);
 	if (!targetClient) 
 	{
-		client->reply(ERR_NOSUCHNICK(client->getNickname(), targetNickname));
+		client->reply(ERR_NOSUCHNICK(targetNickname));
 		return;
 	}
 	if (!channel->hasClient(targetClient)) 
@@ -65,6 +65,6 @@ void Kick::execute(Client* client, const std::vector<std::string>& params)
 
 	std::string kickMessage = ":" + client->getNickname() + " KICK " + channelName + " " + targetNickname + " :" + reason;
 	channel->broadcast(kickMessage);
-	targetClient->write(": KICK " + channelName + " " + targetNickname + " :" + reason + "\n");
+	targetClient->write(": KICK " + channelName + " " + targetNickname + " :" + reason);
 	channel->removeClient(targetClient);
 }

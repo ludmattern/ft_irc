@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:16:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 16:08:58 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 17:23:21 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void Nick::execute(Client* client, const std::vector<std::string>& params)
 {
 	if (params.empty())
 	{
-		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "NICK"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("NICK")));
 		return;
 	}
 	std::string newNickname = params[0];

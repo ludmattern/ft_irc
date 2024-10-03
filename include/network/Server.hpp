@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:16:54 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 16:48:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ public:
 
 	std::vector<Client*> getClients() const;
 	std::string getPassword() const;
+	std::string getName() const { return _name; }
 
 	void closeClientConnection(int client_fd);
 	Channel* getChannelByName(const std::string& channelName);
@@ -69,6 +70,7 @@ private:
 
 	bool _isRunning;
 	int _serverSocket;
+	std::string _name;
 
 	int _port;
 	std::string _password;

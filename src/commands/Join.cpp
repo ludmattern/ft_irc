@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:35 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:12:41 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:22:15 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void Join::execute(Client* client, const std::vector<std::string>& params)
 {
 	if (client->getStatus() != REGISTERED)
 	{
-		client->reply(ERR_NOTREGISTERED(client->getNickname()));
+		client->reply(ERR_NOTREGISTERED());
 		return ;
 	}
 
 	if (params.empty())
 	{
-		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "JOIN"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("JOIN")));
 		return ;
 	}
 	std::string channelName = params[0];
@@ -60,6 +60,6 @@ void Join::execute(Client* client, const std::vector<std::string>& params)
 	
 	}
 
-	channel->welcomeClient(client);
 	channel->broadcast(":" + client->getPrefix() + " JOIN " + channelName);
+	channel->welcomeClient(client);
 }

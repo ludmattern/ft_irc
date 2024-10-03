@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:11:32 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:20:18 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ bool Channel::isOperator(Client* client) const
 void Channel::welcomeClient(Client* client)
 {
 	client->reply(RPL_TOPIC(client->getNickname(), _name, _topic));
-	client->reply(RPL_NAMREPLY(client->getNickname(), _name, "liste des clients"));
+	client->reply(RPL_NAMREPLY(client->getNickname(), _name, getUserList()));
+	client->reply(RPL_ENDOFNAMES(client->getNickname(), _name));
 }
 
 void Channel::broadcast(const std::string& message)
@@ -69,4 +70,16 @@ void Channel::broadcast(const std::string& message, Client* sender)
 void Channel::addInvite(Client& client)
 {
 	_invitedClients.insert(&client);
+}
+
+std::string Channel::getUserList() const
+{
+    std::string userList;
+    for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
+    {
+        if (it->second)
+            userList += "@";
+        userList += it->first->getNickname() + " ";
+    }
+    return userList;
 }

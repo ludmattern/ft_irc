@@ -6,11 +6,12 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 14:52:42 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:51:43 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/Client.hpp"
+#include "libs/cppLibft.hpp"
 #include "replies.hpp"
 #include <stdexcept>
 #include <sys/socket.h>
@@ -40,13 +41,15 @@ std::string Client::getPrefix() const
 void Client::write(const std::string& message) const
 {
 	std::string buffer = message + CRLF;
+	log("Sending to client " + toString(_fd) + ": " + buffer);
 	if (send(_fd, buffer.c_str(), buffer.length(), 0) < 0)
 		throw std::runtime_error("Error while writing to client");
 }
 
 void Client::reply(const std::string& reply)
 {
-	this->write(":" + getPrefix() + " " + reply);
+	std::string serverName = Server::getInstance().getName();
+	this->write(":" + serverName + " " + reply);
 }
 
 void Client::joinChannel(Channel* channel, bool isOperator)

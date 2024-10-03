@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:06:57 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:21:53 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ void Invite::execute(Client* client, const std::vector<std::string>& params)
 {
 	if (client->getStatus() != REGISTERED)
 	{
-		client->reply(ERR_NOTREGISTERED(client->getNickname()));
+		client->reply(ERR_NOTREGISTERED());
 		return;
 	}
 	if (params.size() < 2)
 	{
-		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "INVITE"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("INVITE")));
 		return;
 	}
 	std::string targetNickname = params[0];
@@ -53,7 +53,7 @@ void Invite::execute(Client* client, const std::vector<std::string>& params)
 	Client* targetClient = Server::getInstance().getClientByNickname(targetNickname);
 	if (!targetClient)
 	{
-		client->reply(ERR_NOSUCHNICK(client->getNickname(), targetNickname));
+		client->reply(ERR_NOSUCHNICK(targetNickname));
 		return;
 	}
 	if (channel->hasClient(targetClient))
@@ -63,8 +63,8 @@ void Invite::execute(Client* client, const std::vector<std::string>& params)
 	}
 	channel->addInvite(*targetClient);
 
-	std::string inviteMessage = ":" + client->getPrefix() + " INVITE " + targetNickname + " :" + channelName + "\r\n";
+	std::string inviteMessage = ":" + client->getPrefix() + " INVITE " + targetNickname + " :" + channelName;
 	targetClient->write(inviteMessage);
 
-	client->reply(RPL_INVITING(client->getNickname(), targetNickname, channelName));
+	client->reply(RPL_INVITING(targetNickname, channelName));
 }

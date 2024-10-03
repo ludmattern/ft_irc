@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivMsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:45 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 16:19:04 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 17:24:17 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void PrivMsg::execute(Client* client, const std::vector<std::string> &params)
 {
 	if (client->getStatus() != REGISTERED)
 	{
-		client->reply(ERR_NOTREGISTERED(client->getNickname()));
+		client->reply(ERR_NOTREGISTERED());
 		return;
 	}
 
 	if (params.size() < 2)
 	{
-		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PRIVMSG"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("PRIVMSG")));
 		return;
 	}
 
@@ -74,7 +74,7 @@ void PrivMsg::execute(Client* client, const std::vector<std::string> &params)
 		Client* recipient = _server.getClientByNickname(target);
 		if (recipient == NULL)
 		{
-			client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
+			client->reply(ERR_NOSUCHNICK(target));
 			return;
 		}
 		std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + recipient->getNickname() + " :" + message;

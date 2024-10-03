@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:17:47 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:06:31 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:24:55 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void User::execute(Client* client, const std::vector<std::string>& params)
 
 	if (params.size() < 4)
 	{
-		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "USER"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("USER")));
 		return;
 	}
 
