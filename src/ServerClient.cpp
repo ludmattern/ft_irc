@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerClient.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:08:06 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:26 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:07:38 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void Server::clientRead(int client_fd)
 	else if (bytes_read == 0)
 	{
 		std::vector<std::string> params;
-		parser->executeCommand("QUIT", *client, params);
+		parser->executeCommand("QUIT", client, params);
 		return;
 	}
 	else if (errno != EWOULDBLOCK && errno != EAGAIN)

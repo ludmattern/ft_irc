@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:20 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 14:52:42 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ void Client::reply(const std::string& reply)
 	this->write(":" + getPrefix() + " " + reply);
 }
 
-void Client::joinChannel(Channel* channel/*, bool isOperator*/)
+void Client::joinChannel(Channel* channel, bool isOperator)
 {
 	_channels.insert(channel);
-	//channel->addClient(this, isOperator);
+	channel->addClient(this, isOperator);
 }
 
 const std::set<Channel*>& Client::getChannels() const

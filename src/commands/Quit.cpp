@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:46 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:14 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:07:14 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Quit::Quit() : Command() {}
 
 Quit::~Quit() {}
 
-void Quit::execute(Client& client, const std::vector<std::string>& params) 
+void Quit::execute(Client* client, const std::vector<std::string>& params) 
 {
 	std::string quitMessage = "Client exited";
 	if (!params.empty())
@@ -30,7 +30,7 @@ void Quit::execute(Client& client, const std::vector<std::string>& params)
 		quitMessage = params[0];
 	}
 
-	std::string prefix = client.getPrefix();
+	std::string prefix = client->getPrefix();
 	std::string message = ":" + prefix + " QUIT";
 	if (!quitMessage.empty()) 
 	{
@@ -38,15 +38,15 @@ void Quit::execute(Client& client, const std::vector<std::string>& params)
 	}
 	message += "\r\n";
 
-	std::set<Channel*> channels = client.getChannels();
+	std::set<Channel*> channels = client->getChannels();
 	for (std::set<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
 	{
 		Channel* channel = *it;
-		channel->broadcast(message, &client);
+		channel->broadcast(message, client);
 		channel->removeClient(client);
 	}
 
 
-	_server.closeClientConnection(client.getFd());
+	_server.closeClientConnection(client->getFd());
 }
 

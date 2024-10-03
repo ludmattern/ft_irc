@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Notice.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:42 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:08 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:00:24 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 Notice::Notice() {}
 Notice::~Notice() {}
 
-void Notice::execute(Client& client, const std::vector<std::string>& params)
+void Notice::execute(Client* client, const std::vector<std::string>& params)
 {
-	if (client.getStatus() != REGISTERED)
+	if (client->getStatus() != REGISTERED)
 	{
 		return;
 	}
@@ -50,8 +50,8 @@ void Notice::execute(Client& client, const std::vector<std::string>& params)
 		{
 			return;
 		}
-		std::string fullMessage = ":" + client.getPrefix() + " NOTICE " + target + " :" + message + "\r\n";
-		channel->broadcast(fullMessage, &client);
+		std::string fullMessage = ":" + client->getPrefix() + " NOTICE " + target + " :" + message + "\r\n";
+		channel->broadcast(fullMessage, client);
 	}
 	else
 	{
@@ -60,7 +60,7 @@ void Notice::execute(Client& client, const std::vector<std::string>& params)
 		{
 			return;
 		}
-		std::string fullMessage = ":" + client.getPrefix() + " NOTICE " + recipient->getNickname() + " :" + message + "\r\n";
+		std::string fullMessage = ":" + client->getPrefix() + " NOTICE " + recipient->getNickname() + " :" + message + "\r\n";
 		recipient->write(fullMessage);
 	}
 }

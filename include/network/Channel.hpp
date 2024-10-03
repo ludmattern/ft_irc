@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:16:49 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:06:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,17 @@ public:
 
 	Channel(const std::string& name);
 
-	void addClient(Client& client);
-	void addClient(Client& client, bool isOperator);
-	void welcomeClient(Client& client);
-	void removeClient(Client& client);
+	void addClient(Client* client);
+	void addClient(Client* client, bool isOperator);
+	void welcomeClient(Client* client);
+	void removeClient(Client* client);
 
-	void setOperator(Client& client, bool isOperator);
-	bool isOperator(Client& client) const;
+	void setOperator(Client* client, bool isOperator);
+	bool isOperator(Client* client) const;
 	void broadcast(const std::string& message);
 	void broadcast(const std::string& message, Client* sender);
 
-	bool hasClient(Client& client) const {return _clients.find(&client) != _clients.end();}
+	bool hasClient(Client* client) const {return _clients.find(client) != _clients.end();}
 
 	std::string getName() const {return _name;}
 	std::string getTopic() const {return _topic;}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:37 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:03 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:08:13 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@
 Kick::Kick() {}
 Kick::~Kick() {}
 
-void Kick::execute(Client& client, const std::vector<std::string>& params) 
+void Kick::execute(Client* client, const std::vector<std::string>& params) 
 {
 	if (params.size() < 2) 
 	{
-		client.reply(ERR_NEEDMOREPARAMS(client.getNickname(), "KICK"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "KICK"));
 		return;
 	}
 	std::string channelName = params[0];
@@ -37,34 +37,34 @@ void Kick::execute(Client& client, const std::vector<std::string>& params)
 	Channel* channel = _server.getChannelByName(channelName);
 	if (!channel)
 	{
-		client.reply(ERR_NOSUCHCHANNEL(client.getNickname(), channelName));
+		client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), channelName));
 		return;
 	}
 	if (!channel->hasClient(client)) 
 	{
-		client.reply(ERR_NOTONCHANNEL(client.getNickname(), channelName));
+		client->reply(ERR_NOTONCHANNEL(client->getNickname(), channelName));
 		return;
 	}
 
 	if (!channel->isOperator(client)) 
 	{
-		client.reply(ERR_CHANOPRIVSNEEDED(client.getNickname(), channelName));
+		client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channelName));
 		return;
 	}
 	Client* targetClient = _server.getClientByNickname(targetNickname);
 	if (!targetClient) 
 	{
-		client.reply(ERR_NOSUCHNICK(client.getNickname(), targetNickname));
+		client->reply(ERR_NOSUCHNICK(client->getNickname(), targetNickname));
 		return;
 	}
-	if (!channel->hasClient(*targetClient)) 
+	if (!channel->hasClient(targetClient)) 
 	{
-		client.reply(ERR_USERNOTINCHANNEL(client.getNickname(), targetClient->getNickname(), channel->getName()));
+		client->reply(ERR_USERNOTINCHANNEL(client->getNickname(), targetClient->getNickname(), channel->getName()));
 		return;
 	}
 
-	std::string kickMessage = ":" + client.getNickname() + " KICK " + channelName + " " + targetNickname + " :" + reason;
+	std::string kickMessage = ":" + client->getNickname() + " KICK " + channelName + " " + targetNickname + " :" + reason;
 	channel->broadcast(kickMessage);
 	targetClient->write(": KICK " + channelName + " " + targetNickname + " :" + reason + "\n");
-	channel->removeClient(*targetClient);
+	channel->removeClient(targetClient);
 }

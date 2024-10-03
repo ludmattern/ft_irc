@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:18 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:06:26 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,42 +15,40 @@
 
 Channel::Channel(const std::string& name) : _name(name) {}
 
-void Channel::addClient(Client& client)
+void Channel::addClient(Client* client)
 {
-	_clients[&client] = false;
-	client.joinChannel(this);
+	_clients[client] = false;
 }
 
-void Channel::addClient(Client& client, bool isOperator)
+void Channel::addClient(Client* client, bool isOperator)
 {
-	_clients[&client] = isOperator;
-	client.joinChannel(this);
+	_clients[client] = isOperator;
 }
 
-void Channel::removeClient(Client& client)
+void Channel::removeClient(Client* client)
 {
-	_clients.erase(&client);
-	client.partChannel(this);
+	_clients.erase(client);
+	client->partChannel(this);
 }
 
-void Channel::setOperator(Client& client, bool isOperator)
+void Channel::setOperator(Client* client, bool isOperator)
 {
-	_clients[&client] = isOperator;
+	_clients[client] = isOperator;
 }
 
-bool Channel::isOperator(Client& client) const
+bool Channel::isOperator(Client* client) const
 {
-	std::map<Client*, bool>::const_iterator it = _clients.find(&client);
+	std::map<Client*, bool>::const_iterator it = _clients.find(client);
 	if (it != _clients.end())
 		return it->second;
 	else
 		return false;
 }
 
-void Channel::welcomeClient(Client& client)
+void Channel::welcomeClient(Client* client)
 {
-	client.reply(RPL_TOPIC(client.getNickname(), _name, _topic));
-	client.reply(RPL_NAMREPLY(client.getNickname(), _name, "liste des clients"));
+	client->reply(RPL_TOPIC(client->getNickname(), _name, _topic));
+	client->reply(RPL_NAMREPLY(client->getNickname(), _name, "liste des clients"));
 }
 
 void Channel::broadcast(const std::string& message)

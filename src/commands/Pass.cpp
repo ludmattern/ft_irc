@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:35:46 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:11 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:06:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@ Pass::Pass() : Command() {}
 
 Pass::~Pass() {}
 
-void Pass::execute(Client& client, const std::vector<std::string>& params)
+void Pass::execute(Client* client, const std::vector<std::string>& params)
 {
-	if (client.getStatus() == REGISTERED)
+	if (client->getStatus() == REGISTERED)
 	{
-		client.reply(ERR_ALREADYREGISTERED(client.getNickname()));
+		client->reply(ERR_ALREADYREGISTERED(client->getNickname()));
 		return;
 	}
 	if (params.empty())
 	{
-		client.reply(ERR_NEEDMOREPARAMS(client.getNickname(), "PASS"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PASS"));
 		return;
 	}
-	client.setPassword(params[0]);
-	if (client.getPass() != _server.getPassword())
+	client->setPassword(params[0]);
+	if (client->getPass() != _server.getPassword())
 	{
-		client.reply(ERR_PASSWDMISMATCH(client.getNickname()));
+		client->reply(ERR_PASSWDMISMATCH(client->getNickname()));
 		return;
 	}
-	client.setAuthenticated(true);
+	client->setAuthenticated(true);
 	tryRegister(client);
 }
