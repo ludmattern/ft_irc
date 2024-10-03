@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:11:25 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:47:11 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,22 @@ public:
 	void broadcast(const std::string& message, Client* sender);
 
 	bool hasClient(Client* client) const {return _clients.find(client) != _clients.end();}
-
+	bool hasMode(char mode) const { return _modes.find(mode) != _modes.end();}
 	std::string getName() const {return _name;}
 	std::string getTopic() const {return _topic;}
 	int getNumberOfClients() const {return _clients.size();}
 	int getLimit() const {return _limit;}
+    std::string getPassword() const;
 
 	void setLimit(int limit) { _limit = limit;}
 	void setTopic(const std::string& topic) {_topic = topic;}
-	
-	void addInvite(Client& client);
+	void setPassword(const std::string& password);
+    void setMode(char mode) {_modes.insert(mode);}
+	void removeMode(char mode) {_modes.erase(mode);}
 
+	void addInvite(Client& client);
+	
+	void sendNamesList(Client& client);
 
 private:
 	int			_limit;
@@ -55,7 +60,7 @@ private:
 	std::set<char> _modes;
 	std::map<Client*, bool> _clients;
 	std::set<Client*> _invitedClients;
-
+	std::string _password;
 };
 
 #endif
