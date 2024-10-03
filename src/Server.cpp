@@ -3,21 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/20 10:53:23 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/01 10:30:04 by fprevot          ###   ########.fr       */
+/*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
+/*   Updated: 2024/10/03 16:48:59 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "network/Server.hpp"
+#include "network/Client.hpp"
+#include "network/Channel.hpp"
+#include "network/Parser.hpp"
+#include "libs/cppLibft.hpp"
+#include "replies.hpp"
 #include <sstream>
 #include <arpa/inet.h>
 #include <csignal>
 #include <termios.h>
-#include "cppLibft.hpp"
-#include "Parser.hpp"
+
 struct termios oldt, newt;
+
+void restoreTerminalSettings()
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+}
+
+void Server::handleSignal(int signal)
+{
+	if (signal == SIGINT || signal == SIGQUIT)
+	{
+		std::string message = "Signal received (" + toString(signal) + ")";
+		log(message);
+		log("Closing server...");
+		restoreTerminalSettings();
+		Server& server = Server::getInstance();
+		server._isRunning = false;
+	}
+}
 
 void disableControlCharacterEcho()
 {
@@ -28,28 +50,26 @@ void disableControlCharacterEcho()
 	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 }
 
-void restoreTerminalSettings()
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-}
+Server::Server() : _isRunning(false), _name("ft_irc") {}
 
-Server* global_server_instance = NULL;
-
-Server::Server(int argc, char **argv) : _serverName("MyIRCServer"), _isRunning(true)
-{
-	global_server_instance = this;
-	
-	_commandHandler = new Parser();
-	disableControlCharacterEcho();
-	parseArguments(argc, argv);
-	initializeServerSocket();
-	signal(SIGINT, &Server::handleSignal);
-	signal(SIGQUIT, &Server::handleSignal);
+void Server::init(int argc, char **argv) {
+	if (!_isRunning)
+	{
+		parseArguments(argc, argv);
+		initServer();
+		disableControlCharacterEcho();
+		parser = new Parser();
+		_isRunning = true;
+		signal(SIGINT, &Server::handleSignal);
+		signal(SIGQUIT, &Server::handleSignal);
+	}
+	else
+		throw std::runtime_error("Server is already initialized.");
 }
 
 Server::~Server()
 {
-	delete _commandHandler;
+	delete parser;
 	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
 		delete it->second;
 	_channels.clear();
@@ -59,13 +79,12 @@ Server::~Server()
 		delete it->second;
 	}
 	_clients.clear();
-	for (size_t i = 0; i < _pollDescriptors.size(); ++i)
+	for (size_t i = 0; i < _fds.size(); ++i)
 	{
-		close(_pollDescriptors[i].fd);
+		close(_fds[i].fd);
 	}
-	_pollDescriptors.clear();
+	_fds.clear();
 }
-
 
 void Server::parseArguments(int argc, char **argv)
 {
@@ -86,7 +105,7 @@ void Server::parseArguments(int argc, char **argv)
 	_port = static_cast<int>(port);
 }
 
-void Server::initializeServerSocket()
+void Server::initServer()
 {
 	_serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocket < 0)
@@ -122,83 +141,8 @@ void Server::initializeServerSocket()
 	server_pollfd.fd = _serverSocket;
 	server_pollfd.events = POLLIN;
 	server_pollfd.revents = 0;
-	_pollDescriptors.push_back(server_pollfd);
+	_fds.push_back(server_pollfd);
 
-	logToServer("Server started on port " + toString(_port), "INFO");
-}
-
-void Server::handleSignal(int signal)
-{
-	if (signal == SIGINT || signal == SIGQUIT)
-	{
-		global_server_instance->logToServer("Signal received (" + toString(signal) + ")", "INFO");
-		global_server_instance->logToServer("Closing server...", "WARNING");
-		restoreTerminalSettings();
-		global_server_instance->setRunningState(false);
-	}
-}
-
-void Server::setRunningState(bool is_running)
-{
-	this->_isRunning = is_running;
-}
-
-void Server::run()
-{
-	while (_isRunning)
-	{
-		int poll_count = poll(&_pollDescriptors[0], _pollDescriptors.size(), -1);
-		if (poll_count < 0)
-		{
-			if (_isRunning)
-				throw std::runtime_error("Failed on poll");
-			break;
-		}
-
-		for (size_t i = 0; i < _pollDescriptors.size(); ++i)
-		{
-			if (!_isRunning)
-				break;
-			handlePollEvent(_pollDescriptors[i]);
-		}
-	}
-}
-
-void Server::handlePollEvent(struct pollfd& pollDescriptor)
-{
-	if (isServerSocket(pollDescriptor))
-	{
-		if (pollDescriptor.revents & POLLIN)
-			handleNewConnection();
-	}
-	else if (isClientSocket(pollDescriptor))
-		checkClientEvents(pollDescriptor);
-}
-
-bool Server::isServerSocket(const struct pollfd& pollDescriptor) const
-{
-	return pollDescriptor.fd == _serverSocket;
-}
-
-bool Server::isClientSocket(const struct pollfd& pollDescriptor) const
-{
-	return pollDescriptor.fd != _serverSocket;
-}
-
-void Server::checkClientEvents(struct pollfd& pollDescriptor)
-{
-	if (pollDescriptor.revents & POLLIN)
-		readFromClient(pollDescriptor.fd);
-
-	if (shouldClientDisconnect(pollDescriptor.fd))
-		handleClientDisconnection(pollDescriptor);
-}
-
-void Server::handleClientDisconnection(struct pollfd& pollDescriptor)
-{
-	if (pollDescriptor.revents & POLLOUT)
-		writeToClient(pollDescriptor.fd);
-	closeClientConnection(pollDescriptor.fd);
 }
 
 void Server::setSocketNonBlocking(int fd)
@@ -211,33 +155,125 @@ void Server::setSocketNonBlocking(int fd)
 	}
 }
 
-bool Server::shouldClientDisconnect(int client_fd)
+void Server::run()
 {
-	Client* client = _clients[client_fd];
+	while (_isRunning)
+	{
+		int poll_count = poll(&_fds[0], _fds.size(), -1);
+		if (poll_count < 0)
+		{
+			if (_isRunning)
+				throw std::runtime_error("Failed on poll");
+			break;
+		}
 
-	return (client->shouldDisconnect());
+		for (size_t i = 0; i < _fds.size(); ++i)
+		{
+			if (!_isRunning)
+				break;
+			handlePollEvent(_fds[i]);
+		}
+	}
 }
 
+void Server::handlePollEvent(struct pollfd& pd)
+{
+	if (isServerSocket(pd))
+	{
+		if (pd.revents & POLLIN)
+			clientConnect();
+	}
+	else if (isClientSocket(pd))
+	{
+		if (pd.revents & POLLIN)
+			clientRead(pd.fd);
+	}
+}
+
+bool Server::isServerSocket(const struct pollfd& pd) const
+{
+	return pd.fd == _serverSocket;
+}
+
+bool Server::isClientSocket(const struct pollfd& pd) const
+{
+	return pd.fd != _serverSocket;
+}
+std::string Server::getPassword() const {return _password;}
+std::vector<Client*> Server::getClients() const
+{
+	std::vector<Client*> clients;
+	for (std::map<int, Client*>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
+		clients.push_back(it->second);
+	return clients;
+}
+
+Channel* Server::getChannel(const std::string& name)
+{
+	std::map<std::string, Channel*>::iterator it = _channels.find(name);
+	if (it != _channels.end())
+		return it->second;
+	return NULL;
+}
+
+Channel* Server::addChannel(const std::string& name)
+{
+	Channel* channel = new Channel(name);
+	_channels[name] = channel;
+	return channel;
+}
+
+void Server::closeClientConnection(int client_fd)
+{
+	if (_clients.find(client_fd) == _clients.end())
+	{
+		log("Client FD " + toString(client_fd) + " not found");
+		return;
+	}
+	Client* client = _clients[client_fd];
+	std::string quitMessage = ":" + client->getPrefix() + " QUIT :Client disconnected" + CRLF;
+	closeClientSocket(client_fd);
+	removeClientFromPollDescriptors(client_fd);
+	log("Client " + toString(client_fd) + " disconnected.");
+}
+
+void Server::closeClientSocket(int client_fd)
+{
+	Client* client = _clients[client_fd];
+	close(client_fd);
+	delete client;
+	_clients.erase(client_fd);
+}
+
+void Server::removeClientFromPollDescriptors(int client_fd)
+{
+	for (size_t i = 0; i < _fds.size(); ++i)
+	{
+		if (_fds[i].fd == client_fd)
+		{
+			_fds.erase(_fds.begin() + i);
+			break;
+		}
+	}
+}
 
 Channel* Server::getChannelByName(const std::string& channelName)
 {
-    std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
-    if (it != _channels.end())
-        return it->second;
-    else
-        return NULL;
+	std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
+	if (it != _channels.end())
+		return it->second;
+	else
+		return NULL;
 }
 
 Client* Server::getClientByNickname(const std::string& nickname)
 {
-    for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
-    {
-        if (it->second->getNickname() == nickname)
-            return it->second;
-    }
-    return NULL;
-}
-
-void Server::removeChannel(const std::string& channelName) {
-    _channels.erase(channelName);
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		if (it->second->getNickname() == nickname)
+		{
+			return it->second;
+		}
+	}
+	return NULL;
 }

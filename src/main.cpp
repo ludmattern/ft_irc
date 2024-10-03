@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/23 15:32:29 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 10:52:11 by lmattern         ###   ########.fr       */
+/*   Created: 2024/10/01 12:44:31 by fprevot           #+#    #+#             */
+/*   Updated: 2024/10/03 01:17:22 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "network/Server.hpp"
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
-	try
-	{
-		Server server(argc, argv);
+	try {
+		Server& server = Server::getInstance();
+		server.init(argc, argv);
 		server.run();
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << BRED "Error: " RESET << RED << e.what() << RESET << std::endl;
+		std::cerr << "Error: "  << e.what() << std::endl;
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

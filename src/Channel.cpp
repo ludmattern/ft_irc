@@ -5,97 +5,81 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/24 10:44:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 14:02:59 by lmattern         ###   ########.fr       */
+/*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
+/*   Updated: 2024/10/03 17:20:18 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
-#include <algorithm>
-#include <iostream>
+#include "network/Channel.hpp"
+#include  "replies.hpp"
 
-// Constructor
-Channel::Channel(Client& client, const std::string& name) : _name(name) 
+Channel::Channel(const std::string& name) : _limit(5), _name(name) {}
+
+void Channel::addClient(Client* client)
 {
-	_operators.insert(&client);
+	_clients[client] = false;
 }
 
-Channel::~Channel() {}
-
-// Getters
-const std::string& Channel::getName() const {
-	return _name;
-}
-
-const std::string& Channel::getTopic() const {
-	return _topic;
-}
-
-// Setters
-void Channel::setTopic(const std::string& topic) {
-	_topic = topic;
-}
-
-// Client management
-void Channel::addClient(Client* client) 
+void Channel::addClient(Client* client, bool isOperator)
 {
-	_clients.insert(client);
+	_clients[client] = isOperator;
 }
 
 void Channel::removeClient(Client* client)
 {
 	_clients.erase(client);
-	if (isOperator(client))
-		_operators.erase(client);
+	client->partChannel(this);
 }
 
-bool Channel::hasClient(Client* client) const {
-	return _clients.find(client) != _clients.end();
-}
-
-const std::set<Client*>& Channel::getClients() const {
-	return _clients;
-}
-
-void Channel::addOperator(Client* client)
+void Channel::setOperator(Client* client, bool isOperator)
 {
-    _operators.insert(client);
+	_clients[client] = isOperator;
 }
 
-void Channel::removeOperator(Client* client)
+bool Channel::isOperator(Client* client) const
 {
-    _operators.erase(client);
+	std::map<Client*, bool>::const_iterator it = _clients.find(client);
+	if (it != _clients.end())
+		return it->second;
+	else
+		return false;
 }
 
-bool Channel::isOperator(Client* client) const 
+void Channel::welcomeClient(Client* client)
 {
-    return _operators.find(client) != _operators.end();
+	client->reply(RPL_TOPIC(client->getNickname(), _name, _topic));
+	client->reply(RPL_NAMREPLY(client->getNickname(), _name, getUserList()));
+	client->reply(RPL_ENDOFNAMES(client->getNickname(), _name));
 }
 
-const std::set<Client*>& Channel::getOperators() const
+void Channel::broadcast(const std::string& message)
 {
-    return _operators;
+	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
+		it->first->write(message);
 }
 
-// mode management
-void Channel::addMode(char mode) {
-	_modes.insert(mode);
-}
-
-void Channel::removeMode(char mode) {
-	_modes.erase(mode);
-}
-
-bool Channel::hasMode(char mode) const {
-	return _modes.find(mode) != _modes.end();
-}
-
-// message sending
-void Channel::broadcastMessage(const std::string& message, Client* sender) {
-	for (std::set<Client*>::const_iterator it = _clients.begin(); it != _clients.end(); ++it) {
-		if (*it != sender)
-		{
-			(*it)->addToOutputBuffer(message);
-		}
+void Channel::broadcast(const std::string& message, Client* sender)
+{
+	for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		if (it->first != sender)
+			it->first->write(message);
 	}
+}
+
+void Channel::addInvite(Client& client)
+{
+	_invitedClients.insert(&client);
+}
+
+std::string Channel::getUserList() const
+{
+    std::string userList;
+    for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
+    {
+        if (it->second)
+            userList += "@";
+        userList += it->first->getNickname() + " ";
+    }
+    return userList;
 }

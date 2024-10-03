@@ -5,48 +5,48 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/30 08:17:31 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 10:26:24 by lmattern         ###   ########.fr       */
+/*   Created: 2024/10/02 11:29:46 by lmattern          #+#    #+#             */
+/*   Updated: 2024/10/03 15:07:14 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Commands/Quit.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
+#include "commands/Command.hpp"
+#include "network/Server.hpp"
+#include "network/Client.hpp"
+#include "network/Channel.hpp"
 #include <sstream>
 #include <vector>
 #include <algorithm>
 
-Quit::Quit() {}
+Quit::Quit() : Command() {}
 
 Quit::~Quit() {}
 
-void Quit::execute(Server& server, Client& client, const std::vector<std::string>& params) {
+void Quit::execute(Client* client, const std::vector<std::string>& params) 
+{
 	std::string quitMessage = "Client exited";
-	if (!params.empty()) {
+	if (!params.empty())
+	{
 		quitMessage = params[0];
 	}
 
-	const std::set<std::string>& channels = client.getChannels();
-	std::string prefix = client.getPrefix();
+	std::string prefix = client->getPrefix();
 	std::string message = ":" + prefix + " QUIT";
-	if (!quitMessage.empty()) {
+	if (!quitMessage.empty()) 
+	{
 		message += " :" + quitMessage;
 	}
-	message += CRLF;
+	message += "\r\n";
 
-	for (std::set<std::string>::const_iterator it = channels.begin(); it != channels.end(); ++it) {
-		Channel* channel = server.getChannelByName(*it);
-		if (channel) {
-			server.broadcastToChannel(channel, message, &client);
-			channel->removeClient(&client);
-			if (channel->getClients().empty()) {
-				server.removeChannel(*it);
-				delete channel;
-			}
-		}
+	std::set<Channel*> channels = client->getChannels();
+	for (std::set<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
+	{
+		Channel* channel = *it;
+		channel->broadcast(message, client);
+		channel->removeClient(client);
 	}
 
-	client.markForDisconnection(true);
+
+	_server.closeClientConnection(client->getFd());
 }
+

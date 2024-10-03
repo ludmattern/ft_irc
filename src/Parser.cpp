@@ -5,28 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/23 18:13:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 10:52:48 by lmattern         ###   ########.fr       */
+/*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
+/*   Updated: 2024/10/03 17:20:34 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
-#include "Command.hpp"
-#include "Commands/Pass.hpp"
-#include "Commands/Nick.hpp"
-#include "Commands/User.hpp"
-#include "Commands/Quit.hpp"
-#include "Commands/Ping.hpp"
-#include "Commands/Pong.hpp"
-#include "Commands/Join.hpp"
-#include "Commands/Part.hpp"
-#include "Commands/Kick.hpp"
-#include "Commands/Mode.hpp"
-#include "Commands/PrivMsg.hpp"
-#include "Commands/Notice.hpp"
-#include "Commands/Topic.hpp"
-#include "Commands/Invite.hpp"
-#include "Parser.hpp"
+
+#include "network/Server.hpp"
+#include "commands/Command.hpp"
+#include "replies.hpp"
+#include <iostream>
 #include <algorithm>
 
 Parser::Parser()
@@ -35,8 +23,6 @@ Parser::Parser()
 	_commands["NICK"] = new Nick();
 	_commands["USER"] = new User();
 	_commands["QUIT"] = new Quit();
-	_commands["PING"] = new Ping();
-	_commands["PONG"] = new Pong();
 	_commands["JOIN"] = new Join();
 	_commands["PART"] = new Part();
 	_commands["KICK"] = new Kick();
@@ -56,16 +42,16 @@ Parser::~Parser()
 	_commands.clear();
 }
 
-void Parser::executeCommand(const std::string &commandName, Server &server, Client &client, const std::vector<std::string> &params)
+void Parser::executeCommand(const std::string &commandName, Client* client, const std::vector<std::string> &params)
 {
 	std::map<std::string, Command *>::iterator it = _commands.find(commandName);
 	if (it != _commands.end())
-		it->second->execute(server, client, params);
+		it->second->execute (client, params);
 	else
-		server.sendError(&client, "421", commandName, "Unknown command");
+		client->reply(ERR_UNKNOWNCOMMAND(client->getNickname(), commandName));
 }
 
-void Server::processClientCommand(Client *client, const std::string &commandLine)
+void Parser::processClientCommand(Client *client, const std::string &commandLine)
 {
 	std::string line = commandLine;
 	std::string prefix;
@@ -80,7 +66,7 @@ void Server::processClientCommand(Client *client, const std::string &commandLine
 		}
 		else
 		{
-			sendError(client, ERR_UNKNOWNCOMMAND, "", "Malformed command");
+			//Malformed cmd
 			return;
 		}
 	}
@@ -108,5 +94,5 @@ void Server::processClientCommand(Client *client, const std::string &commandLine
 	}
 
 	std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::toupper);
-	_commandHandler->executeCommand(commandName, *this, *client, params);
+	executeCommand(commandName, client, params);
 }

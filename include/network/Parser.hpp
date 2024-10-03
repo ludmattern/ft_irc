@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:20:05 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 08:20:07 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:06:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,21 @@
 #include <map>
 
 class Server;
-
-#include "Command.hpp"
+class Command;
 
 class Parser
 {
-    private:
+	public:
+		std::map<int, std::string> _clientInputBuffers;
 
-        std::map<std::string, Command*> _commands;
-    public:
-
-        Parser();
-        ~Parser();
-        void executeCommand(const std::string& commandName, Server& server, Client& client, const std::vector<std::string>& params);
+		Parser();
+		~Parser();
+		bool extractCommand(int client_fd, std::string& command);
+		void processClientCommand(Client* client, const std::string &commandLine);
+		void executeCommand(const std::string& commandName, Client* client, const std::vector<std::string>& params);
+	
+	private:
+		std::map<std::string, Command*> _commands;
 
 };
 

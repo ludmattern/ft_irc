@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Invite.hpp                                         :+:      :+:    :+:   */
+/*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/30 08:06:41 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 08:19:43 by lmattern         ###   ########.fr       */
+/*   Created: 2024/10/01 17:26:22 by lmattern          #+#    #+#             */
+/*   Updated: 2024/10/03 17:39:30 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef INVITE_HPP
-#define INVITE_HPP
+#include "network/Server.hpp"
+#include "commands/Command.hpp"
+#include "replies.hpp"
 
-#include "Command.hpp"
+Command::Command() : _server(Server::getInstance()) {}
 
-class Invite : public Command {
-public:
-    Invite();
-    ~Invite();
-    void execute(Server& server, Client& client, const std::vector<std::string>& params);
-};
+void Command::tryRegister(Client* client) 
+{
+	if (!client->isAuthenticated())
+		return;
 
-#endif
+	if (client->getNickname().empty())
+		return;
+
+	if (client->getUsername().empty())
+		return;
+
+	client->setStatus(REGISTERED);
+	client->reply(RPL_WELCOME(client->getNickname()));
+}

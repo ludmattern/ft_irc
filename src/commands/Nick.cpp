@@ -6,33 +6,45 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:16:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 08:24:14 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:23:21 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Commands/Nick.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
+#include "commands/Command.hpp"
+#include "replies.hpp"
 
-Nick::Nick() {}
+Nick::Nick() : Command() {}
 Nick::~Nick() {}
 
-void Nick::execute(Server& server, Client& client, const std::vector<std::string>& params)
+void Nick::execute(Client* client, const std::vector<std::string>& params)
 {
 	if (params.empty())
 	{
-		server.sendError(&client, ERR_NONICKNAMEGIVEN, "", "No nickname given");
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("NICK")));
 		return;
 	}
-
-	std::string nickname = params[0];
-
-	if (server.isNicknameTaken(nickname))
-		server.sendError(&client, ERR_NICKNAMEINUSE, nickname, "Nickname is already in use");
+	std::string newNickname = params[0];
+	if (isNicknameTaken(newNickname))
+	{
+		client->reply(ERR_NICKNAMEINUSE(newNickname));
+		return;
+	}
 	else
 	{
-		client.setNickname(nickname);
-		server.registerClientIfReady(&client);
+		client->setNickname(newNickname);
+		tryRegister(client);
 	}
+}
+
+
+
+bool Nick::isNicknameTaken(const std::string& nickname)
+{
+	std::vector<Client*> clients = _server.getClients();
+	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if ((*it)->getNickname() == nickname)
+			return true;
+	}
+	return false;
 }

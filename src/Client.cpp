@@ -5,129 +5,80 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/24 11:16:17 by lmattern          #+#    #+#             */
-/*   Updated: 2024/09/30 10:44:51 by lmattern         ###   ########.fr       */
+/*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
+/*   Updated: 2024/10/03 16:51:43 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Client.hpp"
+#include "network/Client.hpp"
+#include "libs/cppLibft.hpp"
+#include "replies.hpp"
+#include <stdexcept>
+#include <sys/socket.h>
+#include "network/Server.hpp"
 
-Client::Client(int fd)
-	: _fd(fd), _is_authenticated(false), _is_registered(false), _to_disconnect(false) {}
-
+// Constructor and destructor
+Client::Client(int fd, const std::string &hostname)
+	: _fd(fd), _hostname(hostname), _status(HANDSHAKE) {}
 Client::~Client() {}
 
 // Getters
 int Client::getFd() const { return _fd; }
-const std::string& Client::getIp() const { return _ip; }
-const std::string& Client::getNickname() const { return _nickname; }
-const std::string& Client::getUsername() const { return _username; }
-const std::string& Client::getRealname() const { return _realname; }
-const std::string& Client::getPassword() const { return _password; }
-const std::string& Client::getPrefix() const { return _prefix; }
-bool Client::isAuthenticated() const { return _is_authenticated; }
-bool Client::isRegistered() const { return _is_registered; }
-bool Client::shouldDisconnect() const { return _to_disconnect; }
-
-
-// Setters
-void Client::setIp(const std::string& ip) {
-	_ip = ip;
-	updatePrefix();
-}
-
-void Client::setNickname(const std::string& nickname) {
-	_nickname = nickname;
-	updatePrefix();
-}
-
-void Client::setUsername(const std::string& username) {
-	_username = username;
-	updatePrefix();
-}
-
-void Client::setRealname(const std::string& realname) {
-	_realname = realname;
-}
-
-void Client::setPassword(const std::string& password) {
-	_password = password;
-}
-
-void Client::setAuthenticated(bool authenticated) {
-	_is_authenticated = authenticated;
-}
-
-void Client::setRegistered(bool registered) {
-	_is_registered = registered;
-}
-
-void Client::markForDisconnection(bool to_disconnect) {
-	_to_disconnect = to_disconnect;
-}
-
-// Buffer handling
-void Client::appendToInputBuffer(const char* data, size_t length) {
-	if (_input_buffer.size() + length > MAX_BUFFER_SIZE) 
-	{
-		_to_disconnect = true;
-		return;
-	}
-	_input_buffer.append(data, length);
-}
-
-
-bool Client::extractCommand(std::string& command) 
+std::string Client::getNickname() const { return _nickname; }
+std::string Client::getUsername() const { return _username; }
+std::string Client::getRealname() const { return _realname; }
+std::string Client::getHostname() const { return _hostname; }
+std::string Client::getPass() const { return _password; }
+ClientStatus Client::getStatus() const { return _status; }
+std::string Client::getPrefix() const 
 {
-	size_t pos = _input_buffer.find(CRLF);
-	if (pos != std::string::npos) {
-		if (pos > MAX_MESSAGE_LENGTH) 
-		{
-			_to_disconnect = true;
-			return false;
-		}
-		command = _input_buffer.substr(0, pos);
-		_input_buffer.erase(0, pos + 2);
-		return true;
-	}
-	return false;
+	std::string username = _username.empty() ? "" : "!" + _username;
+	std::string hostname = "@" + _hostname;
+
+	return (_nickname + username + hostname);
 }
 
-
-void Client::addToOutputBuffer(const std::string& data) 
+void Client::write(const std::string& message) const
 {
-	_output_buffer.append(data);
-
+	std::string buffer = message + CRLF;
+	log("Sending to client " + toString(_fd) + ": " + buffer);
+	if (send(_fd, buffer.c_str(), buffer.length(), 0) < 0)
+		throw std::runtime_error("Error while writing to client");
 }
 
-const std::string& Client::getOutputBuffer() const {
-	return _output_buffer;
+void Client::reply(const std::string& reply)
+{
+	std::string serverName = Server::getInstance().getName();
+	this->write(":" + serverName + " " + reply);
 }
 
-void Client::eraseFromOutputBuffer(size_t length) {
-	_output_buffer.erase(0, length);
-}
-
-std::string& Client::getInputBuffer() {
-	return _input_buffer;
-}
-
-// Channel management
-void Client::joinChannel(const std::string& channel) {
+void Client::joinChannel(Channel* channel, bool isOperator)
+{
 	_channels.insert(channel);
+	channel->addClient(this, isOperator);
 }
 
-void Client::leaveChannel(const std::string& channel) {
-	_channels.erase(channel);
-}
-
-const std::set<std::string>& Client::getChannels() const {
+const std::set<Channel*>& Client::getChannels() const
+{
 	return _channels;
 }
 
-void Client::updatePrefix()
+void Client::partChannel(Channel* channel)
 {
-	std::stringstream ss;
-	ss << _nickname << "!" << _username << "@" << _ip;
-	_prefix = ss.str();
+	_channels.erase(channel);
+	// channel->removeClient(this);
+}
+
+void Client::setPassword(const std::string& password) {	_password = password; }
+void Client::setNickname(const std::string& nickname) {	_nickname = nickname; }
+void Client::setUsername(const std::string& username) { _username = username; }
+void Client::setRealname(const std::string& realname) {	_realname = realname; }
+void Client::setStatus(ClientStatus status) { _status = status; }
+
+void Client::setAuthenticated(bool value) {
+	_authenticated = value;
+}
+
+bool Client::isAuthenticated() const {
+	return _authenticated;
 }
