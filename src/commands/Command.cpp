@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 17:26:22 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 14:57:50 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:56:07 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,5 @@ void Command::tryRegister(Client* client)
 		return;
 
 	client->setStatus(REGISTERED);
-	client->reply(RPL_WELCOME(client->getNickname()));
+	client->reply(RPL_WELCOME(client->getNickname(), client->getUsername(), client->getHostname()));
 }

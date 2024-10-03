@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:11:25 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:13:24 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ public:
 	std::string getName() const {return _name;}
 	std::string getTopic() const {return _topic;}
 	int getNumberOfClients() const {return _clients.size();}
+	std::string getUserList() const;
 	int getLimit() const {return _limit;}
 
 	void setLimit(int limit) { _limit = limit;}

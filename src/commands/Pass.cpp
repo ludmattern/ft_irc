@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:35:46 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/03 15:06:31 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:24:01 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void Pass::execute(Client* client, const std::vector<std::string>& params)
 	}
 	if (params.empty())
 	{
-		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PASS"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("PASS")));
 		return;
 	}
 	client->setPassword(params[0]);
 	if (client->getPass() != _server.getPassword())
 	{
-		client->reply(ERR_PASSWDMISMATCH(client->getNickname()));
+		client->reply(ERR_PASSWDMISMATCH());
 		return;
 	}
 	client->setAuthenticated(true);

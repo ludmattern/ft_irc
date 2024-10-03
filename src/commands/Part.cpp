@@ -12,12 +12,12 @@ void Part::execute(Client* client, const std::vector<std::string>& params)
 {
 	if (client->getStatus() != REGISTERED) 
 	{
-		client->reply(ERR_NOTREGISTERED(client->getNickname()));
+		client->reply(ERR_NOTREGISTERED());
 		return;
 	}
 	if (params.empty()) 
 	{
-		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PART"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("PART")));
 		return;
 	}
 	std::string channelsParam = params[0];
@@ -41,7 +41,7 @@ void Part::execute(Client* client, const std::vector<std::string>& params)
 		}
 		std::string prefix = client->getPrefix();
 		std::string message = ":" + prefix + " PART " + channelName;
-		if (!partMessage.empty()) 
+		if (!partMessage.empty())
 		{
 			message += " :" + partMessage;
 		}
