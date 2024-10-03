@@ -6,14 +6,14 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:18 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:02:00 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/Channel.hpp"
 #include  "replies.hpp"
 
-Channel::Channel(const std::string& name) : _name(name) {}
+Channel::Channel(const std::string& name) : _limit(5), _name(name) {}
 
 void Channel::addClient(Client& client)
 {
