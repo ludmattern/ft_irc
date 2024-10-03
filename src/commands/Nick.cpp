@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 08:16:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:06 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:06:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 Nick::Nick() : Command() {}
 Nick::~Nick() {}
 
-void Nick::execute(Client& client, const std::vector<std::string>& params)
+void Nick::execute(Client* client, const std::vector<std::string>& params)
 {
 	if (params.empty())
 	{
-		client.reply(ERR_NEEDMOREPARAMS(client.getNickname(), "NICK"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "NICK"));
 		return;
 	}
 
@@ -29,12 +29,12 @@ void Nick::execute(Client& client, const std::vector<std::string>& params)
 
 	if (isNicknameTaken(newNickname))
 	{
-		client.reply(ERR_NICKNAMEINUSE(newNickname));
+		client->reply(ERR_NICKNAMEINUSE(newNickname));
 		return;
 	}
 	else
 	{
-		client.setNickname(newNickname);
+		client->setNickname(newNickname);
 		tryRegister(client);
 	}
 }

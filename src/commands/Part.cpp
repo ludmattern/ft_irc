@@ -8,16 +8,16 @@ Part::Part() : Command() {}
 
 Part::~Part() {}
 
-void Part::execute(Client& client, const std::vector<std::string>& params) 
+void Part::execute(Client* client, const std::vector<std::string>& params) 
 {
-	if (client.getStatus() != REGISTERED) 
+	if (client->getStatus() != REGISTERED) 
 	{
-		client.reply(ERR_NOTREGISTERED(client.getNickname()));
+		client->reply(ERR_NOTREGISTERED(client->getNickname()));
 		return;
 	}
 	if (params.empty()) 
 	{
-		client.reply(ERR_NEEDMOREPARAMS(client.getNickname(), "PART"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PART"));
 		return;
 	}
 	std::string channelsParam = params[0];
@@ -31,15 +31,15 @@ void Part::execute(Client& client, const std::vector<std::string>& params)
 		Channel* channel = _server.getChannelByName(channelName);
 		if (!channel) 
 		{
-			client.reply(ERR_NOSUCHCHANNEL(client.getNickname(), channelName));
+			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), channelName));
 			continue;
 		}
 		if (!channel->hasClient(client)) 
 		{
-			client.reply(ERR_NOTONCHANNEL(client.getNickname(), channelName));
+			client->reply(ERR_NOTONCHANNEL(client->getNickname(), channelName));
 			continue;
 		}
-		std::string prefix = client.getPrefix();
+		std::string prefix = client->getPrefix();
 		std::string message = ":" + prefix + " PART " + channelName;
 		if (!partMessage.empty()) 
 		{
@@ -49,6 +49,6 @@ void Part::execute(Client& client, const std::vector<std::string>& params)
 		channel->broadcast(message);
 
 		channel->removeClient(client);
-		client.partChannel(channel);
+		client->partChannel(channel);
 	}
 }

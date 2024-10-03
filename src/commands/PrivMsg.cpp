@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivMsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:45 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:12 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:07:07 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@
 PrivMsg::PrivMsg() {}
 PrivMsg::~PrivMsg() {}
 
-void PrivMsg::execute(Client &client, const std::vector<std::string> &params)
+void PrivMsg::execute(Client* client, const std::vector<std::string> &params)
 {
-	if (client.getStatus() != REGISTERED)
+	if (client->getStatus() != REGISTERED)
 	{
-		client.reply(ERR_NOTREGISTERED(client.getNickname()));
+		client->reply(ERR_NOTREGISTERED(client->getNickname()));
 		return;
 	}
 
 	if (params.size() < 2)
 	{
-		client.reply(ERR_NEEDMOREPARAMS(client.getNickname(), "PRIVMSG"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "PRIVMSG"));
 		return;
 	}
 
@@ -45,12 +45,12 @@ void PrivMsg::execute(Client &client, const std::vector<std::string> &params)
 	}
 	if (target.empty())
 	{
-		client.reply("NO TARGET");
+		client->reply("NO TARGET");
 		return;
 	}
 	if (message.empty())
 	{
-		client.reply("NOTHING TO SEND");
+		client->reply("NOTHING TO SEND");
 		return;
 	}
 	if (target[0] == GLOBAL_CHANNEL || target[0] == LOCAL_CHANNEL)
@@ -58,26 +58,26 @@ void PrivMsg::execute(Client &client, const std::vector<std::string> &params)
 		Channel* channel = Server::getInstance().getChannelByName(target);
 		if (channel == NULL)
 		{
-			client.reply(ERR_NOSUCHCHANNEL(client.getNickname(), target));
+			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
 			return;
 		}
 		if (!channel->hasClient(client))
 		{
-			client.reply(ERR_CANNOTSENDTOCHAN(client.getNickname(), target));
+			client->reply(ERR_CANNOTSENDTOCHAN(client->getNickname(), target));
 			return;
 		}
-		std::string fullMessage = ":" + client.getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
-		channel->broadcast(fullMessage, &client);
+		std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
+		channel->broadcast(fullMessage, client);
 	}
 	else
 	{
 		Client* recipient = Server::getInstance().getClientByNickname(target);
 		if (recipient == NULL)
 		{
-			client.reply(ERR_NOSUCHNICK(client.getNickname(), target));
+			client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
 			return;
 		}
-		std::string fullMessage = ":" + client.getPrefix() + " PRIVMSG " + recipient->getNickname() + " :" + message + "\r\n";
+		std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + recipient->getNickname() + " :" + message + "\r\n";
 		recipient->write(fullMessage);
 	}
 }

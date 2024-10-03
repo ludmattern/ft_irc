@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:48 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:15 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:06:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ Topic::Topic() {}
 
 Topic::~Topic() {}
 
-void Topic::execute(Client& client, const std::vector<std::string>& params)
+void Topic::execute(Client* client, const std::vector<std::string>& params)
 {
-	if (client.getStatus() != REGISTERED)
-		client.reply(ERR_NOTREGISTERED(client.getNickname()));
+	if (client->getStatus() != REGISTERED)
+		client->reply(ERR_NOTREGISTERED(client->getNickname()));
 	else if (params.empty())
 	{
-		client.reply(ERR_NEEDMOREPARAMS(client.getNickname(), "TOPIC"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "TOPIC"));
 		return;
 	}
 
@@ -34,21 +34,21 @@ void Topic::execute(Client& client, const std::vector<std::string>& params)
 	Channel* channel = _server.getChannelByName(channelName);
 
 	if (!channel)
-		client.reply(ERR_NOSUCHCHANNEL(client.getNickname(), channelName));
+		client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), channelName));
 	else if (!channel->hasClient(client))
-		client.reply(ERR_NOTONCHANNEL(client.getNickname(), channelName));
+		client->reply(ERR_NOTONCHANNEL(client->getNickname(), channelName));
 	else if (params.size() == 1)
 	{
 		const std::string& topic = channel->getTopic();
 		if (topic.empty())
-			client.reply(channelName + " : No topic is set");
+			client->reply(channelName + " : No topic is set");
 		else
-			client.reply(RPL_TOPIC(client.getNickname(),channelName, topic));
+			client->reply(RPL_TOPIC(client->getNickname(),channelName, topic));
 		return;
 	}
 	if (!channel->isOperator(client))
 	{
-		client.reply(ERR_CHANOPRIVSNEEDED(client.getNickname(), channelName));
+		client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channelName));
 		return;
 	}
 
@@ -62,6 +62,6 @@ void Topic::execute(Client& client, const std::vector<std::string>& params)
 
 	channel->setTopic(newTopic);
 
-	std::string message = ":" + client.getPrefix() + " TOPIC " + channelName + " :" + newTopic + "\r\n";
+	std::string message = ":" + client->getPrefix() + " TOPIC " + channelName + " :" + newTopic + "\r\n";
 	channel->broadcast(message);
 }

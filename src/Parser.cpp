@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:23 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:07:20 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ Parser::~Parser()
 	_commands.clear();
 }
 
-void Parser::executeCommand(const std::string &commandName, Client &client, const std::vector<std::string> &params)
+void Parser::executeCommand(const std::string &commandName, Client* client, const std::vector<std::string> &params)
 {
 	std::map<std::string, Command *>::iterator it = _commands.find(commandName);
 	if (it != _commands.end())
 		it->second->execute (client, params);
 	else
-		client.reply(ERR_UNKNOWNCOMMAND(client.getNickname(), commandName));
+		client->reply(ERR_UNKNOWNCOMMAND(client->getNickname(), commandName));
 }
 
 void Parser::processClientCommand(Client *client, const std::string &commandLine)
@@ -94,5 +94,5 @@ void Parser::processClientCommand(Client *client, const std::string &commandLine
 	}
 
 	std::transform(commandName.begin(), commandName.end(), commandName.begin(), ::toupper);
-	executeCommand(commandName, *client, params);
+	executeCommand(commandName, client, params);
 }

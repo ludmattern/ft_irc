@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:35 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:01 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:06:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@
 Join::Join() {}
 Join::~Join() {}
 
-void Join::execute(Client& client, const std::vector<std::string>& params) 
+void Join::execute(Client* client, const std::vector<std::string>& params) 
 {
-	if (client.getStatus() != REGISTERED)
+	if (client->getStatus() != REGISTERED)
 	{
-		client.reply(ERR_NOTREGISTERED(client.getNickname()));
+		client->reply(ERR_NOTREGISTERED(client->getNickname()));
 		return ;
 	}
 
 	if (params.empty())
 	{
-		client.reply(ERR_NEEDMOREPARAMS(client.getNickname(), "JOIN"));
+		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "JOIN"));
 		return ;
 	}
 
@@ -40,13 +40,13 @@ void Join::execute(Client& client, const std::vector<std::string>& params)
 
 	if (channelName[0] != '#' && channelName[0] != '&')
 	{
-		client.reply(ERR_NOSUCHCHANNEL(client.getNickname(), channelName));
+		client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), channelName));
 		return ;
 	}
 
 	Channel* channel = _server.getChannel(channelName);
 	if(channel)
-		channel->addClient(client);
+		client->joinChannel(channel, false);
 	else
 	{
 		channel = _server.addChannel(channelName);
@@ -54,5 +54,5 @@ void Join::execute(Client& client, const std::vector<std::string>& params)
 	}
 
 	channel->welcomeClient(client);
-	channel->broadcast(":" + client.getPrefix() + " JOIN " + channelName);
+	channel->broadcast(":" + client->getPrefix() + " JOIN " + channelName);
 }
