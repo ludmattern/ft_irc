@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivMsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:45 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:07:07 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:15:22 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void PrivMsg::execute(Client* client, const std::vector<std::string> &params)
 			client->reply(ERR_CANNOTSENDTOCHAN(client->getNickname(), target));
 			return;
 		}
-		std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + target + " :" + message + "\r\n";
+		std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + target + " :" + message;
 		channel->broadcast(fullMessage, client);
 	}
 	else
@@ -77,7 +77,7 @@ void PrivMsg::execute(Client* client, const std::vector<std::string> &params)
 			client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
 			return;
 		}
-		std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + recipient->getNickname() + " :" + message + "\r\n";
+		std::string fullMessage = ":" + client->getPrefix() + " PRIVMSG " + recipient->getNickname() + " :" + message;
 		recipient->write(fullMessage);
 	}
 }
