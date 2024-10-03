@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:35 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:06:31 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:12:00 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void Join::execute(Client* client, const std::vector<std::string>& params)
 		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "JOIN"));
 		return ;
 	}
-
 	std::string channelName = params[0];
 
 	if (channelName[0] != '#' && channelName[0] != '&')
@@ -46,11 +45,19 @@ void Join::execute(Client* client, const std::vector<std::string>& params)
 
 	Channel* channel = _server.getChannel(channelName);
 	if(channel)
+	{
+		if (channel->getLimit() != -1 && channel->getNumberOfClients() >= channel->getLimit()) 
+		{
+			client.reply(ERR_CHANNELISFULL(client.getNickname(), channel->getName()));
+			return;
+		}
 		client->joinChannel(channel, false);
+	}
 	else
 	{
 		channel = _server.addChannel(channelName);
 		channel->addClient(client, true);
+	
 	}
 
 	channel->welcomeClient(client);
