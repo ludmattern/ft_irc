@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 17:28:34 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 18:40:54 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ public:
 
 	void setLimit(int limit) { _limit = limit;}
 	void setTopic(const std::string& topic) {_topic = topic;}
-	void setPassword(const std::string& password);
+	void setPassword(const std::string& password) {_password = password;}
     void setMode(char mode) {_modes.insert(mode);}
 	void removeMode(char mode) {_modes.erase(mode);}
 
