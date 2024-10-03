@@ -45,7 +45,6 @@ void Part::execute(Client* client, const std::vector<std::string>& params)
 		{
 			message += " :" + partMessage;
 		}
-		message += CRLF;
 		channel->broadcast(message);
 
 		channel->removeClient(client);

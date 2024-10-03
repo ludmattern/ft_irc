@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:45:14 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 17:27:57 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:39:19 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,13 @@
 // 482 ERR_CHANOPRIVSNEEDED "<channel> :You're not channel operator"
 #define ERR_CHANOPRIVSNEEDED(nick, channel) "482 " + nick + " " + channel + " :You're not channel operator"
 
+// 501 ERR_UMODEUNKNOWNFLAG ":Unknown MODE flag"
+#define ERR_UMODEUNKNOWNFLAG(nick) "501 " + nick + " :Unknown MODE flag"
+
 // **Reply messages (Numeric Replies)**
 
 // 001 RPL_WELCOME "<nick> :Welcome to the Internet Relay Network <nick>!<user>@<host>"
-#define RPL_WELCOME(nick, user, host) "001 " + nick + " :Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host
+#define RPL_WELCOME(nick) "001 " + nick + " :Welcome to the Internet Relay Network " + nick
 
 // 002 RPL_YOURHOST "<nick> :Your host is <servername>, running version <ver>"
 #define RPL_YOURHOST(nick, servername, version) "002 " + nick + " :Your host is " + servername + ", running version " + version
