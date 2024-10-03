@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:45 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 16:15:22 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/03 16:19:04 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void PrivMsg::execute(Client* client, const std::vector<std::string> &params)
 	}
 	if (target[0] == GLOBAL_CHANNEL || target[0] == LOCAL_CHANNEL)
 	{
-		Channel* channel = Server::getInstance().getChannelByName(target);
+		Channel* channel = _server.getChannelByName(target);
 		if (channel == NULL)
 		{
 			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));
@@ -71,7 +71,7 @@ void PrivMsg::execute(Client* client, const std::vector<std::string> &params)
 	}
 	else
 	{
-		Client* recipient = Server::getInstance().getClientByNickname(target);
+		Client* recipient = _server.getClientByNickname(target);
 		if (recipient == NULL)
 		{
 			client->reply(ERR_NOSUCHNICK(client->getNickname(), target));
