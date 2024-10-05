@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/03 17:20:34 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 13:44:21 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ Parser::Parser()
 	_commands["NOTICE"] = new Notice();
 	_commands["TOPIC"] = new Topic();
 	_commands["INVITE"] = new Invite();
+	_commands["CAP"] = new Cap();
 }
 
 Parser::~Parser()

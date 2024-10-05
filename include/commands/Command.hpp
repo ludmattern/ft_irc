@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 14:58:17 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 13:42:23 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,13 @@ class Part : public Command {
 public:
 	Part();
 	~Part();
+	void execute(Client* client, const std::vector<std::string>& params);
+};
+
+class Cap : public Command {
+public:
+	Cap();
+	~Cap();
 	void execute(Client* client, const std::vector<std::string>& params);
 };
 #endif
