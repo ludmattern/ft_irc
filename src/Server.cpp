@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 16:06:58 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 16:30:12 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,4 +272,16 @@ Client* Server::getClientByNickname(const std::string& nickname)
 			return it->second;
 	}
 	return NULL;
+}
+
+
+void Server::removeChannel(const std::string& channelName)
+{
+	std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
+	if (it != _channels.end())
+	{
+		std::cout << "deleted\n";
+		delete it->second;
+		_channels.erase(it);
+	}
 }
