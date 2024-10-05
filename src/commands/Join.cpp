@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:35 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 14:57:20 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 15:10:13 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void Join::execute(Client* client, const std::vector<std::string>& params)
 	else
 	{
 		channel = _server.addChannel(channelName);
-		channel->setPassword("");
 		channel->addClient(client, true);
 	
 	}
