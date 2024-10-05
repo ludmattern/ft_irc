@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 15:37:10 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:18:10 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 #include "network/Client.hpp"
 #include "network/Channel.hpp"
 #include "commands/Command.hpp"
+#include "libs/cppLibft.hpp"
 #include "replies.hpp"
 #include <iostream>
 #include <string>
+#include <sstream>
 
 Mode::Mode() {}
 Mode::~Mode() {}
-#include <sstream>
 
 void Mode::execute(Client* client, const std::vector<std::string>& params)
 {
@@ -100,7 +101,8 @@ void Mode::execute(Client* client, const std::vector<std::string>& params)
 			}
 			if (limit < channel->getNumberOfClients())
 			{
-				client->reply("WARNING : limits are already reached");
+				client->reply(ERR_INVALIDMODEPARAM(client->getNickname(), channelName, " Error : Cannot set limit lower than current number of users"));
+				return;
 			}
 			channel->setLimit(limit);
 			channel->setMode('l');

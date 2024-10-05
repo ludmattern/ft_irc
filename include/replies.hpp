@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:45:14 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 15:35:04 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:17:14 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@
 // 501 ERR_UMODEUNKNOWNFLAG ":Unknown MODE flag"
 #define ERR_UMODEUNKNOWNFLAG(nick) "501 " + nick + " :Unknown MODE flag"
 
+// 461 ERR_INVALIDMODEPARAM "<nick> <channel> <modechar> <parameter> :Invalid mode parameter"
+#define ERR_INVALIDMODEPARAM(nick, channel, info) "696 " + nick + " " + channel + " :" + info
+
 // **Reply messages (Numeric Replies)**
 
 // 001 RPL_WELCOME "<nick> :Welcome to the Internet Relay Network <nick>!<user>@<host>"
@@ -148,7 +151,7 @@
 #define RPL_CAP_END ": CAP END"
 
 //MODE 324 reply
-#define RPL_CHANNELMODEIS(nick, channel, mode) "324 " + nick + " " + channel + " +" + mode
+#define RPL_CHANNELMODEIS(nick, channel, mode) "324 " + nick + " " + channel + " " + mode
 
 
 // **Server Parameters**
