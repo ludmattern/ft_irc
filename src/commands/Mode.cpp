@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 15:34:57 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 15:37:10 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,14 @@ void Mode::execute(Client* client, const std::vector<std::string>& params)
 			}
 			std::stringstream ss(params[2]);
 			int limit;
-			if (!(ss >> limit)) {
+			if (!(ss >> limit)) 
+			{
 				client->reply("Invalid limit value.");
 				return;
+			}
+			if (limit < channel->getNumberOfClients())
+			{
+				client->reply("WARNING : limits are already reached");
 			}
 			channel->setLimit(limit);
 			channel->setMode('l');
