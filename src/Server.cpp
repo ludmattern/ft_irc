@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 16:30:12 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 16:44:31 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,16 +188,12 @@ void Server::handlePollEvent(struct pollfd& pd)
 	}
 }
 
-bool Server::isServerSocket(const struct pollfd& pd) const
-{
-	return pd.fd == _serverSocket;
-}
+bool Server::isServerSocket(const struct pollfd& pd) const {return pd.fd == _serverSocket;}
 
-bool Server::isClientSocket(const struct pollfd& pd) const
-{
-	return pd.fd != _serverSocket;
-}
+bool Server::isClientSocket(const struct pollfd& pd) const {return pd.fd != _serverSocket;}
+
 std::string Server::getPassword() const {return _password;}
+
 std::vector<Client*> Server::getClients() const
 {
 	std::vector<Client*> clients;
