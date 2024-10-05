@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 14:26:51 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:06:58 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,10 @@ void disableControlCharacterEcho()
 	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 }
 
-Server::Server() : _isRunning(false), _name("ft_irc") {}
+Server::Server() : _isRunning(false), _name("ft_irc"), _maxClient(100) {}
 
-void Server::init(int argc, char **argv) {
+void Server::init(int argc, char **argv) 
+{
 	if (!_isRunning)
 	{
 		parseArguments(argc, argv);
@@ -126,7 +127,6 @@ void Server::initServer()
 		close(_serverSocket);
 		throw std::runtime_error("Failed on bind");
 	}
-
 	if (listen(_serverSocket, SOMAXCONN) < 0)
 	{
 		close(_serverSocket);
