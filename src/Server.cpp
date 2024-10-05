@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 17:57:49 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 18:02:51 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,3 +272,5 @@ void Server::removeChannel(const std::string& channelName)
 		_channels.erase(it);
 	}
 }
+
+std::map<std::string, Channel*> Server::getChannels() const {return _channels;}
