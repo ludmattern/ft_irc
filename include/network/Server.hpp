@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 16:48:31 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:03:22 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ private:
 
 	int _port;
 	std::string _password;
-
+	
+	size_t _maxClient;
 	std::vector<pollfd> _fds;
 	std::map<std::string, Channel*> _channels;
 	std::map<int, Client*> _clients;
