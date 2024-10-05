@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 17:20:18 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:44:41 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,12 @@ std::string Channel::getUserList() const
         userList += it->first->getNickname() + " ";
     }
     return userList;
+}
+
+std::string Channel::getModes() const
+{
+	std::string modes;
+	for (std::set<char>::const_iterator it = _modes.begin(); it != _modes.end(); ++it)
+		modes += *it;
+	return modes;
 }

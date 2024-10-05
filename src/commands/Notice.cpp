@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:42 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 14:22:24 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:25:32 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,9 @@ Notice::~Notice() {}
 void Notice::execute(Client* client, const std::vector<std::string>& params)
 {
 	if (client->getStatus() != REGISTERED)
-	{
 		return;
-	}
 	if (params.size() < 2)
-	{
 		return;
-	}
 	std::string target = params[0];
 	std::string message;
 
@@ -40,16 +36,12 @@ void Notice::execute(Client* client, const std::vector<std::string>& params)
 			message += " " + params[i];
 	}
 	if (target.empty() || message.empty())
-	{
 		return;
-	}
 	if (target[0] == GLOBAL_CHANNEL || target[0] == LOCAL_CHANNEL)
 	{
 		Channel* channel = _server.getChannelByName(target);
 		if (channel == NULL)
-		{
 			return;
-		}
 		std::string fullMessage = ":" + client->getPrefix() + " NOTICE " + target + " :" + message;
 		channel->broadcast(fullMessage, client);
 	}
@@ -57,9 +49,7 @@ void Notice::execute(Client* client, const std::vector<std::string>& params)
 	{
 		Client* recipient = _server.getClientByNickname(target);
 		if (recipient == NULL)
-		{
 			return;
-		}
 		std::string fullMessage = ":" + client->getPrefix() + " NOTICE " + recipient->getNickname() + " :" + message;
 		recipient->write(fullMessage);
 	}

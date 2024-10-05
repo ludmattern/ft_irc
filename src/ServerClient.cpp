@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:08:06 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/03 15:07:38 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:27:04 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,7 @@ bool Parser::extractCommand(int client_fd, std::string& command)
 	if (pos != std::string::npos)
 	{
 		if (pos > MAX_MESSAGE_LENGTH)
-		{
 			return false;
-		}
 		command = clientBuffer.substr(0, pos);
 		clientBuffer.erase(0, pos + 2);
 		return true;
@@ -95,7 +93,5 @@ void Server::clientRead(int client_fd)
 		return;
 	}
 	else if (errno != EWOULDBLOCK && errno != EAGAIN)
-	{
 		throw std::runtime_error("Failed on recv");
-	}
 }

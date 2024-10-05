@@ -42,12 +42,11 @@ void Part::execute(Client* client, const std::vector<std::string>& params)
 		std::string prefix = client->getPrefix();
 		std::string message = ":" + prefix + " PART " + channelName;
 		if (!partMessage.empty())
-		{
 			message += " :" + partMessage;
-		}
 		channel->broadcast(message);
 
 		channel->removeClient(client);
 		client->partChannel(channel);
+		//AJOUTER destruction channel if empty
 	}
 }

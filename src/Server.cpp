@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/03 16:48:59 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:26:51 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,7 @@ Server::~Server()
 	}
 	_clients.clear();
 	for (size_t i = 0; i < _fds.size(); ++i)
-	{
 		close(_fds[i].fd);
-	}
 	_fds.clear();
 }
 
@@ -271,9 +269,7 @@ Client* Server::getClientByNickname(const std::string& nickname)
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
 		if (it->second->getNickname() == nickname)
-		{
 			return it->second;
-		}
 	}
 	return NULL;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:44:31 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/03 01:17:22 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 14:26:12 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int main(int argc, char **argv)
 {
-	try {
+	try
+	{
 		Server& server = Server::getInstance();
 		server.init(argc, argv);
 		server.run();

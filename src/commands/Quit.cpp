@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:46 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 14:24:23 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:24:43 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,12 @@ void Quit::execute(Client* client, const std::vector<std::string>& params)
 {
 	std::string quitMessage = "Client exited";
 	if (!params.empty())
-	{
 		quitMessage = params[0];
-	}
 
 	std::string prefix = client->getPrefix();
 	std::string message = ":" + prefix + " QUIT";
 	if (!quitMessage.empty()) 
-	{
 		message += " :" + quitMessage;
-	}
 
 	std::set<Channel*> channels = client->getChannels();
 	for (std::set<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)

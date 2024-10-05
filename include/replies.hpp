@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:45:14 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 14:10:46 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 15:35:04 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@
 // **Reply messages (Numeric Replies)**
 
 // 001 RPL_WELCOME "<nick> :Welcome to the Internet Relay Network <nick>!<user>@<host>"
-#define RPL_WELCOME(nick) "001 " + nick + " :Welcome to the Internet Relay Network ft_irc" + nick
+#define RPL_WELCOME(nick) "001 " + nick + " :Welcome to the Internet Relay Network ft_irc " + nick
 
 // 002 RPL_YOURHOST "<nick> :Your host is <servername>, running version <ver>"
 #define RPL_YOURHOST(nick, servername, version) "002 " + nick + " :Your host is " + servername + ", running version " + version
@@ -146,6 +146,9 @@
 //CAP LS message
 #define RPL_CAP_LS ": CAP * LS: none"
 #define RPL_CAP_END ": CAP END"
+
+//MODE 324 reply
+#define RPL_CHANNELMODEIS(nick, channel, mode) "324 " + nick + " " + channel + " +" + mode
 
 
 // **Server Parameters**

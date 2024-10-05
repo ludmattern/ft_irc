@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 16:51:43 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:26:05 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ const std::set<Channel*>& Client::getChannels() const
 void Client::partChannel(Channel* channel)
 {
 	_channels.erase(channel);
-	// channel->removeClient(this);
 }
 
 void Client::setPassword(const std::string& password) {	_password = password; }

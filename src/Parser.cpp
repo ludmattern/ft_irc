@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 13:44:21 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:26:28 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ Parser::Parser()
 Parser::~Parser()
 {
 	for (std::map<std::string, Command *>::iterator it = _commands.begin(); it != _commands.end(); ++it)
-	{
 		delete it->second;
-	}
 	_commands.clear();
 }
 
@@ -67,7 +65,7 @@ void Parser::processClientCommand(Client *client, const std::string &commandLine
 		}
 		else
 		{
-			//Malformed cmd
+			client->reply(ERR_UNKNOWNCOMMAND(client->getNickname(), line));
 			return;
 		}
 	}
