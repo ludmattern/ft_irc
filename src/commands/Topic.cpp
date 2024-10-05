@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:48 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 14:22:42 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 15:02:59 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void Topic::execute(Client* client, const std::vector<std::string>& params)
 			client->reply(RPL_TOPIC(client->getNickname(), channelName, topic));
 		return;
 	}
-	if (!channel->isOperator(client))
+	if (!channel->isOperator(client) && !channel->hasMode('t'))
 	{
 		client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channelName));
 		return;
