@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 17:21:53 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:44:24 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void Invite::execute(Client* client, const std::vector<std::string>& params)
 	std::string targetNickname = params[0];
 	std::string channelName = params[1];
 
-	Channel* channel = _server.getChannelByName(channelName);
+	Channel* channel = _server.getChannel(channelName);
 	if (!channel->isOperator(client))
 	{
 		client->reply(ERR_CHANOPRIVSNEEDED(client->getNickname(), channelName));

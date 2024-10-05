@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 15:36:11 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:48:44 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ bool Channel::isOperator(Client* client) const
 void Channel::welcomeClient(Client* client)
 {
 	client->reply(RPL_TOPIC(client->getNickname(), _name, _topic));
-	client->reply(RPL_NAMREPLY(client->getNickname(), _name, getUserList()));
+	client->reply(RPL_NAMREPLY(client->getNickname(), _name, getClients()));
 	client->reply(RPL_ENDOFNAMES(client->getNickname(), _name));
 }
 
@@ -72,7 +72,7 @@ void Channel::addInvite(Client& client)
 	_invitedClients.insert(&client);
 }
 
-std::string Channel::getUserList() const
+std::string Channel::getClients() const
 {
     std::string userList;
     for (std::map<Client*, bool>::const_iterator it = _clients.begin(); it != _clients.end(); ++it)
@@ -90,4 +90,9 @@ std::string Channel::getModes() const
 	for (std::set<char>::const_iterator it = _modes.begin(); it != _modes.end(); ++it)
 		modes += *it;
 	return modes;
+}
+
+std::map<Client*, bool> Channel::getClientsmap() const
+{
+	return _clients;
 }

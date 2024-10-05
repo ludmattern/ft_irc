@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:45 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 17:24:17 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:44:24 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void PrivMsg::execute(Client* client, const std::vector<std::string> &params)
 	}
 	if (target[0] == GLOBAL_CHANNEL || target[0] == LOCAL_CHANNEL)
 	{
-		Channel* channel = _server.getChannelByName(target);
+		Channel* channel = _server.getChannel(target);
 		if (channel == NULL)
 		{
 			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), target));

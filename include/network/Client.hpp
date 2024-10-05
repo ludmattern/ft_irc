@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/03 14:52:49 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:43:09 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ public:
 
 	void setAuthenticated(bool value);
 	bool isAuthenticated() const;
+
 private:
 	bool _authenticated;
 

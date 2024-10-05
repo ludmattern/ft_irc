@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:48 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 15:02:59 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 16:44:24 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void Topic::execute(Client* client, const std::vector<std::string>& params)
 	}
 
 	std::string channelName = params[0];
-	Channel* channel = _server.getChannelByName(channelName);
+	Channel* channel = _server.getChannel(channelName);
 
 	if (!channel)
 		client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), channelName));

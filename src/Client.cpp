@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 14:26:05 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:43:00 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ std::string Client::getPrefix() const
 void Client::write(const std::string& message) const
 {
 	std::string buffer = message + CRLF;
-	log("Sending to client " + toString(_fd) + ": " + buffer);
+	log("Sending to client " + toString(_fd) + ": " + message);
 	if (send(_fd, buffer.c_str(), buffer.length(), 0) < 0)
 		throw std::runtime_error("Error while writing to client");
 }

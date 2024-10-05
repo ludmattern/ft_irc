@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 16:03:22 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 16:44:28 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ public:
 
 	Channel* addChannel(const std::string& name);
 	Channel* getChannel(const std::string& name);
+	std::map<std::string, Channel*> getChannels() const;
 
 	std::vector<Client*> getClients() const;
 	std::string getPassword() const;
 	std::string getName() const { return _name; }
 
 	void closeClientConnection(int client_fd);
-	Channel* getChannelByName(const std::string& channelName);
 	Client* getClientByNickname(const std::string& nickname);
 
 	Parser* parser;

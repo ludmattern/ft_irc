@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:37 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 17:23:13 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:44:24 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void Kick::execute(Client* client, const std::vector<std::string>& params)
 		reason = params[2];
 	else
 		reason = "No reason provided";
-	Channel* channel = _server.getChannelByName(channelName);
+	Channel* channel = _server.getChannel(channelName);
 	if (!channel)
 	{
 		client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), channelName));

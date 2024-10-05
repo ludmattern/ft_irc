@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 16:18:10 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 16:44:24 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void Mode::execute(Client* client, const std::vector<std::string>& params)
 		return;
 	}
 	std::string channelName = params[0];
-	Channel* channel = _server.getChannelByName(channelName);
+	Channel* channel = _server.getChannel(channelName);
 	if (!channel) 
 	{
 		client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), channelName));

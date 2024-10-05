@@ -28,7 +28,7 @@ void Part::execute(Client* client, const std::vector<std::string>& params)
 
 	while (std::getline(ss, channelName, ',')) 
 	{
-		Channel* channel = _server.getChannelByName(channelName);
+		Channel* channel = _server.getChannel(channelName);
 		if (!channel) 
 		{
 			client->reply(ERR_NOSUCHCHANNEL(client->getNickname(), channelName));

@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:45:14 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 16:17:14 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:47:42 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,24 @@
 
 //MODE 324 reply
 #define RPL_CHANNELMODEIS(nick, channel, mode) "324 " + nick + " " + channel + " " + mode
+
+#define RPL_INFO(nick, info) "371 " + nick + " :" + info
+#define RPL_ENDOFINFO(nick) "374 " + nick + " :End of /INFO list"
+#define ERR_NOSUCHSERVER(nick, server) "402 " + nick + " " + server + " :No such server"
+
+#define RPL_LISTSTART(nick) "321 " + nick + " Channel :Users  Name"
+#define RPL_LIST(nick, channel, visible, topic) "322 " + nick + " " + channel + " " + visible + " :" + topic
+#define RPL_LISTEND(nick) "323 " + nick + " :End of /LIST"
+
+#define RPL_WHOREPLY(nick, channel, user, host, server, nickname, status, hopcount, realname) \
+    "352 " + nick + " " + channel + " " + user + " " + host + " " + server + " " + nickname + " " + status + " :" + hopcount + " " + realname
+
+#define RPL_ENDOFWHO(nick, mask) "315 " + nick + " " + mask + " :End of /WHO list"
+
+#define ERR_NEEDMOREPARAMS(nick, command) "461 " + nick + " " + command + " :Not enough parameters"
+
+
+
 
 
 // **Server Parameters**

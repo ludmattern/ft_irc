@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 15:36:03 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:50:08 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ public:
 	void welcomeClient(Client* client);
 	void removeClient(Client* client);
 
+	std::map<Client*, bool> getClientsmap() const;
+
 	void setOperator(Client* client, bool isOperator);
 	bool isOperator(Client* client) const;
 	void broadcast(const std::string& message);
@@ -40,7 +42,7 @@ public:
 	std::string getName() const {return _name;}
 	std::string getTopic() const {return _topic;}
 	int getNumberOfClients() const {return _clients.size();}
-	std::string getUserList() const;
+	std::string getClients() const;
 	int getLimit() const {return _limit;}
 	std::string getPassword() const { return _password;}
 
@@ -54,6 +56,7 @@ public:
 	std::string getModes() const;
 	bool isInvited(Client& client) const {return _invitedClients.find(&client) != _invitedClients.end();}
 	void sendNamesList(Client& client);
+
 
 private:
 	int			_limit;
