@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:46 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 14:22:50 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:24:23 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ void Quit::execute(Client* client, const std::vector<std::string>& params)
 		channel->broadcast(message, client);
 		channel->removeClient(client);
 	}
-
-
 	_server.closeClientConnection(client->getFd());
 }
 
