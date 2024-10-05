@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 16:54:04 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:57:49 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,16 +188,12 @@ void Server::handlePollEvent(struct pollfd& pd)
 	}
 }
 
-bool Server::isServerSocket(const struct pollfd& pd) const
-{
-	return pd.fd == _serverSocket;
-}
+bool Server::isServerSocket(const struct pollfd& pd) const {return pd.fd == _serverSocket;}
 
-bool Server::isClientSocket(const struct pollfd& pd) const
-{
-	return pd.fd != _serverSocket;
-}
+bool Server::isClientSocket(const struct pollfd& pd) const {return pd.fd != _serverSocket;}
+
 std::string Server::getPassword() const {return _password;}
+
 std::vector<Client*> Server::getClients() const
 {
 	std::vector<Client*> clients;
@@ -265,7 +261,14 @@ Client* Server::getClientByNickname(const std::string& nickname)
 	return NULL;
 }
 
-std::map<std::string, Channel*> Server::getChannels() const
+
+void Server::removeChannel(const std::string& channelName)
 {
-	return _channels;
+	std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
+	if (it != _channels.end())
+	{
+		std::cout << "deleted\n";
+		delete it->second;
+		_channels.erase(it);
+	}
 }

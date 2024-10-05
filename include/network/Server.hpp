@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 16:44:28 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:57:01 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ public:
 	std::vector<Client*> getClients() const;
 	std::string getPassword() const;
 	std::string getName() const { return _name; }
-
+	void removeChannel(const std::string& channelName);
 	void closeClientConnection(int client_fd);
 	Client* getClientByNickname(const std::string& nickname);
 
