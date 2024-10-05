@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 18:40:54 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 14:57:22 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,16 @@ public:
 	int getNumberOfClients() const {return _clients.size();}
 	std::string getUserList() const;
 	int getLimit() const {return _limit;}
-    std::string getPassword() const;
+	std::string getPassword() const { return _password;}
 
 	void setLimit(int limit) { _limit = limit;}
 	void setTopic(const std::string& topic) {_topic = topic;}
 	void setPassword(const std::string& password) {_password = password;}
-    void setMode(char mode) {_modes.insert(mode);}
+	void setMode(char mode) {_modes.insert(mode);}
 	void removeMode(char mode) {_modes.erase(mode);}
 
 	void addInvite(Client& client);
-	
+	bool isInvited(Client& client) const {return _invitedClients.find(&client) != _invitedClients.end();}
 	void sendNamesList(Client& client);
 
 private:

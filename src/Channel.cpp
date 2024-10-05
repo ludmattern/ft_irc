@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 17:20:18 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:48:31 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/Channel.hpp"
 #include  "replies.hpp"
 
-Channel::Channel(const std::string& name) : _limit(5), _name(name) {}
+Channel::Channel(const std::string& name) : _limit(5), _name(name), _password("") {}
 
 void Channel::addClient(Client* client)
 {
