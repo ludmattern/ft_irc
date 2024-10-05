@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 18:39:56 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 14:22:52 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "replies.hpp"
 #include <iostream>
 #include <string>
+
 Mode::Mode() {}
 Mode::~Mode() {}
 #include <sstream>
@@ -158,6 +159,5 @@ void Mode::execute(Client* client, const std::vector<std::string>& params)
     std::string modeChangeMessage = ":" + client->getPrefix() + " MODE " + channelName + " " + operation + mode;
     if ((mode == 'k' || mode == 'l' || mode == 'o') && params.size() >= 3)
         modeChangeMessage += " " + params[2];
-    modeChangeMessage += "\r\n";
     channel->broadcast(modeChangeMessage);
 }

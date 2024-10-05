@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cap.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 13:42:41 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 14:12:04 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:13:49 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ void Cap::execute(Client* client, const std::vector<std::string>& params)
 		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), "CAP"));
 		return;
 	}
-
 	std::string subcommand = params[0];
-
 	if (subcommand == "LS")
 		client->write(RPL_CAP_LS);
 	else if (subcommand == "END")
