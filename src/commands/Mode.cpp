@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 14:57:25 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 15:32:49 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,9 @@ void Mode::execute(Client* client, const std::vector<std::string>& params)
 
 	if (operation == '+')
 	{
-		if (mode == 'i')
+		if (mode == 'i' || mode == 't')
 		{
-			channel->setMode('i');
-		}
-		else if (mode == 't')
-		{
-			channel->setMode('t');
+			channel->setMode(mode);
 		}
 		else if (mode == 'k')
 		{
