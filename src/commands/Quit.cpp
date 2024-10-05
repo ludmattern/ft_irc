@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:46 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:07:14 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:22:50 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void Quit::execute(Client* client, const std::vector<std::string>& params)
 	{
 		message += " :" + quitMessage;
 	}
-	message += "\r\n";
 
 	std::set<Channel*> channels = client->getChannels();
 	for (std::set<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)

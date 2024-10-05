@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:48 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 17:24:36 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:22:42 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,6 @@ void Topic::execute(Client* client, const std::vector<std::string>& params)
 
 	channel->setTopic(newTopic);
 
-	std::string message = ":" + client->getPrefix() + " TOPIC " + channelName + " :" + newTopic + "\r\n";
+	std::string message = ":" + client->getPrefix() + " TOPIC " + channelName + " :" + newTopic;
 	channel->broadcast(message);
 }

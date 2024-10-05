@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:42 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 15:00:24 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:22:24 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void Notice::execute(Client* client, const std::vector<std::string>& params)
 		{
 			return;
 		}
-		std::string fullMessage = ":" + client->getPrefix() + " NOTICE " + target + " :" + message + "\r\n";
+		std::string fullMessage = ":" + client->getPrefix() + " NOTICE " + target + " :" + message;
 		channel->broadcast(fullMessage, client);
 	}
 	else
@@ -60,7 +60,7 @@ void Notice::execute(Client* client, const std::vector<std::string>& params)
 		{
 			return;
 		}
-		std::string fullMessage = ":" + client->getPrefix() + " NOTICE " + recipient->getNickname() + " :" + message + "\r\n";
+		std::string fullMessage = ":" + client->getPrefix() + " NOTICE " + recipient->getNickname() + " :" + message;
 		recipient->write(fullMessage);
 	}
 }

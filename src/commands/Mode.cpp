@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:38 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/03 18:39:56 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/05 14:23:12 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,5 @@ void Mode::execute(Client* client, const std::vector<std::string>& params)
     std::string modeChangeMessage = ":" + client->getPrefix() + " MODE " + channelName + " " + operation + mode;
     if ((mode == 'k' || mode == 'l' || mode == 'o') && params.size() >= 3)
         modeChangeMessage += " " + params[2];
-    modeChangeMessage += "\r\n";
     channel->broadcast(modeChangeMessage);
 }
