@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 10:43:51 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 17:50:08 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:20:05 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ public:
 	void addInvite(Client& client);
 	std::string getModes() const;
 	bool isInvited(Client& client) const {return _invitedClients.find(&client) != _invitedClients.end();}
-	void sendNamesList(Client& client);
 
 
 private:

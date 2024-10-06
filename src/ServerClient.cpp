@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerClient.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:08:06 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 16:02:20 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/06 16:19:28 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void Server::clientConnect()
 bool Parser::extractCommand(int client_fd, std::string& command)
 {
 	std::string& clientBuffer = _clientInputBuffers[client_fd];
-	size_t pos = clientBuffer.find("\r\n");
+	size_t pos = clientBuffer.find(CRLF);
 	if (pos != std::string::npos)
 	{
 		if (pos > MAX_MESSAGE_LENGTH)

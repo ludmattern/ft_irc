@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 16:20:33 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 16:27:49 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:25:30 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void Info::execute(Client* client, const std::vector<std::string>& params)
 		if (params[0] != _server.getName())
 		{
 			client->reply(ERR_NOSUCHSERVER(client->getNickname(), params[0]));
-			return;
+			return ;
 		}
 	}
 

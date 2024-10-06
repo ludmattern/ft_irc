@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:47:41 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 17:43:09 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:20:31 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,18 @@ public:
 	std::string getUsername() const;
 	std::string getRealname() const;
 	std::string getHostname() const;
-	ClientStatus getStatus() const;
-	const std::set<Channel*>& getChannels() const;
 	std::string getPrefix() const;
 	std::string getPass() const;
+	ClientStatus getStatus() const;
+	const std::set<Channel*>& getChannels() const;
 
 	void setNickname(const std::string& nickname);
 	void setUsername(const std::string& username);
 	void setRealname(const std::string& realname);
 	void setStatus(ClientStatus status);
 	void setPassword(const std::string& password);
-
 	void setAuthenticated(bool value);
+
 	bool isAuthenticated() const;
 
 private:

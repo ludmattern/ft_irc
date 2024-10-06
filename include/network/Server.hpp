@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 17:57:01 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:21:57 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,19 @@ public:
 	}
 
 	void init(int argc, char **argv);
-	
 	void run();
-
+	
 	Channel* addChannel(const std::string& name);
-	Channel* getChannel(const std::string& name);
-	std::map<std::string, Channel*> getChannels() const;
-
-	std::vector<Client*> getClients() const;
-	std::string getPassword() const;
-	std::string getName() const { return _name; }
 	void removeChannel(const std::string& channelName);
 	void closeClientConnection(int client_fd);
+
+	Channel* getChannel(const std::string& name);
 	Client* getClientByNickname(const std::string& nickname);
+	std::string getPassword() const;
+	std::string getName() const { return _name; }
+	std::vector<Client*> getClients() const;
+	std::map<std::string, Channel*> getChannels() const;
+
 
 	Parser* parser;
 
@@ -71,24 +71,18 @@ private:
 	bool _isRunning;
 	int _serverSocket;
 	std::string _name;
-
 	int _port;
 	std::string _password;
-	
 	size_t _maxClient;
 	std::vector<pollfd> _fds;
 	std::map<std::string, Channel*> _channels;
 	std::map<int, Client*> _clients;
 
 	void	clientConnect();
-	void	clientDisconnect(int fd);
 	void	clientRead(int fd);
-
 
 	void initServer();
 	void setSocketNonBlocking(int fd);
-
-
 	void parseArguments(int argc, char **argv);
 	
 	void handlePollEvent(struct pollfd& pd);
