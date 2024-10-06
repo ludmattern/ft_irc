@@ -1,4 +1,5 @@
 https://www.rfc-editor.org/rfc/rfc1459#section-4.2.3
 
-ducoup le bot pour le lancer tu fait /bot <password> <server_ip> <port> <channel> (channel sans le # c est un com en bash)
-si tu le passe en operator avec mode +o il met le bordel dans le salon
+To start the bot, use the command `/bot <password> <server_ip> <port> <channel>` (note that the channel should be specified without the `#`, as this is a comment in bash).
+
+If you grant the bot operator status with the `mode +o` command, it will cause disruptions in the channel.
