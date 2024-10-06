@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:32 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 16:44:24 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:54:21 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void Invite::execute(Client* client, const std::vector<std::string>& params)
 		client->reply(ERR_NOTREGISTERED());
 		return;
 	}
+
 	if (params.size() < 2)
 	{
 		client->reply(ERR_NEEDMOREPARAMS(client->getNickname(), std::string("INVITE")));

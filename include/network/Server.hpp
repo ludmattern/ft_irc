@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:21:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/06 16:21:57 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:54:21 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,9 @@ private:
 	Server();
 	~Server();
 
+	void initServer();
+	void parseArguments(int argc, char **argv);
+
 	bool _isRunning;
 	int _serverSocket;
 	std::string _name;
@@ -80,12 +83,10 @@ private:
 
 	void	clientConnect();
 	void	clientRead(int fd);
-
-	void initServer();
-	void setSocketNonBlocking(int fd);
-	void parseArguments(int argc, char **argv);
 	
+	void setSocketNonBlocking(int fd);
 	void handlePollEvent(struct pollfd& pd);
+	
 	bool isServerSocket(const struct pollfd& pd) const;
 	bool isClientSocket(const struct pollfd& pd) const;
 
