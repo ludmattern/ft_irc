@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   List.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 16:39:43 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 17:34:56 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/05 18:03:50 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ List::~List() {}
 
 void List::execute(Client* client, const std::vector<std::string>& params)
 {
-
 	(void)params;
 	if (client->getStatus() != REGISTERED)
 	{
