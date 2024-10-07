@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:53:43 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/07 13:09:39 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/07 17:13:53 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void handleOperatorMode(int sockfd, const std::string& channel)
 {
 	std::cout << "bot is oper\n";
 	
-	std::string opermsg = "PRIVMSG " + channel + " :FUCK YOU ALL, i go sleep now, try to awake me and ou will see...\r\n";
+	std::string opermsg = "PRIVMSG " + channel + " :I go sleep now, try to awake me and ou will see...\r\n";
 	sendMessage(sockfd, opermsg);
-	std::string topic_command = "TOPIC " + channel + " Fuck you all NERDS\r\n";
+	std::string topic_command = "TOPIC " + channel + " This chan is over\r\n";
 	sendMessage(sockfd, topic_command);
-	std::string mode_command = "MODE " + channel + " +k fuck\r\n";
+	std::string mode_command = "MODE " + channel + " +k dead\r\n";
 	sendMessage(sockfd, mode_command);
 }
 
@@ -206,7 +206,7 @@ void run(int sockfd, const std::string& channel, const std::vector<std::string>&
 			std::string senderNick = parseNickname(response);
 			if (oper && senderNick != nickname)
 			{
-				kickUser(sockfd, channel, senderNick, "fuck you, let me sleep.");
+				kickUser(sockfd, channel, senderNick, "Let me sleep.");
 			}
 			else
 			{
