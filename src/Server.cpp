@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 18:02:51 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/07 10:56:57 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,6 @@ void Server::removeChannel(const std::string& channelName)
 	std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
 	if (it != _channels.end())
 	{
-		std::cout << "deleted\n";
 		delete it->second;
 		_channels.erase(it);
 	}

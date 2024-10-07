@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:35 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 15:10:13 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/07 10:54:17 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void Join::execute(Client* client, const std::vector<std::string>& params)
 	{
 		channel = _server.addChannel(channelName);
 		channel->addClient(client, true);
-	
+		client->joinChannel(channel, true);
 	}
 
 	channel->broadcast(":" + client->getPrefix() + " JOIN " + channelName);

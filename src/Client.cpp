@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:56:08 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/06 14:59:06 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/07 10:52:51 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ std::string Client::getPrefix() const
 
 void Client::write(const std::string& message) const
 {
+
 	std::string buffer = message + CRLF;
 	log("Sending to client " + toString(_fd) + ": " + message);
 	if (send(_fd, buffer.c_str(), buffer.length(), 0) < 0)
@@ -56,6 +57,7 @@ void Client::joinChannel(Channel* channel, bool isOperator)
 {
 	_channels.insert(channel);
 	channel->addClient(this, isOperator);
+	
 }
 
 const std::set<Channel*>& Client::getChannels() const
@@ -65,7 +67,11 @@ const std::set<Channel*>& Client::getChannels() const
 
 void Client::partChannel(Channel* channel)
 {
-	_channels.erase(channel);
+    std::set<Channel*>::iterator it = _channels.find(channel);
+    if (it != _channels.end())
+    {
+        _channels.erase(it);
+    }
 }
 
 void Client::setPassword(const std::string& password) {	_password = password; }

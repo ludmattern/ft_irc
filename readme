@@ -3,3 +3,5 @@ https://www.rfc-editor.org/rfc/rfc1459#section-4.2.3
 To start the bot, use the command `/bot <password> <server_ip> <port> <channel>` (note that the channel should be specified without the `#`, as this is a comment in bash).
 
 If you grant the bot operator status with the `mode +o` command, it will cause disruptions in the channel.
+
+

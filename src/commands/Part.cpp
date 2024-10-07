@@ -45,8 +45,9 @@ void Part::execute(Client* client, const std::vector<std::string>& params)
 			message += " :" + partMessage;
 		channel->broadcast(message);
 		channel->removeClient(client);
-		client->partChannel(channel);
 		if (channel->getNumberOfClients() == 0)
 			_server.removeChannel(channel->getName());
 	}
 }
+
+

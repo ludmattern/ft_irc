@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 11:29:46 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 16:40:48 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/07 10:56:43 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,16 @@ void Quit::execute(Client* client, const std::vector<std::string>& params)
 	std::string message = ":" + prefix + " QUIT";
 	if (!quitMessage.empty()) 
 		message += " :" + quitMessage;
-
 	std::set<Channel*> channels = client->getChannels();
 	for (std::set<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it)
 	{
 		Channel* channel = *it;
 		channel->broadcast(message, client);
 		channel->removeClient(client);
+		if (channel->getNumberOfClients() == 0)
+		{
+            _server.removeChannel(channel->getName());
+		}
 	}
 	_server.closeClientConnection(client->getFd());
 }
