@@ -6,7 +6,7 @@
 /*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 02:53:43 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/06 02:53:44 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/07 13:09:39 by fprevot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,24 @@ void handleOperatorMode(int sockfd, const std::string& channel)
 {
 	std::cout << "bot is oper\n";
 	
-	std::string opermsg = "PRIVMSG " + channel + " :THIS CHAN IS UNDER CONTROL, FUCK YOU ALL, i go sleep now\r\n";
+	std::string opermsg = "PRIVMSG " + channel + " :FUCK YOU ALL, i go sleep now, try to awake me and ou will see...\r\n";
 	sendMessage(sockfd, opermsg);
-	std::string topic_command = "TOPIC " + channel + " FUCK YOU ALL NERDS\r\n";
+	std::string topic_command = "TOPIC " + channel + " Fuck you all NERDS\r\n";
 	sendMessage(sockfd, topic_command);
 	std::string mode_command = "MODE " + channel + " +k fuck\r\n";
 	sendMessage(sockfd, mode_command);
+}
+
+std::string parseNickname(const std::string& message) 
+{
+	if (message.empty() || message[0] != ':')
+		return "";
+
+	size_t exclPos = message.find('!');
+	if (exclPos == std::string::npos)
+		return "";
+
+	return message.substr(1, exclPos - 1);
 }
 
 void processMessage(int sockfd, const std::string& msg, const std::string& channel, const std::vector<std::string>& jokes)
@@ -103,17 +115,18 @@ bool handleKickEvent(int sockfd, const std::string& response, const std::string&
 	return (false);
 }
 
+void kickUser(int sockfd, const std::string& channel, const std::string& nickname, const std::string& reason)
+{
+	std::string kickCommand = "KICK " + channel + " " + nickname + " :" + reason + "\r\n";
+	if (nickname != "botNewman")
+		sendMessage(sockfd, kickCommand);
+}
+
 bool handleServerResponse(int sockfd, const std::string& response, const std::string& channel, const std::string& nickname, const std::vector<std::string>& jokes)
 {
-	bool oper = false;
 	if (handleKickEvent(sockfd, response, channel, nickname))
 		return (true);
-	if (response.find("MODE " + channel + " +o " + nickname) != std::string::npos)
-	{
-		handleOperatorMode(sockfd, channel);
-		oper = true;
-	}
-	else if (response.find("PRIVMSG " + channel + " :") != std::string::npos && oper == false)
+	else if (response.find("PRIVMSG " + channel + " :") != std::string::npos)
 	{
 		size_t pos = response.find("PRIVMSG " + channel + " :") + ("PRIVMSG " + channel + " :").length();
 		std::string msg = response.substr(pos);
@@ -145,6 +158,7 @@ void run(int sockfd, const std::string& channel, const std::vector<std::string>&
 {
 	char buffer[512];
 	std::string nickname = "botNewman";
+	bool oper = false;
 
 	while (true)
 	{
@@ -153,6 +167,7 @@ void run(int sockfd, const std::string& channel, const std::vector<std::string>&
 			sendQuitCommand(sockfd, "Bye!");
 			break;
 		}
+
 		memset(buffer, 0, sizeof(buffer));
 		int n = recv(sockfd, buffer, sizeof(buffer) - 1, 0);
 		if (n < 0)
@@ -172,8 +187,32 @@ void run(int sockfd, const std::string& channel, const std::vector<std::string>&
 		}
 		std::string response(buffer);
 		std::cout << response << std::endl;
-		if (handleServerResponse(sockfd, response, channel, nickname, jokes))
-			break; 
+		if (response.find("MODE " + channel + " +o " + nickname) != std::string::npos)
+		{
+			handleOperatorMode(sockfd, channel);
+			oper = true;
+			continue;
+		}
+		if (response.find("KICK " + channel + " " + nickname) != std::string::npos)
+		{
+			handleKickEvent(sockfd, response, channel, nickname);
+			break;
+		}
+		size_t privmsg_pos = response.find("PRIVMSG " + channel + " :");
+		if (privmsg_pos != std::string::npos)
+		{
+			size_t msg_start = privmsg_pos + ("PRIVMSG " + channel + " :").length();
+			std::string msg = response.substr(msg_start);
+			std::string senderNick = parseNickname(response);
+			if (oper && senderNick != nickname)
+			{
+				kickUser(sockfd, channel, senderNick, "fuck you, let me sleep.");
+			}
+			else
+			{
+				processMessage(sockfd, msg, channel, jokes);
+			}
+		}
 	}
 	close(sockfd);
 }
