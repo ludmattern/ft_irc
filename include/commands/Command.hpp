@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:33:24 by lmattern          #+#    #+#             */
-/*   Updated: 2024/10/05 17:39:59 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/07 16:17:37 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,13 +133,6 @@ class List : public Command {
 public:
 	List();
 	~List();
-	void execute(Client* client, const std::vector<std::string>& params);
-};
-
-class Who : public Command {
-public:
-	Who();
-	~Who();
 	void execute(Client* client, const std::vector<std::string>& params);
 };
 

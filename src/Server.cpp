@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fprevot <fprevot@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 12:46:10 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/07 10:56:57 by fprevot          ###   ########.fr       */
+/*   Updated: 2024/10/07 15:27:02 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,10 +165,12 @@ void Server::run()
 			break;
 		}
 
-		for (size_t i = 0; i < _fds.size(); ++i)
+		for (int i = _fds.size() - 1; i >= 0; --i)
 		{
 			if (!_isRunning)
 				break;
+			if (_fds[i].revents == 0)
+				continue;
 			handlePollEvent(_fds[i]);
 		}
 	}

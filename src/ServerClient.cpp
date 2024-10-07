@@ -6,17 +6,17 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 13:08:06 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/06 16:19:28 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/07 16:45:08 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "network/Server.hpp"
+#include "libs/cppLibft.hpp"
 #include "replies.hpp"
 #include <arpa/inet.h>
 #include <string>
 #include <cstdio>
 #include <iostream>
-#include "replies.hpp"
 
 void Server::clientConnect()
 {
@@ -65,8 +65,6 @@ bool Parser::extractCommand(int client_fd, std::string& command)
 	return false;
 }
 
-
-
 void Server::clientRead(int client_fd)
 {
 	Client* client = _clients[client_fd];
@@ -88,12 +86,12 @@ void Server::clientRead(int client_fd)
 		}
 		return;
 	}
-	else if (bytes_read == 0)
+	else
 	{
+		if (bytes_read < 0)
+			log("Error while reading from client");
 		std::vector<std::string> params;
 		parser->executeCommand("QUIT", client, params);
 		return;
 	}
-	else if (errno != EWOULDBLOCK && errno != EAGAIN)
-		throw std::runtime_error("Failed on recv");
 }

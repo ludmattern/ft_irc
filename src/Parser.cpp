@@ -6,7 +6,7 @@
 /*   By: lmattern <lmattern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 14:27:00 by fprevot           #+#    #+#             */
-/*   Updated: 2024/10/05 17:50:51 by lmattern         ###   ########.fr       */
+/*   Updated: 2024/10/07 16:48:56 by lmattern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Parser::Parser()
 	_commands["CAP"] = new Cap();
 	_commands["INFO"] = new Info();
 	_commands["LIST"] = new List();
-	_commands["WHO"] = new Who();
+	_commands["WHO"] = NULL;
 }
 
 Parser::~Parser()
@@ -48,7 +48,11 @@ void Parser::executeCommand(const std::string &commandName, Client* client, cons
 {
 	std::map<std::string, Command *>::iterator it = _commands.find(commandName);
 	if (it != _commands.end())
+	{
+		if (commandName == "WHO")
+			return ;
 		it->second->execute (client, params);
+	}
 	else
 		client->reply(ERR_UNKNOWNCOMMAND(client->getNickname(), commandName));
 }
